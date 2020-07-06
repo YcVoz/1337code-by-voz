@@ -1,0 +1,174 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* addTwoNumbers(ListNode* l1, ListNode* l2) {
+        int sizeOfA=0;
+        int sizeOfB=0;  
+        int sizeAll=0;
+        ListNode* nowA;
+        nowA = l1;
+        ListNode* nowB;
+        nowB = l2;
+        while(1)
+        {
+            sizeOfA++;
+            if(nowA->next!=NULL)
+            {
+                nowA = nowA->next;
+            }
+            else
+            {
+                break;
+            }
+        }
+        while(1)
+        {
+            sizeOfB++;
+            if(nowB->next!=NULL)
+            {
+                nowB = nowB->next;
+            }
+            else
+            {
+                break;
+            }
+        }
+        
+        nowB=l2;
+        nowA=l1;
+        ListNode* output;
+        ListNode* now;
+        if(sizeOfB>sizeOfA)
+        {
+            sizeAll=sizeOfB;
+            output=new ListNode(nowB->val);
+            now=output;
+            nowB=nowB->next;
+            for(int i=1;i<sizeOfB-sizeOfA;i++)
+            {
+                now->next=new ListNode(nowB->val);
+                now=now->next;
+                nowB=nowB->next;
+            }
+            for(int i=0;i<sizeOfA;i++)
+            {
+                now->next=new ListNode(nowB->val+nowA->val);
+                now=now->next;
+                nowB=nowB->next;
+                nowA=nowA->next;
+            }
+            
+        }
+        else if(sizeOfB<sizeOfA)
+        {
+            sizeAll=sizeOfA;
+            output=new ListNode(nowA->val);
+            now=output;
+            nowA=nowA->next;
+            for(int i=1;i<sizeOfA-sizeOfB;i++)
+            {
+                now->next=new ListNode(nowA->val);
+                now=now->next;
+                nowA=nowA->next;
+            }
+            for(int i=0;i<sizeOfB;i++)
+            {
+                now->next=new ListNode(nowA->val+nowB->val);
+                now=now->next;
+                nowB=nowB->next;
+                nowA=nowA->next;
+            }
+        }
+        else
+        {
+            sizeAll=sizeOfB;
+            output=new ListNode(nowA->val+nowB->val);
+            now=output;
+            nowA=nowA->next;
+            nowB=nowB->next;
+            for(int i=1;i<sizeOfB;i++)
+            {
+                now->next=new ListNode(nowA->val+nowB->val);
+                now=now->next;
+                nowB=nowB->next;
+                nowA=nowA->next;
+            }
+        }
+        
+        output=new ListNode(0,output);
+        now=output;
+        int noneedcheck=0;
+        for(int i=0;i<sizeAll;i++)
+        {
+            nowB=now->next;
+            if(noneedcheck>0)
+            {
+                noneedcheck--;
+                now->val=0;
+            }
+            else if(noneedcheck<0)
+            {
+                noneedcheck++;
+            }
+            else
+            {
+                if(nowB->val>9)
+                {
+                    now->val+=1;
+                    nowB->val-=10;
+                }
+                else if(nowB->val==9)
+                {
+                    int count=1;
+                    int vvv=-1;
+                    while(1)
+                    {
+                        if(nowB->next==NULL)
+                        {
+                            break;
+                        }
+                        else if(nowB->next->val==9)
+                        {
+                            count++;
+                            nowB=nowB->next;
+                        }     
+                        else
+                        {
+                            vvv=nowB->next->val;                            
+                            break;
+                        }
+                    }           
+                    if(vvv>9)
+                    {
+                        now->val+=1;
+                        nowB->next->val-=10;
+                        noneedcheck = count;
+                    }
+                    else
+                    {
+                        noneedcheck = count*(-1);
+                    }
+                }  
+            }
+            now=now->next;
+        }
+        if(now->val>9)
+        {
+            now->val-=10;
+        }
+        if(output->val==0)
+        {
+            output=output->next;
+        }
+        return output;
+    }
+};
