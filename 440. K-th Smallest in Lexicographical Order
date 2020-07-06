@@ -1,0 +1,135 @@
+class Solution {
+public:
+    int findKthNumber(int n, int k) {
+        vector<int> eachbit;
+        eachbit.resize(0);
+        int tem = n;
+        while(tem/10!=0)
+        {
+            eachbit.push_back(tem%10);
+            tem/=10;
+        }      
+        eachbit.push_back(tem%10);
+        if(eachbit.size()==1)
+        {
+            return k;
+        }
+        reverse(eachbit.begin(),eachbit.end());
+        int edge = n2index(eachbit);
+        if(k==edge)
+        {
+            return n;
+        }
+        //cout<<"edge:"<<edge<<endl;
+        int level = 0;
+        int nowfirstbit = 1;     
+        int count = 0;
+        int fin = 1;
+        int bit = eachbit.size();
+        int output = 0;
+        while(nowfirstbit<eachbit[0]&&fin)
+        {      
+            int ttt = fulltreenode(bit); 
+            count+=ttt;
+            if(count>k)
+            {
+                fin = 0;
+                output = nowfirstbit;
+                count-=ttt; 
+            }            
+            nowfirstbit++;
+        }
+        if(k<=edge)
+        {   
+            if(fin)    
+            {
+                output = nowfirstbit;
+            }
+            while(1)
+            {
+                if(count==k-1)
+                {
+                    return output;
+                }
+                count++;
+                
+                nowfirstbit = 0;
+                bit--;
+                fin = 1;           
+                while(fin)
+                {
+                    int ttt = fulltreenode(bit);   
+                    count+=ttt;                  
+                    if(count==k-1)
+                    {
+                        nowfirstbit++;
+                        output *= 10;                        
+                        output += nowfirstbit;                       
+                        return output;
+                    }
+                    else if(count>=k)
+                    {
+                        fin = 0;
+                        count-=ttt;
+                        output *= 10;
+                        output += nowfirstbit;
+                       
+                    }  
+                    nowfirstbit++;
+                }
+            }
+        }
+        else
+        {
+            output = 0;
+            count = 0;
+            int backK = n-k+1; 
+            int remain = backK;
+
+            if(remain==1)
+            {
+                return fulltreenode(bit-1)*9;        
+            }
+            while(remain!=0)
+            {
+                bit--;
+                int ttt = fulltreenode(bit);
+                int num_pac = (remain)/ttt;
+                count = num_pac*ttt;
+                if(remain/ttt*ttt==remain)
+                {
+                    output*=10;
+                    output += 10-num_pac;
+                    return output;
+                }
+                remain-=count;                        
+                output*=10;
+                output += 9-num_pac;                                                       
+            }
+            return output;
+        }
+        return 300000;
+
+    }
+    int fulltreenode(int numOfBit)
+    {
+        int output = 1;
+        for(int i=1;i<numOfBit;i++)
+        {
+            output*=10;
+            output+=1;
+        }
+        return output;
+    }
+    int n2index(vector<int> n)
+    {
+        int output = 1;
+        output+=fulltreenode(n.size())*(n[0]-1);
+        for(int i = 1;n.size()-1>=i;i++)
+        {
+            output++;
+            output+=fulltreenode(n.size()-i)*n[i];
+        }
+        return output;
+    }
+};
