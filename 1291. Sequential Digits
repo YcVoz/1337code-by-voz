@@ -1,0 +1,31 @@
+class Solution {
+public:
+    vector<int> sequentialDigits(int low, int high) {
+        vector<int> output;
+        vector<int> list;
+        list.resize(0);
+        output.resize(0);
+        for(int i=8;i>0;i--)
+        {
+            for(int u=1;u<i+1;u++)
+            {
+                int tem = u;
+                for(int o=0;o<9-i;o++)
+                {
+                    tem = tem*10+o+1+u;
+                }
+                list.push_back(tem);
+            }
+        }
+        for(int i=0;i<list.size();i++)
+        {
+            if(list[i]>=low&&list[i]<=high)
+            {
+                output.push_back(list[i]);
+            }
+            else if(list[i]>high)
+                break;
+        }
+        return output;
+    }
+};
