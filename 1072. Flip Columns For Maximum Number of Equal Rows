@@ -1,0 +1,147 @@
+class Solution {
+public:
+    int allsame(vector<vector<int>>& matrix,int m,int n)
+    {
+        int tput=0;
+        for(int i=0;i<m;i++)
+        {
+            int c=0;
+            for(int u=0;u<n;u++)
+            {
+                c+=matrix[i][u];
+            }
+            if(c==0||c==n)
+            {
+                tput++;
+            }
+        }
+        return tput;
+    }
+    void rowtosome(vector<vector<int>>& matrix,int index_row,int m,int n,int iwant)
+    {
+        for(int i=0;i<n;i++)
+        {
+            if(matrix[index_row][i]!=iwant)
+            {
+                flip(matrix,i,m);
+            }
+        }
+    }
+    void flip(vector<vector<int>>& matrix,int index_col,int m)
+    {
+        for(int i=0;i<m;i++)
+        {
+            if(matrix[i][index_col]==0)
+            {matrix[i][index_col]=1;}
+            else
+            {
+                matrix[i][index_col]=0;
+            }
+        }
+    }
+
+    int maxEqualRowsAfterFlips(vector<vector<int>>& matrix) {
+        int large=0;
+        int m = matrix.size();
+        int n = matrix[0].size();
+        if(m==1)
+        {
+            int out=0;
+            for(int i=0;i<n;i++)
+            {
+                out+=matrix[0][i];
+            }
+            if(out>=n-out)
+            {
+                return out;
+            }
+            else
+            {
+                return n-out;
+            }
+        }
+        if(n==1)
+        {
+            return m;
+        }
+        vector<bool> del;
+        int numofdel=0;
+        del.resize(n);
+        for(int i=0;i<n;i++)
+        {
+            del[i]=0;
+        }
+        for(int i=0;i<n;i++)
+        {
+            
+            if(matrix[0][i]==0)
+            {     
+                
+                flip(matrix,i,m);
+                
+            }
+            
+        }
+        
+        for(int i=0;i<n;i++)//del the same
+        {
+            if(del[i]==0)
+            {
+                for(int u=i+1;u<n;u++)
+                {
+                    if(del[u]==0)
+                    {
+                        bool l=1;
+                        for(int o=1;o<m;o++)
+                        {
+                            if(matrix[o][i]!=matrix[o][u])
+                            {
+                                l=0;
+                                break;
+                            }
+                        }
+                        if (l==1)
+                        {
+                            del[u]=1;
+                            numofdel++;
+                        }
+                    }
+                }
+            }
+        }
+
+        vector<vector<int>> matrixx;
+        matrixx.resize(m);
+        for(int i=0;i<m;i++)
+        {
+            matrixx[i].resize(n-numofdel);
+        }
+        int tem = 0;
+        for(int i=0;i<n;i++)
+        {
+            if(del[i]==0)
+            {
+                for(int u=0;u<m;u++)
+                {
+                    matrixx[u][tem]=matrix[u][i];
+                }
+                tem++;
+            }
+        }
+        n=n-numofdel;
+        for(int i=0;i<m;i++)
+        {
+            rowtosome(matrixx,i,m,n,0);
+            if(allsame(matrixx,m,n)>large)
+            {
+                large=allsame(matrixx,m,n);
+            }
+            rowtosome(matrixx,i,m,n,1);
+            if(allsame(matrixx,m,n)>large)
+            {
+                large=allsame(matrixx,m,n);
+            }
+        }
+        return large;
+    }
+};
