@@ -1,0 +1,56 @@
+struct ListNodea{
+public:
+    int time;
+    ListNodea *next;
+    ListNodea():time(0),next(0){};
+    ListNodea(int b):time(b),next(0){};
+};
+class Solution {
+public:
+    int minSetSize(vector<int>& arr) {
+        ListNodea* head = new ListNodea(100001);     
+        map<int,int> count;
+        for(int i=0;i<arr.size();i++)
+        {
+            count[arr[i]]++;
+        }
+        for(auto iter = count.begin(); iter != count.end(); iter++)
+        {
+            ListNodea* tem = head;
+            bool tag = 1;
+            while(tem->next!=NULL&&tag)
+            {
+                if(tem->next->time>iter->second)
+                {
+                    tem = tem->next;
+                }
+                else
+                {
+                    ListNodea* temmm = tem->next;
+                    tem->next = new ListNodea(iter->second);
+                    tem->next->next = temmm;
+                    tag = 0;
+                }
+            }
+            if(tag){
+                tem->next = new ListNodea(iter->second);
+            }
+        }
+        int conuat = 0;
+        int delnum = 0;
+        ListNodea* tem = head;
+        while(tem->next!=NULL)
+        {       
+            tem = tem->next;  
+        }
+        while(delnum<arr.size()/2)
+        {
+            if(head->next!=NULL){
+                delnum+=head->next->time;
+                head = head->next;              
+            }
+            conuat++;
+        }
+        return conuat;
+    }
+};
