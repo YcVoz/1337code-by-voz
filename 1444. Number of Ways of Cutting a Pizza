@@ -1,0 +1,71 @@
+class Solution {
+public:
+    int ways(vector<string>& pizza, int k) {
+        int m = pizza.size();
+        int n = pizza[0].size();
+        vector<vector<int>> apple;
+        vector<vector<vector<int>>> memoryapple;
+        memoryapple.resize(m);
+        for(int i=0;i<m;i++){
+            memoryapple[i].resize(n);
+            for(int u=0;u<n;u++){
+                memoryapple[i][u].resize(k+1);
+                for(int o=0;o<k+1;o++){
+                    memoryapple[i][u][o] = 0;
+                }
+            }
+        }
+        apple.resize(m);
+        for(int i=0;i<m;i++){
+            apple[i].resize(n);
+            for(int u=0;u<n;u++){
+                if(pizza[m-i-1][n-1-u]=='A')
+                {
+                    apple[i][u] = 1;                
+                }
+                if(i==0&&u==0){
+                    ;
+                }
+                else if(i==0&&u!=0){
+                    apple[i][u]+=apple[i][u-1];
+                }
+                else if(i!=0&&u==0){
+                    apple[i][u]+=apple[i-1][u];
+                }
+                else{
+                    apple[i][u] = apple[i][u]+apple[i-1][u]+apple[i][u-1]-apple[i-1][u-1];
+                }
+            }
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int j=0;j<n;j++)
+            {
+                if(apple[i][j]!=0)
+                {
+                    memoryapple[i][j][1] = 1;     
+                }
+            }
+        }           
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                for(int o=1;o<k+1;o++){
+                    for(int a=0;a<i;a++){                      
+                        if(apple[a][j]!=apple[i][j]){
+                            memoryapple[i][j][o]+=memoryapple[a][j][o-1];
+                            memoryapple[i][j][o]%=1000000007;
+                        }
+                    }
+                    for(int a=0;a<j;a++){                       
+                        if(apple[i][a]!=apple[i][j]){
+                            memoryapple[i][j][o]+=memoryapple[i][a][o-1];
+                            memoryapple[i][j][o]%=1000000007;
+                        }
+                    }
+                }
+            }
+        }
+        return memoryapple[m-1][n-1][k];
+    }
+
+};
