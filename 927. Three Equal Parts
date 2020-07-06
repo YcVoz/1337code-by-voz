@@ -1,0 +1,75 @@
+class Solution {
+public:
+    vector<int> threeEqualParts(vector<int>& A) {
+        vector<int> res;
+        vector<int> index41;
+        index41.resize(0);
+        res.resize(2);
+        res[0]=-1;
+        res[1]=-1;
+        
+        for(int i=0;i<A.size();i++)
+        {
+            if(A[i]==1)
+            {
+                index41.push_back(i);
+            }
+        }
+        if(index41.size()==0)
+        {
+            res[0]=0;
+            res[1]=2;
+            return res;
+        }
+        if(index41.size()%3!=0)
+        {
+            return res;            
+        }
+        else
+        {
+            int backZeroCount = A.size()-1-index41[index41.size()-1];
+            res[0]=index41[(index41.size()/3)-1]+backZeroCount;
+            res[1]=index41[(index41.size()/3)*2-1]+backZeroCount+1;
+            int sizeA = res[0]-index41[0];
+            int sizeB = (res[1]-1)-index41[(index41.size()/3)];
+            int sizeC = (A.size()-1)-index41[(index41.size()/3)*2];
+            if(sizeA!=sizeB)
+            {
+                res[0]=-1;
+                res[1]=-1; 
+                return res; 
+            }
+            else if(sizeA!=sizeC)
+            {
+                res[0]=-1;
+                res[1]=-1; 
+                return res; 
+            }
+            int count = 0;
+            int tb = index41[(index41.size()/3)];
+            for(int i=index41[0];i<=res[0];i++)
+            {              
+                if(A[i]!=A[tb+count])
+                {
+                    res[0]=-1;
+                    res[1]=-1; 
+                    return res; 
+                }   
+                count++;
+            }
+            tb = index41[(index41.size()/3)*2];
+            count = 0;
+            for(int i=index41[0];i<=res[0];i++)
+            {              
+                if(A[i]!=A[tb+count])
+                {
+                    res[0]=-1;
+                    res[1]=-1; 
+                    return res; 
+                }   
+                count++;
+            }
+        }
+        return res; 
+    }
+};
