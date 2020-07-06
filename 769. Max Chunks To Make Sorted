@@ -1,0 +1,40 @@
+class Solution {
+public:
+    int maxChunksToSorted(vector<int>& arr) {
+        vector<int> index;
+        index.resize(arr.size());
+        for(int i=0;i<arr.size();i++)
+        {
+            index[arr[i]]=i;
+        }
+        int nowposition = index[0];
+        int start = 0;
+        int chunk=0;
+        int next = 1;
+        while(true)
+        {
+            for(int i=start;i<=nowposition;i++)
+            {
+                //tag = 0;
+                if(arr[i]>nowposition)
+                {
+                    nowposition=arr[i];
+                    if(arr[i]!=arr.size()-1)
+                    {next = index[arr[i]+1];}
+                    
+                }          
+                if(i==nowposition)
+                {
+                    chunk++;                    
+                    if(i==arr.size()-1)
+                    {
+                        return chunk;
+                    }
+                    next = index[nowposition+1];
+                }
+            }
+            start=nowposition+1;
+            nowposition = next;
+        }
+    }
+};
