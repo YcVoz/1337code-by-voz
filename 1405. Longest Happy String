@@ -1,0 +1,157 @@
+class Solution {
+public:
+    string longestDiverseString(int a, int b, int c) {
+        string sa = "a";
+        string sb = "b";
+        string sc = "c";
+        int ia = a;
+        int ib = b;
+        int ic = c;
+        if(a>=c && c>=b)
+        {
+            sa = "b";
+            sb = "c";
+            sc = "a";
+            ia = b;
+            ib = c;
+            ic = a;
+        }
+        else if(b>=a && a>=c)
+        {
+            sa = "c";
+            sb = "a";
+            sc = "b";
+            ia = c;
+            ib = a;
+            ic = b;
+        }
+        else if(b>=c && c>=a)
+        {
+            sa = "a";
+            sb = "c";
+            sc = "b";
+            ia = a;
+            ib = c;
+            ic = b;
+        }
+        else if(a>=b && b>=c)
+        {
+            sa = "c";
+            sb = "b";
+            sc = "a";
+            ia = c;
+            ib = b;
+            ic = a;
+        }
+        else if(c>=a && a>=b)
+        {
+            sa = "b";
+            sb = "a";
+            sc = "c";
+            ia = b;
+            ib = a;
+            ic = c;
+        }
+        vector<int> t;
+        string output="";
+        t.resize(ia+1);
+        for(int i=0;i<ia+1;i++)
+        {
+            t[i] = (ib/(ia+1));
+        }
+        for(int i=0;i<ib%(ia+1);i++)
+        {
+            t[i]+=1;
+        }
+        if(ic>=(ia+ib+1)*2)
+        {
+            for(int i=0;i<ia;i++)
+            {
+                output+=sc;
+                output+=sc;
+                for(int u=0;u<t[i];u++)
+                {
+                    output+=sb;
+                    output+=sc;
+                    output+=sc;
+                }
+                output+=sa;
+            }
+            output+=sc;output+=sc;
+            for(int u=0;u<t[ia];u++)
+            {
+                output+=sb;
+                output+=sc;output+=sc;
+            }
+        }
+        else if(ic>=ia+ib+1)
+        {
+            int remainC = ic - (ia+ib+1);
+            for(int i=0;i<ia;i++)
+            {
+                output+=sc;
+                if(remainC!=0)
+                {
+                    output+=sc;
+                    remainC--;
+                }
+                for(int u=0;u<t[i];u++)
+                {
+                    output+=sb;
+                   output+=sc;
+                    if(remainC!=0)
+                    {
+                        output+=sc;
+                        remainC--;
+                    }
+                }
+                output+=sa;
+            }
+            output+=sc;
+            if(remainC!=0)
+            {
+                output+=sc;
+                remainC--;
+            }
+            for(int u=0;u<t[ia];u++)
+            {
+                output+=sb;
+                output+=sc;
+                if(remainC!=0)
+                {
+                    output+=sc;
+                    remainC--;
+                }
+            }
+        }
+        else
+        {
+            int remainC = ic - ib;
+            for(int i=0;i<ia;i++)
+            {
+                if(remainC!=0)
+                {
+                    output+=sc;
+                    remainC--;
+                }
+                for(int u=0;u<t[i];u++)
+                {
+                    output+=sb;
+                    output+=sc;
+                }
+                output+=sa;
+            }
+            if(remainC!=0)
+            {
+                output+=sc;
+                remainC--;
+            }
+            for(int u=0;u<t[ia];u++)
+            {
+                output+=sb;
+                output+=sc;
+            }
+        }
+        return output;
+    }
+};
