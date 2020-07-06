@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int leastBricks(vector<vector<int>>& wall) {
+        int m = wall.size();
+        map<int,int> a;
+        for(int i=0;i<m;i++)
+        {
+            int len = 0;
+            for(int u=0;u<wall[i].size()-1;u++)
+            {
+                len+=wall[i][u];
+                a[len]++;
+            }
+        }
+        int max = 0;
+        for(auto iter = a.begin();iter!=a.end();iter++)
+        {
+            if(iter->second>max)   
+            {
+                max = iter->second;
+            }
+        }
+        return m-max;
+    }
+};
