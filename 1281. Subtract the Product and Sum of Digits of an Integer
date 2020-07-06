@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int subtractProductAndSum(int n) {
+        int POD = 1;
+        int SOD = 0;
+        while(n>0)
+        {
+            POD*=n%10;
+            SOD+=n%10;
+            n/=10;
+        }
+
+        return POD-SOD;
+    }
+};
