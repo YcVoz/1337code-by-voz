@@ -1,0 +1,72 @@
+class FreqStack {
+public:
+    vector<int> myStack;
+    vector<int> myStack_num;
+    map<int,int> count;
+    vector<int> count2time;
+    int maxx;
+    FreqStack() {
+        myStack.resize(0);
+        myStack_num.resize(0);
+        count2time.resize(1);
+        maxx = 0;
+    }
+    
+    void push(int x) {
+        count[x]++;
+        myStack.emplace_back(x);
+        myStack_num.emplace_back(count[x]);      
+        count2time[count[x]-1]--;
+        if(count[x]>maxx)
+        {
+            maxx = count[x];
+            count2time.resize(count[x]+1);
+            count2time[count[x]] = 1;            
+        }
+        else
+        {
+            count2time[count[x]]++;
+        }
+    }
+    
+    int pop() {
+        int delIndex = -1;
+        int ourput = -1;
+        for(int i=myStack.size()-1;i>=0;i--)
+        {
+            if(myStack_num[i]==maxx)
+            {
+                ourput = myStack[i];
+                delIndex = i;
+                i = -1;             
+                count[myStack[delIndex]]--;
+                if(count2time[maxx]==1)
+                {
+                    count2time[maxx-1]++;
+                    count2time.resize(count2time.size()-1);
+                    maxx = count2time.size()-1;
+                }
+                else
+                {
+                    count2time[maxx]--;
+                    count2time[maxx-1]++;
+                }
+            }            
+        }        
+        for(int i = delIndex;i<myStack.size()-1;i++)
+        {
+            myStack[i] = myStack[i+1];
+            myStack_num[i] = myStack_num[i+1];
+        }
+        myStack.resize(myStack.size()-1);
+        myStack_num.resize(myStack_num.size()-1);
+        return ourput;
+    }
+};
+
+/**
+ * Your FreqStack object will be instantiated and called as such:
+ * FreqStack* obj = new FreqStack();
+ * obj->push(x);
+ * int param_2 = obj->pop();
+ */
