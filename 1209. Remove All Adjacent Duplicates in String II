@@ -1,0 +1,43 @@
+class Solution {
+public:
+    string removeDuplicates(string s, int k) {   
+        if(s.size()==0)
+        {
+            return "";
+        }
+        vector<pair<char,int>> kanna;
+        string stackLike = "";    
+        for(int i=0;i<s.size();i++)
+        {            
+            if(kanna.size()!=0)
+            {
+                if(kanna[kanna.size()-1].first==s[i])
+                {                    
+                    if(kanna[kanna.size()-1].second+1==k)
+                    {
+                        kanna.resize(kanna.size()-1);
+                        stackLike.resize(stackLike.size()-k+1);
+                    }
+                    else
+                    {
+                        kanna[kanna.size()-1].second++;
+                        stackLike+=s[i];
+                    }
+                }
+                else
+                {
+                    pair<char,int> p1(s[i],1);
+                    kanna.push_back(p1);
+                    stackLike+=s[i];
+                }
+            }
+            else
+            {
+                pair<char,int> p1(s[i],1);
+                kanna.push_back(p1);
+                stackLike+=s[i];
+            }             
+        }
+        return stackLike;
+    }
+};
