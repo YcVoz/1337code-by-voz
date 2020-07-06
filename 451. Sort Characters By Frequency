@@ -1,0 +1,34 @@
+class Solution {
+public:
+    string frequencySort(string s) {
+        map<char,int> countChar;
+        map<int,string> num2Char;
+        vector<int> forsort;
+        forsort.resize(0);
+        string output = "";
+        for(int i=0;i<s.size();i++)
+        {
+            countChar[s[i]]++;
+        }
+        for(auto iter = countChar.begin(); iter != countChar.end(); iter++)
+        {
+            num2Char[iter->second]+=iter->first;
+            if(num2Char[iter->second].size()==1)
+            {
+                forsort.push_back(iter->second);
+            }            
+        }
+        sort(forsort.begin(),forsort.end(),greater<int>());
+        for(int i=0;i<forsort.size();i++)
+        {
+            for(int o=0;o<num2Char[forsort[i]].size();o++)
+            {
+                for(int u=0;u<forsort[i];u++)
+                {
+                    output+=num2Char[forsort[i]][o];
+                }
+            }       
+        }
+        return output;
+    }
+};
