@@ -1,0 +1,93 @@
+class Solution {
+public:
+    int nowX = 0;
+    int nowY = 0;
+    int maxGold = 0;
+    int nowGold = 0;
+    int m;
+    int n;
+    vector<int> test;
+    vector<vector<int>> nowmap;
+    int getMaximumGold(vector<vector<int>>& grid) {
+        nowmap = grid;
+        test.resize(0);
+        m = grid.size();
+        n = grid[0].size();
+        for(int i=0;i<m;i++)
+        {
+            for(int o=0;o<n;o++)
+            {
+                if( grid[i][o]!=0)
+                {               
+                    nowX = i;
+                    nowY = o;
+                    nowGold = nowmap[i][o];
+                    nowmap[i][o] = 0;                
+                    move(grid);
+                    nowmap[i][o] = grid[i][o];
+                }
+            }
+        }
+        return maxGold;
+            
+    }
+    bool move(vector<vector<int>>& grid)
+    {
+        if(nowY!=0&&nowmap[nowX][nowY-1]!=0)//u
+        {
+            nowY--;
+            nowGold += nowmap[nowX][nowY];
+            test.push_back(nowmap[nowX][nowY]);
+            nowmap[nowX][nowY] = 0;            
+            move(grid);    
+            test.resize(test.size()-1);
+            nowGold -= grid[nowX][nowY];
+            nowmap[nowX][nowY] = grid[nowX][nowY];
+            nowY++;
+        }
+        if(nowY!=n-1&&nowmap[nowX][nowY+1]!=0)//d
+        {
+            nowY++;
+            nowGold += nowmap[nowX][nowY];
+            test.push_back(nowmap[nowX][nowY]);
+            nowmap[nowX][nowY] = 0;
+            move(grid);          
+            test.resize(test.size()-1);
+            nowGold -= grid[nowX][nowY];
+            nowmap[nowX][nowY] = grid[nowX][nowY];
+            nowY--;
+        }
+        if(nowX!=0&&nowmap[nowX-1][nowY]!=0)//l
+        {
+            nowX--;
+            nowGold += nowmap[nowX][nowY];
+            test.push_back(nowmap[nowX][nowY]);
+            nowmap[nowX][nowY] = 0;
+            move(grid); 
+            test.resize(test.size()-1);
+            nowGold -= grid[nowX][nowY];
+            nowmap[nowX][nowY] = grid[nowX][nowY];
+            nowX++;
+        }
+        if(nowX!=m-1&&nowmap[nowX+1][nowY]!=0)//r
+        {
+            nowX++;
+            nowGold += nowmap[nowX][nowY];
+            test.push_back(nowmap[nowX][nowY]);
+            nowmap[nowX][nowY] = 0;
+            move(grid);  
+            test.resize(test.size()-1);
+            nowGold -= grid[nowX][nowY];
+            nowmap[nowX][nowY] = grid[nowX][nowY];
+            nowX--;
+        }
+        else
+        {
+            if(nowGold>maxGold)
+            {
+                maxGold = nowGold;
+            }
+        }
+        return 0;
+    }
+};
