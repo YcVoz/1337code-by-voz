@@ -1,0 +1,79 @@
+class Solution {
+public:
+    int longestConsecutive(vector<int>& nums) {
+        vector<vector<int>> kanna;
+        kanna.resize(2);
+        kanna[0].resize(0);
+        kanna[1].resize(0);
+        int longg = 0;
+        for(int i=0;i<nums.size();i++)
+        {
+            bool tagAlreadyHave = 0;
+            bool tagSome1up1 = 0;
+            bool tagSome1down1 = 0;
+            int tem0=0;
+            int tem1=0;
+            for(int u=0;u<kanna[0].size();u++)
+            {                
+                if(nums[i]<=kanna[1][u]&&nums[i]>=kanna[0][u])
+                {
+                    tagAlreadyHave=1;
+                }
+                if(nums[i]==kanna[1][u]+1)
+                {
+                    tagSome1up1=1;
+                    tem1=u;
+                }
+                if(nums[i]==kanna[0][u]-1)
+                {
+                    tagSome1down1=1;
+                    tem0=u;
+                }
+            }
+            if(tagAlreadyHave==0)
+            {
+                if(tagSome1up1==1&&tagSome1down1==1)
+                {
+                    kanna[1][tem1]=kanna[1][tem0];
+                    kanna[0][tem0]=kanna[0][tem1];
+                    int le=kanna[1][tem1]-kanna[0][tem1]+1;
+                    if(le>longg)
+                    {
+                        longg=le;
+                    }
+                }
+                else if(tagSome1up1==1&&tagSome1down1!=1)
+                {
+                    kanna[1][tem1]+=1;
+                    int le=kanna[1][tem1]-kanna[0][tem1]+1;
+                    if(le>longg)
+                    {
+                        longg=le;
+                    }
+                }
+                else if(tagSome1down1==1&&tagSome1up1!=1)
+                {
+                    kanna[0][tem0]-=1;
+                    int le=kanna[1][tem0]-kanna[0][tem0]+1;
+                    if(le>longg)
+                    {
+                        longg=le;
+                    }
+                }
+                else
+                {
+                    kanna[0].resize(kanna[0].size()+1);
+                    kanna[1].resize(kanna[1].size()+1);
+                    kanna[0][kanna[0].size()-1]=nums[i];
+                    kanna[1][kanna[1].size()-1]=nums[i];
+                    int le=1;
+                    if(le>longg)
+                    {
+                        longg=le;
+                    }
+                }
+            }
+        }
+        return longg;
+    }
+};
