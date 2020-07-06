@@ -1,0 +1,52 @@
+class Solution {
+public:
+    bool isValidSerialization(string preorder) {
+        if(preorder.size()==0)
+        {
+            return 0;
+        }
+        else
+        {
+            int numOfSpace = 1;
+            int i=0;
+            while(i<preorder.size())
+            {
+                if(numOfSpace<=0)
+                    return 0;
+                if(preorder[i]=='#')
+                {
+                    numOfSpace--;                    
+                }
+                else
+                {
+                    
+                    numOfSpace++;
+                }
+                bool tag = 1;
+                while(tag)
+                {
+                    if(i<preorder.size()-1)
+                    {
+                        if(preorder[i]!=',')
+                        {
+                            i++;                            
+                        }
+                        else
+                        {
+                            tag = 0;
+                            i++;
+                        }
+                    }
+                    else
+                    {
+                        i++; 
+                        tag = 0;
+                    }
+                }
+            }
+            if(numOfSpace==0)
+                return 1;
+            return 0;
+        }        
+    }
+};
