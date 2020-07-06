@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int numSimilarGroups(vector<string>& A) {
+        vector<int> needed;
+        vector<int> queue;
+        needed.resize(A.size());
+        queue.resize(0);
+        int output = 0;
+        for(int i=0;i<A.size();i++)
+        {
+            needed[i] = 1;
+        }
+        int count = 0;
+        for(int i=0;i<A.size();i++)
+        {
+            if(needed[i])
+            {
+                output++;
+                needed[i] = 0;
+                for(int u=0;u<A.size();u++)
+                {
+                    if(needed[u])
+                    {
+                        if(check(A[i],A[u]))
+                        {
+                            needed[u] = 0;
+                            queue.push_back(u);
+                        }
+                    }
+                }    
+                for(int u=0;u<queue.size();u++)
+                {                    
+                    for(int o=0;o<A.size();o++)
+                    {
+                        if(needed[o])
+                        {
+                            if(check(A[o],A[queue[u]]))
+                            {
+                                needed[o] = 0;
+                                queue.push_back(o);
+                            } 
+                        }                     
+                    }
+                }
+                queue.resize(0);
+            }
+            
+        }
+        return output;
+    }
+    bool check(string a,string b)
+    {
+        int count = 0;
+        for(int i=0;i<a.size();i++)
+        {
+            if(a[i]!=b[i])
+            {
+                count++;
+                if(count>2)
+                {
+                    return 0;
+                }
+            }
+        }
+        return 1;
+    }
+};
