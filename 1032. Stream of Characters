@@ -1,0 +1,88 @@
+
+class StreamChecker {
+public:
+    int erase = 0;
+    map<string,int> menu;
+    map<string,bool> record;
+    vector<char> quer;
+    StreamChecker(vector<string>& words) {
+        quer.resize(0);
+        int maxLen = 0;    
+        for(int i=0;i<words.size();i++)
+        {
+            reverse(words[i].begin(),words[i].end());
+        }
+        sort(words.begin(),words.end());
+        int nowindex = 0;
+        int endindex = words.size()-1;
+        while(nowindex<endindex)
+        {
+            int nowcheckindex = nowindex + 1;
+            while(isSame(words[nowindex],words[nowcheckindex]))
+            {
+                words[nowcheckindex] = "1";
+                nowcheckindex++; 
+                erase++;
+                if(nowcheckindex>endindex)
+                {
+                    break;
+                }
+            }               
+            nowindex = nowcheckindex;
+        }                
+        sort(words.begin(),words.end());
+        for(int i=erase;i<words.size();i++)
+        {
+            for(int u=0;u<words[i].size()-1;u++)
+            {                
+                menu[words[i].substr(0,u+1)] = 1;
+            }   
+            menu[words[i]] = 2;
+        }
+    }    
+    bool query(char letter) 
+    {
+        quer.push_back(letter);
+        int count = 1;
+        string s1 = "";
+        s1+=letter;
+        while(menu.find(s1) != menu.end())
+        {
+            if(menu[s1]==2)
+            {
+                return 1;
+            }
+            else
+            {
+                if(quer.size()-count==0)
+                {
+                    return 0;
+                }
+                s1+=quer[quer.size()-1-count];
+                count++;
+            }
+        }
+        return 0;
+    }    
+    bool isSame(string s1,string s2)
+    {
+        if(s2.size()<s1.size())
+        {
+            return 0;
+        }
+        for(int i=0;i<s1.size();i++)
+        {
+            if(s1[i]!=s2[i])
+            {
+                return 0;
+            }
+        }
+        return 1;
+    }
+};
+
+/**
+ * Your StreamChecker object will be instantiated and called as such:
+ * StreamChecker* obj = new StreamChecker(words);
+ * bool param_1 = obj->query(letter);
+ */
