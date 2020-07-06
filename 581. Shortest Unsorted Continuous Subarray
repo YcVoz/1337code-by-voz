@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int findUnsortedSubarray(vector<int>& nums) {
+        vector<int> qnum = nums;
+        sort(qnum.begin(),qnum.end());
+        int start = 0;
+        int end = nums.size()-1;
+        bool tag=0;
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i]!=qnum[i])
+            {
+                tag = 1;
+                break;
+            }
+        }
+        if(!tag)
+        {
+            return 0;
+        }
+        while(qnum[start]==nums[start])
+        {
+            start++;           
+        }
+        while(qnum[end]==nums[end])
+        {
+            end--;
+        }
+        return end-start+1;
+    }
+};
