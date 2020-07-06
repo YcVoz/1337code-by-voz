@@ -1,1 +1,2 @@
-# 1337code-by-voz
+# 1337code
+# Try my best
