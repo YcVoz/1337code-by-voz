@@ -1,0 +1,366 @@
+class Solution {
+public:
+    vector<vector<int>> insert(vector<vector<int>>& intervals, vector<int>& newInterval) {
+        int start = -3;
+        int startnot = -3;
+        int end = -3;
+        int endnot = -3;
+        vector<vector<int>> output; 
+        if(intervals.size()==0)
+        {
+            output.resize(1);
+            output[0].resize(2);
+            output[0][0]=newInterval[0];
+            output[0][1]=newInterval[1];
+            return output;
+        }
+        if(newInterval[0]<intervals[0][0])
+        {
+            start=-2;
+        }
+        else if(newInterval[0]>intervals[intervals.size()-1][1])
+        {
+            start=-1;
+        }
+        else
+        {
+            for(int i=0;i<intervals.size();i++)
+            {
+                if(start == -3)
+                {
+                    if(newInterval[0]<=intervals[i][1]&&newInterval[0]>=intervals[i][0])
+                    {
+                        start=i;
+                    }            
+                }
+            }
+            if(start == -3)
+            {
+                for(int i=0;i<intervals.size()-1;i++)
+                {
+                    if(startnot == -3)
+                    {
+                        if(newInterval[0]>intervals[i][1]&&newInterval[0]<intervals[i+1][0])
+                        {
+                            startnot=i;
+                        }            
+                    }
+                }
+            }
+        }
+        if(newInterval[1]<intervals[0][0])
+        {
+            end=-2;
+        }
+        else if(newInterval[1]>intervals[intervals.size()-1][1])
+        {
+            end=-1;
+        }
+        else
+        {
+            for(int i=0;i<intervals.size();i++)
+            {
+                if(end == -3)
+                {
+                    if(newInterval[1]<=intervals[i][1]&&newInterval[1]>=intervals[i][0])
+                    {
+                        end=i;
+                    }            
+                }
+            }
+            if(end == -3)
+            {
+                for(int i=0;i<intervals.size()-1;i++)
+                {
+                    if(endnot == -3)
+                    {
+                        if(newInterval[1]>intervals[i][1]&&newInterval[1]<intervals[i+1][0])
+                        {
+                            endnot=i;
+                        }            
+                    }
+                }
+            }
+        }  
+        if(start==-2&&end==-2)
+        {
+            output.resize(intervals.size()+1);
+            output[0].resize(2);
+            output[0][0]=newInterval[0];
+            output[0][1]=newInterval[1];
+            for(int i=0;i<intervals.size();i++)
+            {
+                output[i+1].resize(2);
+                output[i+1][0]=intervals[i][0];
+                output[i+1][1]=intervals[i][1];
+            }
+            return output;
+        }
+        else if(start==-1&&end==-1)
+        {
+            output.resize(intervals.size()+1);
+            for(int i=0;i<intervals.size();i++)
+            {
+                output[i].resize(2);
+                output[i][0]=intervals[i][0];
+                output[i][1]=intervals[i][1];
+            }
+            output[intervals.size()].resize(2);
+            output[intervals.size()][0]=newInterval[0];
+            output[intervals.size()][1]=newInterval[1];
+            return output;
+        }
+        else if(start==-2&&end==-1)
+        {
+            output.resize(1);
+            output[0].resize(2);
+            output[0][0]=newInterval[0];
+            output[0][1]=newInterval[1];
+            return output;
+        }
+        else if(start==-2)
+        {
+            if(end==-3)
+            {
+                output.resize(intervals.size()-endnot);
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<output.size();i++)
+                {
+                    if(i>endnot)
+                    {
+                        output[i-endnot][0]=intervals[i][0];
+                        output[i-endnot][1]=intervals[i][1];
+                    }              
+                }
+                output[0][0]=newInterval[0];
+                output[0][1]=newInterval[1];
+            }
+            else
+            {
+                output.resize(intervals.size()-end);
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<output.size();i++)
+                {
+                    if(i>=end)
+                    {
+                        output[i-end][0]=intervals[i][0];
+                        output[i-end][1]=intervals[i][1];
+                    }            
+                }
+                output[0][0]=newInterval[0];
+            }
+        }
+        else if(end==-1)
+        {
+            if(start==-3)
+            {
+                output.resize(startnot+2);
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i][0]=intervals[i][0];
+                    output[i][1]=intervals[i][1];            
+                }
+                output[output.size()-1][0]=newInterval[0];
+                output[output.size()-1][1]=newInterval[1];
+            }
+            else
+            {
+                output.resize(start+1);
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i][0]=intervals[i][0];
+                    output[i][1]=intervals[i][1];            
+                }
+                output[output.size()-1][1]=newInterval[1];
+            }
+        }
+        else if(start != -3&& end!=-3)
+        {
+            if(start==end)
+            {                
+                output.resize(intervals.size());
+                for(int i=0;i<intervals.size();i++)
+                {
+                    output[i].resize(2);
+                    output[i][0]=intervals[i][0];
+                    output[i][1]=intervals[i][1];
+                }
+                return output;
+            }
+            else
+            {
+                output.resize(intervals.size()-(end-start));
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                output[start][0]=intervals[start][0];
+                output[start][1]=intervals[end][1];
+                for(int i=0;i<intervals.size();i++)
+                {
+                    
+                    if(i<start)
+                    {
+                        output[i][0]=intervals[i][0];
+                        output[i][1]=intervals[i][1];
+                    }
+                    else if(i>end)
+                    {
+                        output[i-(end-start)][0]=intervals[i][0];
+                        output[i-(end-start)][1]=intervals[i][1];
+                    }
+                }
+                return output;
+            }
+        }
+        else if(start == -3&& end!=-3)
+        {
+            if(startnot+1==end)
+            {
+                output.resize(intervals.size());
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<output.size();i++)
+                {                    
+                    output[i][0]=intervals[i][0];
+                    output[i][1]=intervals[i][1];
+                }
+                output[startnot+1][0]=newInterval[0];
+                return output;
+            }
+            else
+            {
+                output.resize(intervals.size()-(end-startnot)+1);
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<intervals.size();i++)
+                {                    
+                    if(i<=startnot+1)
+                    {
+                        output[i][0]=intervals[i][0];
+                        output[i][1]=intervals[i][1];
+                    }
+                    else if(i>=end&&i-(end-startnot)+1<output.size())
+                    {
+                        output[i-(end-startnot)+1][0]=intervals[i][0];
+                        output[i-(end-startnot)+1][1]=intervals[i][1];
+                    }
+                }
+                output[startnot+1][0]=newInterval[0];
+                return output;
+            }
+        }
+        else if(start != -3&& end==-3)
+        {
+            if(start==endnot)
+            {
+                output.resize(intervals.size());
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<output.size();i++)
+                {                    
+                    output[i][0]=intervals[i][0];
+                    output[i][1]=intervals[i][1];
+                }
+                output[start][1]=newInterval[1];
+                return output;
+            }
+            else
+            {
+                output.resize(intervals.size()-(endnot-start));
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<intervals.size();i++)
+                {                    
+                    if(i<=start)
+                    {
+                        output[i][0]=intervals[i][0];
+                        output[i][1]=intervals[i][1];
+                    }
+                    else if(i>endnot&&i-(endnot-start)<output.size())
+                    {
+                        output[i-(endnot-start)][0]=intervals[i][0];
+                        output[i-(endnot-start)][1]=intervals[i][1];
+                    }
+                }
+                output[start][1]=newInterval[1];
+                return output;
+            }
+        }
+        else if(start == -3&& end==-3)
+        {
+            if(startnot==endnot)
+            {
+                output.resize(intervals.size()+1);
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                output[startnot+1][0]=newInterval[0];
+                output[startnot+1][1]=newInterval[1];              
+                for(int i=0;i<intervals.size();i++)
+                {                 
+                    if(i<=startnot)
+                    {
+                        output[i][0]=intervals[i][0];
+                        output[i][1]=intervals[i][1];
+                    }
+                    else
+                    {
+                        output[i+1][0]=intervals[i][0];
+                        output[i+1][1]=intervals[i][1];
+                    }
+                    
+                }
+                return output;
+            }
+            else
+            {
+                output.resize(intervals.size()-(endnot-startnot)+1);
+                for(int i=0;i<output.size();i++)
+                {
+                    output[i].resize(2);
+                }
+                for(int i=0;i<intervals.size();i++)
+                {
+                    if(i<=startnot)
+                    {
+                        output[i][0]=intervals[i][0];
+                        output[i][1]=intervals[i][1];
+                    }
+                    else if(i>endnot)
+                    {
+                        output[i-(endnot-startnot)+1][0]=intervals[i][0];
+                        output[i-(endnot-startnot)+1][1]=intervals[i][1];
+                    }
+                }            
+                output[startnot+1][0]=newInterval[0];
+                output[startnot+1][1]=newInterval[1]; 
+                return output;
+            }
+        }
+        return output;
+    }
+};
