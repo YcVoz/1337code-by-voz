@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<int> findDiagonalOrder(vector<vector<int>>& nums) {
+        int largeSize=nums.size();
+        vector<int> res;
+        res.resize(0);
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i].size()>largeSize)
+            {
+                largeSize = nums[i].size();
+            }
+        }
+        vector<vector<int>> respace;
+        respace.resize(largeSize*2-1);
+        /*for(int i=0;i<respace.size();i++)
+        {
+            respace[i].resize(0);
+        }*/
+        for(int i=0;i<nums.size();i++)
+        {
+            for(int o=0;o<nums[i].size();o++)
+            {
+                respace[i+o].push_back(nums[i][o]);
+            }
+        }
+        for(int i=0;i<respace.size();i++)
+        {
+            for(int o=0;o<respace[i].size();o++)
+            {
+                res.push_back(respace[i][respace[i].size()-1-o]);
+            }
+        }
+        return res;
+    }
+};
