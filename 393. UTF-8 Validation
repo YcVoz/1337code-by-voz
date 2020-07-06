@@ -1,0 +1,92 @@
+class Solution {
+public:
+    bool validUtf8(vector<int>& data) 
+    {    
+        for(int i=0;i<data.size();i++)
+        {
+            data[i]=int2string(data[i]);
+        }
+        bool firstcheck=1;
+        int count=0;
+        int realcount=0;
+        bool valid=1;
+        for(int i=0;i<data.size();i++)
+        {
+            if(valid)
+            {
+                if(firstcheck==0)
+                {
+                    if(data[i]%100==1)
+                    {
+                        count--;
+                    }
+                    else
+                    {
+                        valid=0;
+                    }    
+                    if(count==0)
+                    {
+                        firstcheck=1;
+                    }
+                }
+                else
+                {
+                    realcount=0;
+                    bool breakk=0;
+                    for(int u=0;u<8;u++)
+                    {
+                        if(breakk==0)
+                        {
+
+                            if(u==0)
+                            {
+                                if(data[i]%10==0)
+                                {
+                                    breakk=1;
+                                }
+                                else
+                                {
+                                    realcount++;
+                                }
+                            }
+                            else
+                            {
+                                if(data[i]%10==0)
+                                {
+                                    breakk=1;
+                                    count=realcount-1;
+                                    firstcheck=0;
+                                }
+                                else
+                                {
+                                    realcount++;
+                                }
+                            }
+                            data[i]/=10;
+                        }              
+                    }
+                    if((realcount>=5)||(realcount==1))
+                    {
+                        valid=0;
+                    }
+                }
+            }           
+        }
+        if(count!=0)
+        {
+            valid=0;
+        }
+        return valid;
+    }
+    int int2string(int a)
+    {
+        int s1=0;
+        for(int i=0;i<8;i++)
+        {
+            s1*=10;
+            s1+=a%2;
+            a/=2;
+        }    
+        return s1;
+    }
+};
