@@ -1,0 +1,125 @@
+class Solution {
+public:
+    int maxEqualFreq(vector<int>& nums) {
+        map<int, int>::iterator iter;
+        if(nums.size()<=3)
+        {
+            return nums.size();
+        }
+        map<int,int> data;
+        int min = 10001;
+        vector<int> countt;
+        countt.resize(1);
+        /*vector<vector<int>> kanna;
+        kanna.resize(3);
+        for(int i=0;i<3;i++)
+        {
+           kanna[i].resize(2); 
+        }     */           
+        for(int i=0;i<nums.size();i++)
+        {
+            data[nums[i]]+=1;            
+        }
+        //kanna[0][1] = 0;
+        //vector<int> count;
+       // count.resize(0);
+        for(iter = data.begin(); iter != data.end(); iter++)
+        {
+            if(iter->second>countt.size())
+            {
+                countt.resize(iter->second+1);
+            }
+            if(iter->second<min && iter->second!=1)
+            {
+                min = iter->second;
+            }
+            countt[iter->second-1]++;
+            /*if(iter->second==1 )
+            {
+                kanna[0][1]++;
+            }*/
+        }  
+        if(min==10001)
+        {
+            return nums.size();
+        }
+        /*kanna[0][0] = 1;
+        kanna[1][0] = min;
+        kanna[2][0] = min+1;      
+        kanna[1][1] = 0;
+        kanna[2][1] = 0;*/
+        /*
+        for(iter = data.begin(); iter != data.end(); iter++)
+        {
+            if(iter->second==min)
+            {
+                kanna[1][1]+=1;
+            }
+            else if(iter->second==min+1)
+            {
+                kanna[2][1]+=1;
+            }
+        }*/
+        for(int i=nums.size()-1;i>=0;i--)
+        {
+            /*
+            if(i<10)
+            {
+                std::cout<<"***"<<nums[i]<<" "<<data[nums[i]]<<endl;
+                std::cout<<min<<endl;
+                std::cout<<countt[0]<<endl;
+                std::cout<<countt[min-1]<<endl;
+                std::cout<<countt[min]<<endl;
+            }*/
+            
+            if(countt[0]==i-1&&countt[1]==1&&min==2)
+            {
+                return i+1;
+            }
+            else if(countt[0]==1&&(countt[min-1]*min==i))
+            {
+                return i+1;
+            }
+            else if(countt[0]==0&&((countt[min-1]+1)*min==i)&&countt[min]==1)
+            {
+                return i+1;
+            }
+            else if(countt[0]==0&&countt[min]==0&&countt[min-1]==1&&min==i+1)
+            {
+                return i+1;
+            }
+            if(data[nums[i]]==1)
+            {
+                countt[0]--;
+            }
+            else if(data[nums[i]]==min)
+            {
+                countt[min-1]--;
+                countt[min-2]++;
+                if(min!=2)
+                {
+                    min--;
+                }                
+                else if(countt[min-1]==0)
+                {
+                    for(int u=1;u<countt.size();u++)
+                    {
+                        if(countt[u]!=0)
+                        {
+                            min = u+1;
+                            break;
+                        }
+                    }    
+                }
+                
+            }
+            else
+            {
+                countt[data[nums[i]]-1]--;
+                countt[data[nums[i]]-2]++;
+            }
+            data[nums[i]]--;
+        }
+        return 300;
+    }
+};
