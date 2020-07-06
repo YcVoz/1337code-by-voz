@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int countBinarySubstrings(string s) {
+        char now = s[0];
+        int nowcounta=1;
+        int nowcountb=0;
+        int output = 0;
+        for(int i=1;i<s.size();i++)
+        {
+            if(s[i]==now)
+            {
+                nowcounta++;
+            }
+            else
+            {
+                output+=min(nowcountb,nowcounta);
+                now = s[i];
+                nowcountb = nowcounta;                
+                nowcounta = 1;                
+            }          
+        }
+        output+=min(nowcountb,nowcounta);
+        return output;
+    }
+};
