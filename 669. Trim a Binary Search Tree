@@ -1,0 +1,59 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    TreeNode* trimBST(TreeNode* root, int L, int R) {
+        root = goL(root,L);
+        root = goR(root,R);
+        return root;
+    }
+    TreeNode* goL(TreeNode* root, int L)
+    {
+        if(root==NULL)
+            return NULL;
+        if(root->val==L)
+        {
+            root->left = NULL;
+            return root;
+        }
+        else if(root->val>L)
+        {
+            root->left = goL(root->left, L);                
+            return root;
+        }
+        else
+        {
+            root = goL(root->right, L);
+            return root;
+        }
+    }
+    TreeNode* goR(TreeNode* root, int R)
+    {
+        if(root==NULL)
+            return NULL;
+        if(root->val==R)
+        {
+            root->right = NULL;
+            return root;
+        }
+        else if(root->val<R)
+        {
+            root->right = goR(root->right, R);
+            return root;
+        }
+        else
+        {
+            root = goR(root->left, R);
+            return root;
+        }
+    }
+};
