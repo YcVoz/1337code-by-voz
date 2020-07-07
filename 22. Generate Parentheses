@@ -1,0 +1,52 @@
+class Solution {
+public:
+    vector<string> output;
+    stack<bool> myStack;
+    string s;
+    int remain;
+    vector<string> generateParenthesis(int n) {        
+        remain = n;        
+        output.resize(0);
+        s = "";
+        make();
+        return output;
+    }
+    void make()
+    {
+        if(myStack.size()!=0)
+        {
+            s+=")";
+            myStack.pop();
+            make();
+            myStack.push(1);
+            s.resize(s.size()-1);            
+            if(remain>0)
+            {
+                s+="(";
+                myStack.push(1);
+                remain--;
+                make();
+                remain++;
+                myStack.pop();
+                s.resize(s.size()-1);
+            }
+        }
+        else
+        {
+            if(remain>0)
+            {
+                s+="(";
+                myStack.push(1);
+                remain--;
+                make();
+                remain++;
+                myStack.pop();
+                s.resize(s.size()-1);
+            }
+            else
+            {
+                output.emplace_back(s);
+            }
+        }
+    }
+};
