@@ -1,0 +1,51 @@
+class Solution {
+public:
+    int totalHammingDistance(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        int max = nums[0];
+        int indexOfMax = 0;
+        for(int i=1;i<nums.size();i++)
+        {
+            if(nums[i]>max){
+                max = nums[i];
+                indexOfMax = i;
+            }               
+        }
+        nums[indexOfMax] = nums[0];
+        nums[0] = max;
+        vector<int> bu(0);
+        while(max!=0)
+        {
+            bu.resize(bu.size()+1);
+            bu[bu.size()-1] = 0;
+            if(max%2==0){                
+                bu[bu.size()-1]++;
+            }
+            max/=2;
+        }
+        for(int i=1;i<nums.size();i++)
+        {
+            for(int k=0;k<bu.size();k++)
+            {
+                if(nums[i]!=0)
+                {
+                    if(nums[i]%2==0){                
+                        bu[k]++;
+                    }
+                    nums[i]/=2;
+                }
+                else
+                {
+                    bu[k]++;
+                }
+            }            
+        }
+        int output = 0;
+        for(int i=0;i<bu.size();i++)
+        {
+            output+=bu[i]*(nums.size()-bu[i]);
+        }
+        return output;
+    }
+};
