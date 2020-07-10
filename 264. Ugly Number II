@@ -1,0 +1,72 @@
+class Solution {
+public:
+    int nthUglyNumber(int n) {
+        if(n == 1)
+            return 1; 
+        int count = 1;    
+        queue<int> neededtime2;
+        queue<int> neededtime3;
+        queue<int> neededtime5;
+        neededtime2.push(1);
+        while(count<n)
+        {
+            int a,b,c;
+            if(neededtime2.size()!=0)
+                a = neededtime2.front()*2;
+            else
+                a = 2147483647;
+            if(neededtime3.size()!=0)
+                b = neededtime3.front()*3;
+            else
+                b = 2147483647;
+            if(neededtime5.size()!=0)
+                c = neededtime5.front()*5;
+            else
+                c = 2147483647;
+            count++;
+            if(a<=b&&a<=c)
+            {
+                if(count==n)
+                {
+                    return a;
+                }
+                if(a==b)
+                {
+                    neededtime5.push(neededtime3.front());
+                    neededtime3.pop();
+                }
+                if(a==c)
+                {
+                    neededtime5.pop();
+                }
+                neededtime3.push(neededtime2.front());
+                neededtime2.pop();
+                neededtime2.push(a);
+            }
+            else if(b<=a&&b<=c)
+            {
+                if(count==n)
+                {
+                    return b;
+                }
+                if(b==c)
+                {
+                    neededtime5.pop();
+                }
+                neededtime5.push(neededtime3.front());
+                neededtime3.pop();
+                neededtime2.push(b);
+            }
+            else
+            {
+                if(count==n)
+                {
+                    return c;
+                }
+                neededtime5.pop();
+                neededtime2.push(c);
+            }
+        }   
+        return -1;
+    }
+};
