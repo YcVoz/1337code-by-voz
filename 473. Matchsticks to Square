@@ -1,0 +1,88 @@
+class Solution {
+public:
+    vector<int> num;
+    bool makesquare(vector<int>& nums) {
+        if(nums.size()==0)
+            return 0;
+        int max = 0;
+        int side = 0;
+        for(int i=0;i<nums.size();i++)
+        {
+            max += nums[i];
+        }
+        if(max%4!=0)
+            return 0;
+        side = max/4;
+        sort(nums.begin(),nums.end());
+        if(nums[nums.size()-1]>side)
+            return 0;
+        num = nums;
+        vector<int> stack4;
+        stack4.resize(4);
+        int nowIndex = nums.size()-1;
+        for(int i=0;i<4;i++)
+            stack4[i] = side;
+        return putin(stack4,nowIndex);
+        
+    }
+    bool putin(vector<int> stack4,int nowIndex)
+    {     
+        if(nowIndex==0)
+        {
+            int not0 = 0;
+            bool matchSize = 0;
+            for(int i=0;i<4;i++)
+            {
+                if(stack4[i]!=0)
+                {
+                    not0++;
+                    if(stack4[i]==num[0])
+                    {
+                        matchSize = 1;
+                    }
+                }
+            }
+            if(not0==1&&matchSize)
+                return 1;
+            else
+                return 0;
+        }
+        vector<bool> output(4);
+        bool can = 0;
+        output[0] = 0;
+        if(stack4[0]>=num[nowIndex])
+        {
+            output[0] = 1;
+            can = 1;
+        }
+        for(int i=1;i<4;i++)
+        {
+            output[i] = 0;
+            if(stack4[i]!=stack4[i-1])
+            {
+                if(stack4[i]>=num[nowIndex])
+                {
+                    output[i] = 1;
+                    can = 1;
+                } 
+            }           
+        }
+        if(!can)
+            return 0;
+        for(int i=0;i<4;i++)
+        {
+            if(output[i])
+            {
+                stack4[i]-=num[nowIndex];
+                bool yes = putin(stack4,nowIndex-1);
+                if(yes)
+                    return 1;
+                else
+                {
+                    stack4[i]+=num[nowIndex];
+                }
+            }
+        }
+        return 0;
+    }
+};
