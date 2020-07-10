@@ -1,0 +1,82 @@
+class Solution {
+public:
+    int triangleNumber(vector<int>& nums) {
+        if(nums.size()<3)
+            return 0;
+        sort(nums.begin(),nums.end());
+        int n = nums.size();
+        vector<vector<int>> aki;
+        aki.resize(n-2);
+        int output = 0;
+        for(int i=0;i<aki.size();i++)
+        {
+            aki[i].resize(n-1);            
+        }
+        int limit = nums[0]+nums[1];
+        bool tag = 1;
+        for(int i=2;i<n&&tag;i++)
+        {
+            if(nums[i]<limit)
+            {
+                aki[0][1] = i;
+            }
+            else
+            {
+                tag = 0;
+                output+=i-2;
+            }
+        }
+        if(tag)
+        {
+            output+=n-2; 
+        }
+        for(int i = 0;i<=n-3;i++)
+        {
+            if(i!=0)
+            {
+                limit = nums[i]+nums[i+1];                
+                tag = 1;
+                aki[i][i+1] = i+1;
+                for(int o=aki[i-1][i+1]+1;o<n&&tag;o++)
+                {
+                    if(nums[o]<limit)
+                    {
+                        aki[i][i+1] = o;
+                    }
+                    else
+                    {
+                        output+=max(o-1-i-1,0);
+                        tag = 0;
+                    }
+                }
+                if(tag)
+                {
+                    output+=max(0,n-1-i-1);
+                }
+            }
+            for(int u=i+2;u<=n-2;u++)
+            {
+                limit = nums[i]+nums[u];                
+                tag = 1;
+                aki[i][u] = u;
+                for(int o=aki[i][u-1]+1;o<n&&tag;o++)
+                {
+                    if(nums[o]<limit)
+                    {
+                        aki[i][u] = o;
+                    }
+                    else
+                    {
+                        output+=max(o-1-u,0);
+                        tag = 0;
+                    }
+                }
+                if(tag)
+                {
+                    output+=max(0,n-1-u);
+                }
+            }
+        }
+        return output;
+    }
+};
