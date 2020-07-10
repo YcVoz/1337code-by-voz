@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int kConcatenationMaxSum(vector<int>& arr, int k) {
+        int pre = arr[0];
+        int post = arr[0];
+        int nowsum = arr[0];
+        int insidesum = 0;
+        int insidemin = 10001;
+        int insidemax = 0;
+        bool nowlowest = 0;
+        for(int i=1;i<arr.size()-1;i++)
+        {
+            nowsum += arr[i];
+            insidesum += arr[i];
+            if(insidesum<insidemin)
+                insidemin = insidesum;
+            if(insidesum-insidemin>insidemax)
+                insidemax = insidesum-insidemin;          
+            if(nowsum>pre)
+                pre = nowsum;
+            if(nowsum<post)
+                post = nowsum;
+        }  
+        nowsum += arr[arr.size()-1];
+        if(nowsum>pre)
+            pre = nowsum;
+        if(nowsum<post)
+            post = nowsum;        
+             
+        if(pre<0)
+        {
+            pre = 0;
+        }
+        if(post>0)
+        {
+            post = 0;            
+        }
+        post = nowsum - post;
+        if(nowsum<0)
+        {
+            nowsum = 0;
+        }
+        else
+        {
+            int plus = nowsum;
+            for(int i = 1;i<k-2;i++)
+            {
+                nowsum+=plus;
+                nowsum%=1000000007;
+            }
+        }
+        if(k>2)
+            return max(insidemax,nowsum+post+pre);
+        else if(k==2)
+        {
+            int a = max(post,nowsum);
+            int b = max(pre,nowsum);
+            return max(insidemax,a+b);
+        }
+        else
+        {
+            int a = max(post,nowsum);
+            a = max(pre,a);
+            return max(insidemax,a);
+        }
+    }
+};
