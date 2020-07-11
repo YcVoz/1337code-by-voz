@@ -1,0 +1,67 @@
+class Solution {
+public:
+    vector<vector<int>> group;
+    map<int,int> label;
+    bool equationsPossible(vector<string>& equations) {
+        vector<vector<int>> graph;
+        graph.resize(26);
+        vector<pair<int,int>> notsame;
+        notsame.resize(0);
+        vector<bool> needed(26);        
+        for(int i=0;i<26;i++)
+        {
+            graph[i].resize(0);
+            needed[i] = 1;
+            label[i] = -1;
+        }
+        for(int i=0;i<equations.size();i++)
+        {
+            int a = int(equations[i][0]-'a');
+            int b = int(equations[i][3]-'a');
+            if(equations[i][1]=='=')
+            {
+                if(a!=b)
+                {
+                    graph[a].emplace_back(b);
+                    graph[b].emplace_back(a);
+                }
+            }
+            else
+            {
+                if(a==b)
+                    return 0;
+                pair<int,int> p1(a,b);
+                notsame.emplace_back(p1);
+            }
+        }
+        for(int i=0;i<26;i++)
+        {           
+            if(needed[i])
+            {
+                group.resize(group.size()+1);
+                group[group.size()-1].resize(0);
+                DFS(graph,needed,i);
+            }
+        }
+        for(int i=0;i<notsame.size();i++)
+        {
+            if(label[notsame[i].first]==label[notsame[i].second]&&label[notsame[i].second]!=-1)            
+            return 0;   
+        }
+        return 1;
+    }
+    void DFS(vector<vector<int>> graph,vector<bool> needed,int n)
+    {           
+        needed[n] = 0;
+        group[group.size()-1].emplace_back(n);
+        if(graph[n].size()!=0)
+            label[n] = group.size()-1;
+        for(int u=0;u<graph[n].size();u++)
+        {
+            if(needed[graph[n][u]])
+            {
+                DFS(graph,needed,graph[n][u]);
+            }
+        }       
+    }
+};
