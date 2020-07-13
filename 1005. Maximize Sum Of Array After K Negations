@@ -1,0 +1,62 @@
+class Solution {
+public:
+    int largestSumAfterKNegations(vector<int>& A, int K) {
+        int numOfNegative = 0;
+        int smallestPositive = 2147483647;
+        int biggestNegative = -2147483647;
+        int sum = 0;
+        int negativeSum = 0;
+        vector<int> negativeArr(0);
+        for(int i=0;i<A.size();i++)
+        {
+            sum+=A[i];
+            if(A[i]>=0)
+            {
+                if(A[i]<smallestPositive)
+                {
+                    smallestPositive = A[i];
+                }
+            }
+            else
+            {
+                negativeSum+=A[i];
+                numOfNegative++;
+                negativeArr.emplace_back(A[i]);
+                if(A[i]>biggestNegative)
+                {
+                    biggestNegative = A[i];
+                }
+            }
+        }
+        if(K==0)
+            return sum;
+        if(K>numOfNegative)
+        {
+            if((K-numOfNegative)%2==0)
+            {
+                sum-=2*negativeSum;
+                return sum;
+            }
+            else
+            {
+                sum-=2*negativeSum;
+                sum-=2*min(biggestNegative*(-1),smallestPositive);
+                return sum;
+            }
+        }
+        else if(K == numOfNegative)
+        {
+            sum-=2*negativeSum;
+            return sum;
+        }
+        else
+        {
+            sort(negativeArr.begin(),negativeArr.end());
+            for(int i=0;i<K;i++)
+            {
+                sum-=2*negativeArr[i];
+            }
+            return sum;
+        }
+    }
+};
