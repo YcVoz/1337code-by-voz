@@ -1,0 +1,87 @@
+class Solution {
+public:
+    bool judgePoint24(vector<int>& nums) {
+        double a = nums[0];
+        double b = nums[1];
+        double c = nums[2];
+        double d = nums[3];
+        return check4(a,b,c,d);
+    }
+    bool check2(double a,double b)
+    {
+        for(int i=0;i<6;i++)
+        {
+            if(doTwoNumber(a,b,i)<=24.1&&doTwoNumber(a,b,i)>=23.9)
+            {
+                return 1;
+            }               
+        }
+        return 0;
+    }
+    bool check3(double a,double b,double c)
+    {        
+       vector<double> s(3);
+        s[0] = a;
+        s[1] = b;
+        s[2] = c;
+        for(int i=0;i<2;i++)
+        {
+            for(int u=i+1;u<3;u++)
+            {
+                int x = 3-i-u;               
+                for(int oper = 0;oper<6;oper++)
+                {
+                    if(check2(doTwoNumber(s[i],s[u],oper),s[x])) 
+                        return 1;
+                }               
+            }
+        }
+        return 0;
+    }
+    bool check4(double a,double b,double c,double d)
+    {
+        vector<double> s(4);
+        s[0] = a;
+        s[1] = b;
+        s[2] = c;
+        s[3] = d;
+        for(int i=0;i<3;i++)
+        {
+            for(int u=i+1;u<4;u++)
+            {
+                int x = 0;
+                for(int o=0;o<4;o++)
+                {
+                    if(o!=i&&o!=u)
+                    {
+                        x = o;
+                    }
+                }
+                int y = 6-i-u-x;
+                for(int oper = 0;oper<6;oper++)
+                {
+                    if(check3(doTwoNumber(s[i],s[u],oper),s[x],s[y])) 
+                        return 1;
+                }               
+            }
+        }
+        return 0;
+    }
+    double doTwoNumber(double a,double b, int oper)
+    {
+        if(oper==0)
+            return a+b;
+        if(oper==1)
+            return a*b;
+        if(oper==2)
+            return a-b;
+        if(oper==3&&b!=0)
+            return a/b;
+        if(oper==4)
+            return b-a;
+        if(oper==5&&a!=0)
+            return b/a;
+        else 
+            return -10000;
+    }
+};
