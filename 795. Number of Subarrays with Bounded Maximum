@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int numSubarrayBoundedMax(vector<int>& A, int L, int R) {
+        vector<int> minusZone(0);
+        int smallzone = 0;
+        int now = -1;
+        int output = 0;
+        for(int i=0;i<A.size();i++)
+        {
+            if(A[i]>R)
+            {                
+                int thiszone = i-now-1;
+                now = i;
+                if(thiszone>0)
+                {
+                    output+=zoneArea(thiszone);
+                    minusZone.emplace_back(smallzone);
+                    smallzone = 0;
+                    for(int u=0;u<minusZone.size();u++)
+                    {
+                        if(minusZone[u]>0)
+                        {
+                            output-=zoneArea(minusZone[u]);
+                        }
+                    }
+                    minusZone.resize(0);
+                }             
+            }
+            else if(A[i]<L)
+            {
+                smallzone++;
+            }
+            else
+            {
+                minusZone.emplace_back(smallzone);
+                smallzone = 0;
+            }
+        }
+        int thiszone = A.size()-now-1;
+        if(thiszone>0)
+        {
+            output+=zoneArea(thiszone);
+            minusZone.emplace_back(smallzone);
+            smallzone = 0;
+            for(int u=0;u<minusZone.size();u++)
+            {
+                if(minusZone[u]>0)
+                {
+                    output-=zoneArea(minusZone[u]);
+                }
+            }
+            minusZone.resize(0);
+        } 
+        return output;
+    }
+    int zoneArea(int lenth)
+    {
+        return lenth*(lenth-1)/2+lenth;
+    }
+};
