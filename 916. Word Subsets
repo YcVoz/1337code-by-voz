@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<string> wordSubsets(vector<string>& A, vector<string>& B) {
+        vector<int> max;
+        max.resize(26);
+        vector<string> output(0);
+        int count = 0;
+        for(int i=0;i<B.size();i++)
+        {
+            vector<int> tmax;
+            tmax.resize(26);
+            for(int u=0;u<B[i].size();u++)
+            {
+                int letter = int(B[i][u]-'a');
+                tmax[letter]++;
+                if(tmax[letter]>max[letter])
+                {
+                    max[letter] = tmax[letter];
+                    count++;
+                }
+            }
+        }
+        for(int i=0;i<A.size();i++)
+        {
+            vector<int> Amax = max;
+            int herecount = count;
+            for(int u=0;u<A[i].size()&&herecount>0;u++)
+            {
+                int letter = int(A[i][u]-'a');             
+                if(Amax[letter]>0)
+                {
+                    herecount--;
+                    Amax[letter]--;
+                }
+            }
+            if(herecount==0)
+                output.emplace_back(A[i]);
+        }
+        return output;
+    }
+};
