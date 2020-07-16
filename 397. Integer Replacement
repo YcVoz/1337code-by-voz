@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int integerReplacement(int n) {
+        long nn = n;
+        int count = 0;
+        while(nn!=1)
+        {
+            count++;
+            if(nn%2)
+            {
+                if((nn-1)/2%2==0||nn-1==2)
+                    nn--;
+                else
+                    nn++;
+            }
+            else
+            {
+                nn/=2;
+            }
+        }
+        return count;
+    }
+};
