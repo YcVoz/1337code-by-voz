@@ -1,0 +1,76 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        vector<string> part(0);
+        bool big = 1;
+        int numOfBrackets = 0;
+        int bitOfNum = 0;
+        bool onlyone = 0;
+        string sub = "";
+        int timesss = 0;
+        for(int i=0;i<s.size();i++)
+        {
+            if(big)
+            {
+                if(s[i]=='[')
+                {
+                    big = 0;
+                    numOfBrackets++;
+                    onlyone = 1;
+                }
+                else if(int(s[i]-'0')<=9)
+                {
+                    bitOfNum++;
+                    timesss*=10;
+                    timesss+=int(s[i]-'0');
+                }                
+                else 
+                {
+                    string fk = "";
+                    fk+=s[i];
+                    part.emplace_back(fk);
+                }
+            }
+            else
+            {
+                sub+=s[i];
+                if(s[i]=='[')
+                {                    
+                    numOfBrackets++;
+                    if(numOfBrackets==2)
+                    {
+                        onlyone = 0;
+                    }
+                }
+                else if(s[i]==']')
+                {           
+                    numOfBrackets--;
+                    if(numOfBrackets==0)
+                    {
+                        big = 1;
+                        sub.resize(sub.size()-1);
+                        string goout = "";
+                        if(!onlyone)
+                        {
+                            sub = decodeString(sub);
+                        }
+                        for(int k=0;k<timesss;k++)
+                        {
+                            goout+=sub;
+                        }
+                        part.emplace_back(goout);
+                        sub = "";
+                        timesss = 0;
+                        bitOfNum = 0;
+                    }
+                }
+            }
+        }
+        sub = "";
+        for(int i=0;i<part.size();i++)
+        {
+            sub+=part[i];
+        }
+        return sub;
+    }
+};
