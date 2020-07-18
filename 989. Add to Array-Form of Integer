@@ -1,0 +1,60 @@
+class Solution {
+public:
+    vector<int> addToArrayForm(vector<int>& A, int K) {
+        vector<int> incase(0);
+        int index = A.size()-1;        
+        bool oneBitOverFlow = 0;
+        int overflowIndex = 0;
+        while(K!=0||oneBitOverFlow)
+        {     
+            if(index>=0)
+            {
+                int thisbit = A[index]+K%10+oneBitOverFlow;
+                K/=10;
+                if(thisbit>9)
+                {
+                    A[index] = thisbit-10;
+                    oneBitOverFlow = 1;
+                }
+                else
+                {
+                    oneBitOverFlow = 0;
+                    A[index] = thisbit;
+                }
+                index--;
+            }
+            else
+            {
+                int thisbit = K%10+oneBitOverFlow;
+                K/=10;
+                if(thisbit>9)
+                {
+                    incase.emplace_back(thisbit-10);
+                    oneBitOverFlow = 1;
+                }
+                else
+                {
+                    oneBitOverFlow = 0;
+                    incase.emplace_back(thisbit);
+                }
+            }
+        }        
+        if(incase.size()>0)
+        {
+            vector<int> output(0);
+            for(int i=incase.size()-1;i>=0;i--)
+            {
+                output.emplace_back(incase[i]);
+            }
+            for(int i=0;i<A.size();i++)
+            {
+                output.emplace_back(A[i]);
+            }
+            return output;
+        }
+        else
+        {
+            return A;
+        }
+    }
+};
