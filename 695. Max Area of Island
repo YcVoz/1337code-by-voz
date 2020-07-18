@@ -1,0 +1,88 @@
+class Solution {
+public:
+    int maxAreaOfIsland(vector<vector<int>>& grid) {
+        int m = grid.size();
+        if(m==0)
+            return 0;
+        int n = grid[0].size();
+        vector<vector<bool>> isVisit;
+        isVisit.resize(m);
+        queue<pair<int,int>> q1;
+
+        int max = 0;
+        for(int i=0;i<m;i++)
+        {
+            isVisit[i].resize(n);
+            //for(int u=0;u<n;u++)
+             //   isVisit[i][u] = 0;
+        }        
+        for(int i=0;i<m;i++)
+        {
+            for(int u=0;u<n;u++)
+            {
+                if(grid[i][u]&&(!isVisit[i][u]))
+                {
+                    int now = 1;
+                    isVisit[i][u] = 1;
+                    pair<int,int> p1(i,u);
+                    q1.push(p1);
+                    while(q1.size()>0)
+                    {   
+                        int a = q1.front().first;
+                        int b = q1.front().second;
+                        q1.pop();
+                        if(a!=0)
+                        {
+                            if(!isVisit[a-1][b]&&grid[a-1][b])
+                            {
+                                now++;
+                                isVisit[a-1][b] = 1;
+                                pair<int,int> tem(a-1,b);
+                                q1.push(tem);
+                            }
+                        }
+                        if(b!=0)
+                        {
+                            if(!isVisit[a][b-1]&&grid[a][b-1])
+                            {
+                                now++;
+                                isVisit[a][b-1] = 1;
+                                pair<int,int> tem(a,b-1);
+                                q1.push(tem);
+                            }
+                        }
+                        if(b!=n-1)
+                        {
+                            if(!isVisit[a][b+1]&&grid[a][b+1])
+                            {
+                                now++;
+                                isVisit[a][b+1] = 1;
+                                pair<int,int> tem(a,b+1);
+                                q1.push(tem);
+                            }
+                        }
+                        if(a!=m-1)
+                        {
+                            if(!isVisit[a+1][b]&&grid[a+1][b])
+                            {
+                                now++;
+                                isVisit[a+1][b] = 1;
+                                pair<int,int> tem(a+1,b);
+                                q1.push(tem);
+                            }
+                        }
+                    }
+                    if(now>max)
+                        max = now;
+                    
+                }
+                else
+                {
+                    isVisit[i][u] = 1;;
+                }
+                
+            }
+        }
+        return max;
+    }
+};
