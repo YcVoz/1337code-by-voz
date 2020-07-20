@@ -1,0 +1,72 @@
+class Solution {
+public:
+    int trapRainWater(vector<vector<int>>& heightMap) {
+        int m = heightMap.size();
+        int n = heightMap[0].size();
+        int highest = 0;
+        for(int i=0;i<m;i++)
+        {
+            for(int u=0;u<n;u++)
+            {
+                if(heightMap[i][u]>highest)
+                {
+                    highest = heightMap[i][u];
+                }
+            }
+        }
+        vector<vector<int>> water;
+        water.resize(m);
+        for(int i=0;i<m;i++)
+        {
+            water[i].resize(n);
+            if(i!=0&&i!=m-1)
+            {
+                for(int u=1;u<n-1;u++)
+                {
+                    water[i][u] = highest - heightMap[i][u];
+                }
+                water[i][0] = 0;
+                water[i][n-1] = 0;
+            }
+            else
+            {
+                for(int u=0;u<n;u++)
+                {
+                    water[i][u] = 0;
+                }
+            }
+        }
+        bool fin = 0;
+        while(!fin)
+        {     
+            fin = 1;
+            for(int i=1;i<m-1;i++)
+            {
+                for(int u=1;u<n-1;u++)
+                {
+                    if(water[i][u]!=0)
+                    {
+                        int min1 = min(heightMap[i-1][u]+water[i-1][u],heightMap[i+1][u]+water[i+1][u]);
+                        int min2 = min(heightMap[i][u-1]+water[i][u-1],heightMap[i][u+1]+water[i][u+1]);
+                        int minn=min(min1,min2);
+                        if(heightMap[i][u]+water[i][u]>minn)
+                        {
+                            water[i][u] = max(0,minn-heightMap[i][u]);
+                            fin = 0;
+                        }
+                    }
+                }
+            }
+        }
+        
+        int output = 0;
+        for(int i=1;i<m-1;i++)
+        {
+            for(int u=1;u<n-1;u++)
+            {
+                output+=water[i][u];
+            }
+        }
+        return output;
+    }
+};
