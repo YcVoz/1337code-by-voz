@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int atMostNGivenDigitSet(vector<string>& D, int N) {
+        int numOfAlldit = D.size();
+        vector<bool> aaa(9);        
+        vector<int> lowerThan(9);
+        vector<int> NN(0);
+        for(int i=0;i<D.size();i++)
+        {
+            aaa[D[i][0]-'1'] = 1;
+        }
+        lowerThan[0] = 0;
+        for(int i=1;i<9;i++)
+        {
+            lowerThan[i] = lowerThan[i-1] + aaa[i-1];
+        }
+
+        int numberOfBit = 0;
+        while(N>0)
+        {
+            NN.emplace_back(N%10);
+            numberOfBit++;
+            N/=10;
+        }
+        bool tag = 1;
+        int output = 0;
+        for(int i=0;i<numberOfBit&&tag;i++)
+        {
+            if(NN[NN.size()-1-i]!=0)
+            {                   
+                output+=lowerThan[NN[NN.size()-1-i]-1]*pow(numOfAlldit,numberOfBit-1-i);
+                if(!aaa[NN[NN.size()-1-i]-1])
+                {
+                    tag = 0;
+                }
+                else if(i==numberOfBit-1)
+                    output+=1;
+            }
+            else
+            {
+                tag = 0;
+            }
+        }
+        for(int nowbitnumber = 1;nowbitnumber<numberOfBit;nowbitnumber++)
+        {
+            output+=pow(numOfAlldit,nowbitnumber);
+        }
+        return output;
+    }
+};
