@@ -1,0 +1,71 @@
+class Solution {
+public:
+    string largestNumber(vector<int>& nums) {
+        map<long long, vector<int>> mappp;
+        int numberOfZero = 0;
+        int bidBit = 0;
+        for(int i=0;i<nums.size();i++)
+        {
+            int bitt = 0;
+            int thisaa = nums[i];
+            while(thisaa>0)
+            {
+                bitt++;
+                thisaa/=10;
+            } 
+            if(bitt>bidBit)
+                bidBit = bitt;
+        }
+        for(int i=0;i<nums.size();i++)
+        {
+            if(nums[i]==0)
+            {                
+                numberOfZero++;
+            }
+            else
+            {
+                long long tem = nums[i];
+                int thisa = nums[i];
+                int bit = 0;      
+                vector<int> everybit(0);
+                while(thisa>0)
+                {
+                    bit++;
+                    everybit.emplace_back(thisa%10);
+                    thisa/=10;
+                }                
+                bit = bidBit - bit +1;
+                int nowIndex = everybit.size()-1;
+                for(int i=0;i<bit;i++)
+                {
+                    tem*=10;
+                    tem+=everybit[nowIndex];
+                    if(nowIndex!=0)
+                    {
+                        nowIndex--;
+                    }
+                    else
+                    {
+                        nowIndex = everybit.size()-1;
+                    }
+                }
+                mappp[tem].emplace_back(nums[i]);
+            }     
+        }
+        string output = "";
+        for(auto iter_r = mappp.begin(); iter_r != mappp.end(); iter_r++)
+        {
+            for(int i=0;i<iter_r->second.size();i++)
+            {
+                output = to_string(iter_r->second[i]) + output;
+            }            
+        }
+        for(int i=0;i<numberOfZero;i++)
+        {
+            output = output + "0";
+        }
+        if(output[0]=='0')
+            return "0";
+        return output;
+    }
+};
