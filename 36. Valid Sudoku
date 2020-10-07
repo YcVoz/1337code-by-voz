@@ -1,0 +1,47 @@
+class Solution {
+public:
+    bool isValidSudoku(vector<vector<char>>& board) {
+        vector<vector<bool>> hor(9);
+        vector<vector<bool>> vir(9);
+        vector<vector<bool>> block(9);
+        for(int i=0;i<9;i++)
+        {
+            vector<bool> tem(9,0);
+            hor[i] = tem;
+            vir[i] = tem;
+            block[i] = tem;
+        }
+        for(int i=0;i<board.size();i++)
+        {
+            for(int j=0;j<board[0].size();j++)
+            {
+                if(board[i][j]!='.')
+                {
+                    int thisNumber = board[i][j]-'1';
+                    if(hor[thisNumber][i])
+                    {
+                        return 0;
+                    }
+                    if(vir[thisNumber][j])
+                    {
+                        return 0;
+                    }
+                    if(block[thisNumber][toBlock(i,j)])
+                    {
+                        return 0;
+                    }
+                    hor[thisNumber][i] = 1;
+                    vir[thisNumber][j] = 1;
+                    block[thisNumber][toBlock(i,j)] = 1;
+                }
+            }
+        }
+        return 1;
+    }
+    int toBlock(int i,int j)
+    {
+        int smallI = i/3;
+        int smallJ = j/3;
+        return 3*smallJ+smallI;
+    }
+};
