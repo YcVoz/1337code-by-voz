@@ -1,0 +1,66 @@
+class Solution {
+public:
+    int maxDotProduct(vector<int>& nums1, vector<int>& nums2) {
+        int m = nums1.size();
+        int n = nums2.size();  
+        bool taggg = 1;
+        bool havePos = 1;
+        bool haveNeg = 1;
+        for(int i=0;i<m&&(havePos||haveNeg);i++)
+        {
+            if(nums1[i]>0)
+            {
+                havePos = 0;
+            }
+            else if(nums1[i]<0)
+            {
+                haveNeg = 0;
+            }
+        }
+        if(havePos||haveNeg)
+        {
+            havePos = 1;
+            haveNeg = 1;
+            for(int i=0;i<n&&(havePos||haveNeg);i++)
+            {
+                if(nums2[i]>0)
+                {
+                    havePos = 0;
+                }
+                else if(nums2[i]<0)
+                {
+                    haveNeg = 0;
+                }
+            }
+            if(havePos||haveNeg)
+            {
+                int a = abs(nums1[0]);
+                int b = abs(nums2[0]);
+                for(int i=1;i<m;i++)
+                {
+                    a = min(a,abs(nums1[i]));
+                }
+                for(int i=1;i<n;i++)
+                {
+                    b = min(b,abs(nums2[i]));
+                }
+                return a*b*-1;
+            }
+        }
+        vector<vector<int>> table(m+1,vector<int>(n+1,0));
+        for(int i=1;i<=m;i++)
+        {
+            for(int u = 1;u<=n;u++)
+            {
+                if(nums1[i-1]*nums2[u-1]>0)
+                {
+                    table[i][u] = nums1[i-1]*nums2[u-1]+table[i-1][u-1];
+                }
+                table[i][u] = max(table[i][u],table[i][u-1]);
+                table[i][u] = max(table[i][u],table[i-1][u]);
+                    
+            }
+        }
+        return table[m][n];
+    }
+};
