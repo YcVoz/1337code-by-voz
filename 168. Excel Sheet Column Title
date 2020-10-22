@@ -1,0 +1,26 @@
+class Solution {
+public:
+    string convertToTitle(int n) {
+        long long test = 26;
+        int count = 1;
+        while(n>test)
+        {
+            n-=test;
+            test*=26; 
+            count++;
+        }
+        n--;
+        string output = "";
+        while(n>0)
+        {
+            output = char('A'+n%26) + output;
+            n/=26;
+            count--;
+        }
+        for(int i=0;i<count;i++)
+        {
+            output = 'A' + output;
+        }
+        return output;
+    }
+};
