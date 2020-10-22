@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int numOfSubarrays(vector<int>& arr, int k, int threshold) {
+        if(arr.size()<k)
+            return 0;
+        int kannaThreshold = threshold*k;
+        int times = arr.size()-k;
+        int nowSum = 0;
+        int output = 0;
+        for(int i=0;i<k;i++)
+        {
+            nowSum+=arr[i];
+        }
+        if(nowSum>=kannaThreshold)
+            output++;
+        for(int i=0;i<times;i++)
+        {
+            nowSum-=arr[i];
+            nowSum+=arr[k+i];
+            if(nowSum>=kannaThreshold)
+                output++;
+        }
+        return output;
+    }
+};
