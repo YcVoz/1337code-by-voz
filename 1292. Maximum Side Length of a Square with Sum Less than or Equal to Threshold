@@ -1,0 +1,67 @@
+class Solution {
+public:
+    int maxSideLength(vector<vector<int>>& mat, int threshold) {
+        int m = mat.size();
+        int n = mat[0].size();
+        int limit;  
+        if(m>=n)
+            limit = n;
+        else 
+            limit = m;
+        vector<vector<int>> newMat(m,vector<int>(n,0));
+        newMat[0][0] = mat[0][0];
+        for(int i=1;i<m;i++)
+        {
+            newMat[i][0] = mat[i][0] + newMat[i-1][0];
+        }
+        for(int i=1;i<n;i++)
+        {
+            newMat[0][i] = mat[0][i] + newMat[0][i-1];
+        }
+        for(int i=1;i<m;i++)
+        {
+            for(int u=1;u<n;u++)
+            {
+                newMat[i][u] = newMat[i-1][u] + newMat[i][u-1] - newMat[i-1][u-1] + mat[i][u];                           
+            }
+        }
+        bool tag = 1;
+        for(int outPutSize=1;outPutSize<=limit&&tag;outPutSize++)
+        {            
+            bool pass = 0;
+            if(newMat[outPutSize-1][outPutSize-1]<=threshold)
+            {
+                pass = 1;
+            }
+            for(int a = outPutSize;a<n&&(!pass);a++)
+            {
+                if(newMat[outPutSize-1][a]-newMat[outPutSize-1][a-outPutSize]<=threshold)
+                {
+                    pass = 1;
+                }
+            }
+            for(int a = outPutSize;a<m&&(!pass);a++)
+            {
+                if(newMat[a][outPutSize-1]-newMat[a-outPutSize][outPutSize-1]<=threshold)
+                {
+                    pass = 1;
+                }
+            }                   
+            for(int a = outPutSize;a<m&&(!pass);a++)
+            {
+                for(int b = outPutSize;b<n&&(!pass);b++)
+                {
+                    if(newMat[a][b]-newMat[a-outPutSize][b]-newMat[a][b-outPutSize]+newMat[a-outPutSize][b-outPutSize]<=threshold)
+                    {
+                        pass = 1;
+                    }
+                }
+            }
+            if(!pass)
+            {
+                return outPutSize-1;
+            }
+        }
+        return limit;
+    }
+};
