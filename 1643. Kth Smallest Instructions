@@ -1,0 +1,84 @@
+class Solution {
+public:
+    string kthSmallestPath(vector<int>& destination, int k) {
+        string a = "";
+        int num_H = destination[1];
+        int num_V = destination[0];
+        if(k==1)
+        {
+            for(int i=0;i<num_H;i++)
+            {
+                a += "H";
+            }
+            for(int i=0;i<num_V;i++)
+            {
+                a += "V";
+            }
+            return a;
+        }
+        if(num_V==0)
+        {
+            for(int i=0;i<num_H;i++)
+            {
+                a += "H";
+            }
+            return a;
+        }
+        else if(num_H==0)
+        {
+            for(int i=0;i<num_V;i++)
+            {
+                a += "V";
+            }
+            return a;
+        }
+        int count = 1;
+        int num_preH = num_H;
+        int thisCount = 0;
+        int lastCount = 0;
+        
+        bool kannaTag = 1;
+        while(kannaTag)
+        {
+            thisCount = nCr(num_H + num_V - (num_preH-1) - 1, num_H - (num_preH-1));
+            if(thisCount+count>=k)
+            {
+                kannaTag = 0;
+            }
+            else
+            {
+                count += thisCount;
+                num_preH--;
+            }
+        }  
+        num_preH--;
+        for(int i = 0;i<num_preH;i++)
+        {
+            a += 'H';
+        }
+        a += 'V';
+        
+        destination[1] -= num_preH;
+        destination[0] -= 1;
+        a += kthSmallestPath(destination, k - count );
+        return a;
+    }
+    int nCr(int a, int b)
+    {
+        long long output = 1;
+        b = min(b,a-b);
+        if(b*a==0)
+        {
+            return 1;
+        }
+        for(int i=0;i<b;i++)
+        {
+            output *= (a-i);
+        }
+        for(int i=0;i<b;i++)
+        {
+            output /= (b-i);
+        }
+        return output;
+    }
+};
