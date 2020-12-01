@@ -1,0 +1,15 @@
+class Solution {
+public:
+    int minDifference(vector<int>& nums) {
+        if(nums.size()<=4)
+            return 0;
+        int sizz = nums.size()-1;
+        sort(nums.begin(),nums.end());
+        int output = 2000000000;
+        output = min(abs(nums[sizz]-nums[3]),output);
+        output = min(abs(nums[sizz-1]-nums[2]),output);
+        output = min(abs(nums[sizz-2]-nums[1]),output);
+        output = min(abs(nums[sizz-3]-nums[0]),output);
+        return output;
+    }
+};
