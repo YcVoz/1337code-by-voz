@@ -1,0 +1,67 @@
+class Solution {
+public:
+    vector<bool> camelMatch(vector<string>& queries, string pattern) {
+        vector<bool> output(queries.size());
+        for(int i = 0;i < queries.size();i++)
+        {
+            int queries_pointer = 0;
+            int pattern_pointer = 0;
+            bool tag = 1;
+            while(pattern_pointer<pattern.size()&&tag&&queries_pointer<queries[i].size())
+            {
+                if(queries[i][queries_pointer]!=pattern[pattern_pointer])
+                {
+                    int tem = queries[i][queries_pointer]-'A';
+                    if(tem>=0 && tem<26)
+                    {
+                        tag = 0;
+                    }
+                    else
+                    {
+                        queries_pointer++;
+                    }
+                }
+                else
+                {
+                    pattern_pointer++;
+                    queries_pointer++;
+                }
+            }
+            if(tag)
+            {
+                if(pattern_pointer>=pattern.size())
+                {
+                    if(queries_pointer>=queries[i].size())
+                    {
+                        output[i] = 1;
+                    }
+                    else
+                    {
+                        tag = 1;
+                        for(int u = queries_pointer;u<queries[i].size()&&tag;u++)
+                        {
+                            int tem = queries[i][u]-'A';
+                            if(tem>=0 && tem<26)
+                            {
+                                tag = 0;
+                            }
+                        }
+                        if(tag)
+                            output[i] = 1;
+                        else
+                            output[i] = 0;
+                    }
+                }
+                else 
+                {
+                    output[i] = 0;
+                }
+            }
+            else
+            {
+                output[i] = 0;
+            }            
+        }
+        return output;
+    }
+};
