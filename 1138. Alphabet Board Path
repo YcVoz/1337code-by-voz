@@ -1,0 +1,72 @@
+class Solution {
+public:
+    string alphabetBoardPath(string target) {
+        string output = "";
+        int nowX = 0;
+        int nowY = 0;
+        for(int i=0;i<target.size();i++)
+        {
+            if(target[i] == 'z')
+            {
+                if(nowX==5&&nowY==0)
+                    ;
+                else
+                {
+                    for(int u = 0;u<nowY;u++)
+                        output += 'L';
+                    for(int u = 0;u<(5-nowX);u++)
+                        output += 'D';
+                    nowX = 5;
+                    nowY = 0;
+                }
+            }
+            else 
+            {
+                int x = int(target[i]-'a') / 5;
+                int y = int(target[i]-'a') % 5;
+                if(nowX == 5 && nowY == 0)
+                {
+                    for(int u = 0;u<(5-x);u++)
+                        output += 'U';
+                    for(int u = 0;u<y;u++)
+                        output += 'R';
+                }
+                else
+                {
+                    if(x>nowX)
+                    {
+                        for(int u = 0;u<(x-nowX);u++)
+                        {
+                            output+='D';
+                        }
+                    }
+                    else if(x<nowX)
+                    {
+                        for(int u = 0;u<(nowX-x);u++)
+                        {
+                            output+='U';
+                        }
+                    }
+                    if(y>nowY)
+                    {
+                        for(int u = 0;u<(y-nowY);u++)
+                        {
+                            output+='R';
+                        }
+                    }
+                    else if(y<nowY)
+                    {
+                        for(int u = 0;u<(nowY-y);u++)
+                        {
+                            output+='L';
+                        }
+                    }
+                }      
+                nowX = x;
+                nowY = y;
+            }      
+            output += '!';           
+        }
+        return output;
+    }
+};
