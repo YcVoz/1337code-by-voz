@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int countServers(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        vector<int> had(n,0);
+        vector<int> w84check(0); 
+        int all = 0;
+        for(int i = 0;i<m;i++)
+        {
+            int thisRowCount = 0;
+            int lastIndex = -1;
+            for(int u=0;u<n;u++)
+            {
+                if(grid[i][u])
+                {
+                    all++;
+                    had[u]++;
+                    lastIndex = u;
+                    thisRowCount++;
+                }
+            }
+            if(thisRowCount == 1)
+            {
+                w84check.emplace_back(lastIndex);
+            }
+        }
+        for(int i=0;i<w84check.size();i++)
+        {
+            if(had[w84check[i]]==1)
+            {
+                all--;
+            }
+        }
+        return all;
+    }
+};
