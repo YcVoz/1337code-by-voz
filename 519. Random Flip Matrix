@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int nowSize = 0;
+    int initSize = 0;
+    vector<int> remainEle;   
+    int m = -1;
+    int n = -1;
+    
+    Solution(int n_rows, int n_cols) {
+        initSize = n_rows*n_cols;
+        nowSize = initSize;
+        remainEle.resize(initSize);
+        for(int i = 0;i<initSize;i++)
+        {
+            remainEle[i] = i;
+        }
+        m = n_rows;
+        n = n_cols;       
+    }
+    
+    vector<int> flip() {
+        int delIndex = rand() % nowSize;
+        int a = remainEle[delIndex]/n;
+        int b = remainEle[delIndex]%n;
+        int tem = remainEle[delIndex];
+        remainEle[delIndex] = remainEle[nowSize-1];
+        remainEle[nowSize-1] = tem;
+        nowSize--;
+
+        return vector<int> { a, b };
+    }
+    
+    void reset() {
+        nowSize = initSize;
+    }
+};
+
+/**
+ * Your Solution object will be instantiated and called as such:
+ * Solution* obj = new Solution(n_rows, n_cols);
+ * vector<int> param_1 = obj->flip();
+ * obj->reset();
+ */
