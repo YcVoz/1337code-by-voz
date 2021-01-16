@@ -1,0 +1,59 @@
+class Solution {
+public:
+    vector<int> mostCompetitive(vector<int>& nums, int k) {
+        vector<int> output(1,nums[0]);
+        bool tag = 1;
+        for(int i=1;i<nums.size()&&tag;i++)
+        {
+            int inputIndex = -1;
+            if(output[0]>nums[i])
+            {
+                inputIndex = 0;
+            }
+            else if(output[output.size()-1]<=nums[i])
+            {
+                if(output.size()<k)
+                {
+                    output.emplace_back(nums[i]);
+                }
+            }
+            else
+            {
+                int left = 0;
+                int right = output.size()-1;
+                int mid = (left+right)/2;
+                while(left+1!=right)
+                {
+                    if(nums[i]>=output[mid])
+                    {
+                        left = mid;
+                    }
+                    else
+                    {
+                        right = mid;
+                    }
+                    mid = (left+right)/2;
+                }
+                inputIndex = right;
+            }  
+            if(inputIndex!=-1)
+            {
+                if((nums.size()-i)<=k-inputIndex)
+                {
+                    tag = 0;
+                    output.resize(k);
+                    for(int u = 0;u<(nums.size()-i);u++)
+                    {
+                        output[k-1-u] = nums[nums.size()-1-u];
+                    }
+                }
+                else
+                {
+                    output[inputIndex] = nums[i];
+                    output.resize(inputIndex+1);
+                }
+            }
+        }
+        return output;
+    }
+};
