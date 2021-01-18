@@ -1,0 +1,30 @@
+class Solution {
+public:
+    map<int,long long> m1;
+    int combinationSum4(vector<int>& nums, int target) {
+        if(!nums.size())
+            return 0;
+        sort(nums.begin(),nums.end());
+        for(int i=0;i<nums.size();i++)
+        {
+            m1[nums[i]] += 1;
+        }
+        for(auto iter = m1.begin();iter!=m1.end();iter++)
+        {
+            if(iter->first==target)
+                return iter->second;
+            else if(iter->first>target)
+                return 0;
+            bool tagg = 1;
+            for(int i=0;i<nums.size()&&tagg;i++)
+            {
+                if(iter->first+nums[i]<=target)
+                    m1[iter->first+nums[i]] += iter->second;
+                else
+                    tagg = 0;
+                m1[iter->first+nums[i]] %= 2147483647;
+            }
+        }
+        return 0;
+    }
+};
