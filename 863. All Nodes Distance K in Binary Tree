@@ -1,0 +1,58 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode(int x) : val(x), left(NULL), right(NULL) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> distanceK(TreeNode* root, TreeNode* target, int K) {
+        vector<vector<int>> graph(501,vector<int>(0));
+        vector<bool> checked(501,0);
+        queue<TreeNode*> q1;
+        vector<queue<int>> q2(2);
+        q1.push(root);
+        while(!q1.empty())
+        {
+            TreeNode* tem = q1.front();
+            q1.pop();
+            if(tem->left!=NULL)
+            {
+                graph[tem->left->val].emplace_back(tem->val);
+                graph[tem->val].emplace_back(tem->left->val);
+                q1.push(tem->left);
+            }
+            if(tem->right!=NULL)
+            {
+                graph[tem->right->val].emplace_back(tem->val);
+                graph[tem->val].emplace_back(tem->right->val);
+                q1.push(tem->right);
+            }
+        }
+        q2[0].push(target->val);
+        for(int i = 0;i < K;i++)
+        {
+            while(!q2[i%2].empty())
+            {
+                int tem = q2[i%2].front();                
+                q2[i%2].pop();
+                for(int u = 0;u < graph[tem].size();u++ )
+                {
+                    if(!checked[graph[tem][u]])
+                        q2[!(i%2)].push(graph[tem][u]);
+                }                
+                checked[tem] = 1;
+            }
+        }
+        vector<int> output(q2[K%2].size());
+        for(int i=0;i < output.size();i++)
+        {            
+            output[i] = q2[K%2].front();
+            q2[K%2].pop();
+        }
+        return output;
+    }
+};
