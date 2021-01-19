@@ -1,0 +1,48 @@
+class Solution {
+public:
+    bool possibleBipartition(int N, vector<vector<int>>& dislikes) {
+        if(!dislikes.size())
+            return 1;
+        vector<vector<int>> diss(N,vector<int>(0));
+        vector<int> check(N,-1);
+        for(int i=0;i<dislikes.size();i++)
+        {
+            diss[dislikes[i][0]-1].emplace_back(dislikes[i][1]-1);
+            diss[dislikes[i][1]-1].emplace_back(dislikes[i][0]-1);
+        }
+        vector<queue<int>> q1(2);
+        bool tag = 0;
+        for(int i=0;i<diss.size();i++)
+        {
+            if(diss[i].size()!=0)
+            {      
+                if(check[i]==-1)
+                {
+                    q1[tag].push(i);
+                }
+                while(!q1[0].empty()||!q1[1].empty())
+                {
+                    if(check[q1[tag].front()]==-1)
+                    {
+                        check[q1[tag].front()] = tag;
+                        for(int uu = 0;uu<diss[q1[tag].front()].size();uu++)
+                        {
+                            if(check[diss[q1[tag].front()][uu]]==-1)
+                                q1[!tag].push(diss[q1[tag].front()][uu]);
+                            else if(check[diss[q1[tag].front()][uu]]==tag)
+                                return 0;   
+                        }
+                    }
+                    else if(check[q1[tag].front()] != tag)
+                    {
+                        return 0;
+                    }
+                    q1[tag].pop();
+                    if(q1[tag].empty())
+                        tag = !tag;
+                }
+            }
+        }
+        return 1;
+    }
+};
