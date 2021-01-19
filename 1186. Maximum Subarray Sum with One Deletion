@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int maximumSum(vector<int>& arr) {
+        if(arr.size()==1)
+            return arr[0];
+        vector<vector<int>> dp(2,vector<int> (arr.size(),0));
+        dp[0][0] = arr[0];
+        dp[1][0] = 0;
+        int numofNegative = 0;
+        if(arr[0]<=0)
+            numofNegative++;
+        int max = arr[0];
+        for(int i=1;i<arr.size();i++)
+        {
+            if(arr[i]<=0)            
+                numofNegative++;            
+            if(arr[i]>max)
+                max = arr[i];
+            if(dp[0][i-1]<0)
+                dp[0][i] = arr[i];
+            else
+                dp[0][i] = arr[i] + dp[0][i-1];                
+        }
+        if(numofNegative==arr.size())
+            return max;
+        max = -1;
+        for(int i=1;i<arr.size();i++)
+        {
+            if(arr[i]<=0)            
+                numofNegative++;            
+            if(arr[i]>max)
+                max = arr[i];
+            if(dp[0][i-1]<0)
+                dp[0][i] = arr[i];
+            else
+                dp[0][i] = arr[i] + dp[0][i-1];  
+            if(dp[0][i-1]>dp[1][i-1] + arr[i])
+                dp[1][i] = dp[0][i-1];
+            else
+                dp[1][i] = dp[1][i-1] + arr[i];
+            if(dp[1][i]>max)
+                max = dp[1][i];
+            if(dp[0][i]>max)
+                max = dp[0][i];
+        }
+        return max;
+    }
+};
