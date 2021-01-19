@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int dieSimulator(int n, vector<int>& rollMax) {
+        vector<vector<int>> dp(6,vector<int>(n));
+        for(int i=0;i<dp.size();i++)
+            dp[i][0] = 1;
+        for(int i=1;i<n;i++)
+        {
+            int all = 0;
+            for(int u=0;u<dp.size();u++)
+            {
+                all = all + dp[u][i-1]; 
+                all %= 1000000007;
+            }
+            for(int u=0;u<dp.size();u++)
+            {
+                dp[u][i] = all;                
+                if(i-(rollMax[u])==0)
+                    dp[u][i] -= 1;
+                else if(i-(rollMax[u])>0)
+                {
+                    for(int o=0;o<dp.size();o++)
+                    {
+                        dp[u][i] -= dp[o][i-rollMax[u]-1];
+                        while(dp[u][i]<0)
+                            dp[u][i] += 1000000007;
+                    }
+                    dp[u][i] += dp[u][i-rollMax[u]-1];
+                }
+                dp[u][i] %= 1000000007;
+            }
+        }
+        int output = 0;
+        for(int u=0;u<dp.size();u++)
+        {
+            output += dp[u][n-1]; 
+            output %= 1000000007;
+        }
+        return output%1000000007;
+    }
+};
