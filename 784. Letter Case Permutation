@@ -1,0 +1,52 @@
+class Solution {
+public:
+    vector<string> letterCasePermutation(string S) {
+        vector<string> output(1);
+        if(S[0]-'0'>=0&&S[0]-'0'<10)
+            output[0] = S[0];
+        else
+        {
+            output[0] = S[0];
+            string s1 = "";
+            if(S[0]-'a'>=0&&S[0]-'a'<26)            
+                s1+=((char)(S[0]-'a'+'A'));            
+            else
+                s1+=((char)(S[0]-'A'+'a')); 
+            output.emplace_back(s1);
+        }
+        for(int i=1;i<S.size();i++)
+        {
+            if(S[i]-'0'>=0&&S[i]-'0'<10)
+            {
+                for(int u=0;u<output.size();u++)
+                {
+                    output[u]+=S[i];
+                }
+            }
+            else
+            {
+                int sizee = output.size();
+                output.resize(sizee*2);
+                for(int u=sizee;u<output.size();u++)
+                {
+                    output[u] = output[u-sizee]+S[i];
+                }
+                if(S[i]-'a'>=0&&S[i]-'a'<26)
+                {
+                    for(int u=0;u<sizee;u++)
+                    {
+                        output[u] += (char)(S[i]-'a'+'A');
+                    }
+                }
+                else
+                {
+                    for(int u=0;u<sizee;u++)
+                    {
+                        output[u] += (char)(S[i]-'A'+'a');
+                    }
+                }
+            }
+        }
+        return output;
+    }
+};
