@@ -1,0 +1,74 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int maxProduct(TreeNode* root) {
+        vector<queue<TreeNode*>> q1(2);
+        bool tag = 0;
+        int all = 0;
+        q1[tag].push(root);
+        while(!q1[tag].empty())
+        {
+            all += q1[tag].front()->val;
+            if(q1[tag].front()->left!=NULL)
+                q1[!tag].push(q1[tag].front()->left);
+            if(q1[tag].front()->right!=NULL)
+                q1[!tag].push(q1[tag].front()->right);
+            q1[tag].pop();
+            if(q1[tag].empty())
+                tag = !tag;
+        }
+        double half = all/2.0;
+        int out1 = getSubtreeValue(root, all).first+half;  
+        long long output;
+        output = abs(all-out1)%(1000000000+7);
+        output *= out1%(1000000000+7);
+        output %= (1000000000+7);
+        return output;
+    }
+    pair<double,int> getSubtreeValue(TreeNode* root,int all)
+    {
+        double ganyu= all/2.0;
+        int l = 0;
+        int r = 0;
+        int a = 0;
+        double l2 = all;
+        double r2 = all;
+        double a2 = all;
+        pair<double,int> lll;
+        pair<double,int> rrr;
+        if(root->left!=NULL)
+        {
+            lll = getSubtreeValue(root->left,all);
+            l = lll.second;
+            l2 = lll.first;
+        }
+        if(root->right!=NULL)
+        {
+            rrr = getSubtreeValue(root->right,all);
+            r = rrr.second;
+            r2 = rrr.first;
+        }
+        if(l==r&&l==0)
+            return pair<double,int>(abs(root->val-ganyu),root->val);
+        a = l + r + root->val;
+        a2 = abs(a-ganyu);
+
+        if(l2<=r2&&l2<=a2)
+            return pair<double,int>(l2,a);
+        if(r2<=l2&&r2<=a2)
+            return pair<double,int>(r2,a);
+        if(a2<=r2&&a2<=l2)
+            return pair<double,int>(a2,a);
+        return pair<double,int>(-111,-111);
+    }
+};
