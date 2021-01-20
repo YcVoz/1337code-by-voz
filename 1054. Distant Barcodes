@@ -1,0 +1,45 @@
+class Solution {
+public:
+    vector<int> rearrangeBarcodes(vector<int>& barcodes) {
+        map<int,int> m1;
+        int maxlength = 0;
+        for(int i=0;i<barcodes.size();i++)
+        {
+            m1[barcodes[i]]++;
+            if(m1[barcodes[i]]>maxlength)
+                maxlength = m1[barcodes[i]];
+        }
+        vector<vector<int>> v1(maxlength,vector<int>(0));
+        for(auto iter = m1.begin();iter!=m1.end();iter++)
+        {
+            v1[(iter->second)-1].emplace_back(iter->first);
+        }
+        vector<int>output(barcodes.size());
+        for(int i=0;i<barcodes.size();i++)
+        {   
+            int nowLenghth = maxlength;
+            output[i] = v1[nowLenghth-1][v1[nowLenghth-1].size()-1];
+            if(i>0&&output[i-1]==output[i])
+            {
+                if(v1[nowLenghth-1].size()>1)
+                {
+                    output[i] = v1[nowLenghth-1][v1[nowLenghth-1].size()-2];
+                    v1[nowLenghth-1][v1[nowLenghth-1].size()-2] = v1[nowLenghth-1][v1[nowLenghth-1].size()-1];
+                }      
+                else
+                {
+                    nowLenghth--;
+                    while(!v1[nowLenghth-1].size())
+                        nowLenghth--;                    
+                    output[i] = v1[nowLenghth-1][v1[nowLenghth-1].size()-1];
+                }
+            }
+            if(nowLenghth-1>0)
+                v1[nowLenghth-2].emplace_back(output[i]);
+            v1[nowLenghth-1].resize(v1[nowLenghth-1].size()-1);
+            if(!v1[maxlength-1].size())
+                maxlength--;
+        }
+        return output;
+    }
+};
