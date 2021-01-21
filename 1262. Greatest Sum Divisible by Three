@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maxSumDivThree(vector<int>& nums) {
+        vector<vector<int>> dp(3,vector<int>(nums.size(),0));
+        for(int i=0;i<dp.size();i++)
+            dp[i][0] = 0;
+        dp[nums[0]%3][0] = nums[0];
+        for(int i=1;i<nums.size();i++)
+        {
+            for(int u=0;u<dp.size();u++)
+            {      
+                int sum1 = nums[i] + dp[u][i-1];
+                int mod = sum1 % 3;
+                if(sum1>dp[mod][i-1]&&sum1>dp[mod][i])
+                    dp[mod][i] = sum1;
+            }
+            for(int u=0;u<dp.size();u++)
+            {
+                if(!dp[u][i])
+                    dp[u][i] = dp[u][i-1];
+            }
+        }
+        return dp[0][nums.size()-1];
+    }
+};
