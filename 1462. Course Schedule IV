@@ -1,0 +1,70 @@
+class Solution {
+public:
+    vector<bool> checkIfPrerequisite(int n, vector<vector<int>>& prerequisites, vector<vector<int>>& queries) {
+        vector<vector<int>> v1(n,vector<int>(0));
+        vector<bool> check(n,0);
+        vector<bool> output(queries.size(),0);
+        for(int i=0;i<prerequisites.size();i++)
+        {
+            v1[prerequisites[i][0]].emplace_back(prerequisites[i][1]);
+        }
+        for(int i=0;i<queries.size();i++)
+        {
+            if(check[queries[i][0]])
+            {
+                bool tag = 1;
+                for(int u=0;tag&&u<v1[queries[i][0]].size();u++)
+                {
+                    if(v1[queries[i][0]][u]==queries[i][1])
+                        tag = 0;
+                }
+                if(!tag)
+                    output[i] = 1;
+                else
+                    output[i] = 0;                    
+            }
+            else
+            {
+                if(!v1[queries[i][0]].size())
+                {
+                    check[queries[i][0]] = 1; 
+                }                   
+                else
+                {
+                    queue<int> q1;
+                    vector<bool> checkkk(n,0);
+                    for(int u=0;u<v1[queries[i][0]].size();u++)
+                    {
+                        q1.push(v1[queries[i][0]][u]);
+                        checkkk[v1[queries[i][0]][u]] = 1;
+                    }
+                    while(!q1.empty())
+                    {                        
+                        for(int a = 0;a<v1[q1.front()].size();a++)
+                        {
+                            if(!checkkk[v1[q1.front()][a]])
+                            {
+                                checkkk[v1[q1.front()][a]] = 1;
+                                v1[queries[i][0]].emplace_back(v1[q1.front()][a]);
+                                q1.push(v1[q1.front()][a]);
+                            }
+                        }
+                        q1.pop();
+                    }
+                    check[queries[i][0]] = 1;
+                    bool tag = 1;
+                    for(int u=0;tag&&u<v1[queries[i][0]].size();u++)
+                    {
+                        if(v1[queries[i][0]][u]==queries[i][1])
+                            tag = 0;
+                    }
+                    if(!tag)
+                        output[i] = 1;
+                    else
+                        output[i] = 0;    
+                }                
+            }
+        }
+        return output;
+    }
+};
