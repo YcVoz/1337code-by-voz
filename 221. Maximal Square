@@ -1,0 +1,50 @@
+class Solution {
+public:
+    int maximalSquare(vector<vector<char>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int output = 0;
+        vector<vector<int>> m1(m,vector<int>(n,0));
+        for(int i=0;i<n;i++)        
+            m1[0][i] = (matrix[0][i] - '0');        
+        for(int i=1;i<m;i++)
+        {
+            for(int u=0;u<n;u++)
+            {
+                if((matrix[i][u]- '0'))
+                    m1[i][u] =(matrix[i][u]- '0') + m1[i-1][u];
+            }
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int u=0;u<n;u++)
+            {
+                if(m1[i][u]>output&&n-u>output)
+                {
+                    int count = 1;
+                    int nowIndex = u+1;
+                    if(nowIndex<n)
+                    {
+                        bool tag = 1;
+                        while(tag)
+                        {                        
+                            if(m1[i][nowIndex]>output)
+                            {
+                                if(nowIndex<n-1)
+                                    nowIndex++;
+                                else
+                                    tag = 0;
+                                count++;
+                            }
+                            else                        
+                                tag = 0;                        
+                        }
+                    }
+                    if(count>output)                    
+                        output++;                                           
+                }
+            }
+        }
+        return output*output;
+    }
+};
