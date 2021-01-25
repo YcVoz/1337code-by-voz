@@ -1,0 +1,85 @@
+class Solution {
+public:
+    vector<int> constructDistancedSequence(int n) {
+        vector<bool> check(n,0);
+        vector<int> v1(n*2-1,-1);   
+        int big = 1;
+        int remain = n*2-1;
+        func1(v1,big,check,remain);
+        return v1;
+    }
+    bool func1(vector<int> &nowarr,int big,vector<bool>& check,int & remain)
+    {
+        int putin = nextPutin(check,big);    
+        if(putin==-1)
+            return 0;
+        for(int i=0;i<nowarr.size();i++)
+        {
+            if(nowarr[i]==-1)
+            {
+                if(putin==1)
+                {
+                    nowarr[i] = putin;
+                    remain--;
+                    check[putin-1] = 1;
+                    if(remain==0)
+                        return 1;
+                    if(func1(nowarr,1,check,remain))
+                    {
+                        return 1;  
+                    }
+                    else
+                    {
+                        remain++;
+                        nowarr[i] = -1;
+                        check[putin-1] = 0;
+                    }
+                }
+                else
+                {                  
+                    if((i+putin)<nowarr.size()&&nowarr[i+putin]==-1)
+                    {
+                        nowarr[i+putin] = putin;
+                        nowarr[i] = putin;
+                        remain-=2;
+                        check[putin-1] = 1;
+                        if(remain==0)
+                            return 1;
+                        if(func1(nowarr,1,check,remain))
+                        {
+                            return 1;  
+                        }
+                        else
+                        {
+                            remain+=2;
+                            nowarr[i+putin] = -1;
+                            nowarr[i] = -1;
+                            check[putin-1] = 0;
+                            return func1(nowarr,big+1,check,remain);
+                        }
+                    }
+                    else
+                    {
+                        return func1(nowarr,big+1,check,remain);
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+    int nextPutin(vector<bool> check,int big)
+    {        
+        for(int i = check.size()-1;i>=0;i--)
+        {
+            if((!check[i])&&big==1)
+            {          
+                return i+1;
+            }
+            else if(!check[i])
+            {
+                big--;
+            }
+        }
+        return -1;
+    }
+};
