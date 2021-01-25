@@ -1,0 +1,31 @@
+class SnapshotArray {
+public:
+    vector<map<int,int>> v1;
+    int n = -1;
+    SnapshotArray(int length) {
+        v1.resize(1);
+    }
+    
+    void set(int index, int val) {
+        v1[v1.size()-1][index] = val;
+    }
+    
+    int snap() {
+        n++;
+        v1.resize(v1.size()+1);
+        v1[v1.size()-1] = v1[v1.size()-2];
+        return n;
+    }
+    
+    int get(int index, int snap_id) {        
+        return v1[snap_id][index];
+    }
+};
+
+/**
+ * Your SnapshotArray object will be instantiated and called as such:
+ * SnapshotArray* obj = new SnapshotArray(length);
+ * obj->set(index,val);
+ * int param_2 = obj->snap();
+ * int param_3 = obj->get(index,snap_id);
+ */
