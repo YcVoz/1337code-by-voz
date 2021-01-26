@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int maxDistToClosest(vector<int>& seats) {
+        vector<int> check(seats.size(),0);        
+        vector<queue<int>> q1(2);
+        bool tag = 0;
+        int nowpop = 1;
+        for(int i=0;i<seats.size();i++)
+        {
+            if(seats[i])
+            {
+                check[i] = 1;
+                q1[tag].push(i);
+            }
+        }
+        while(!q1[tag].empty())
+        {
+            int nowIndex = q1[tag].front();
+            q1[tag].pop();
+            if(nowIndex<check.size()-1)
+            {
+                if(!check[nowIndex+1])
+                {
+                    check[nowIndex+1] = nowpop;
+                    q1[!tag].push(nowIndex+1);
+                }
+            }
+            if(nowIndex>0)
+            {
+                if(!check[nowIndex-1])
+                {
+                    check[nowIndex-1] = nowpop;
+                    q1[!tag].push(nowIndex-1);
+                }
+            }
+            if(q1[tag].empty())
+            {
+                tag = !tag;
+                nowpop++;
+            }
+        }
+        return nowpop-2;
+    }
+};
