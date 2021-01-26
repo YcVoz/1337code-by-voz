@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int brokenCalc(int X, int Y) {
+        int count = 0;
+        while(Y>X)
+        {
+            if(Y%2)
+            {
+                Y = (Y+1)/2;
+                count += 2;
+            }
+            else
+            {
+                Y /= 2;
+                count++;
+            }
+        }
+        if(X==Y)
+            return count;
+        if(X>Y)
+            return X-Y+count;
+        return -1;   
+    }
+};
