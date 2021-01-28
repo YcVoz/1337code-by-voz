@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool canReach(vector<int>& arr, int start) {   
+        if(!arr[start])
+            return 1;
+        vector<queue<int>> q1(2);
+        map<int,bool> visited;
+        bool tag = 0;
+        visited[start] = 1;
+        q1[tag].push(start);
+        while(!q1[tag].empty())
+        {
+            int now = q1[tag].front();
+            q1[tag].pop();
+            if(now+arr[now]<arr.size())
+            {
+                if(!visited[now+arr[now]])
+                {
+                    if(!arr[now+arr[now]])
+                        return 1;
+                    visited[now+arr[now]] = 1;
+                    q1[!tag].push(now+arr[now]);
+                }
+            }
+            if(now-arr[now]>=0)
+            {
+                if(!visited[now-arr[now]])
+                {
+                    if(!arr[now-arr[now]])
+                        return 1;
+                    visited[now-arr[now]] = 1;
+                    q1[!tag].push(now-arr[now]);
+                }
+            }
+            if(q1[tag].empty())
+                tag = !tag;
+        }
+        return 0;
+    }
+};
