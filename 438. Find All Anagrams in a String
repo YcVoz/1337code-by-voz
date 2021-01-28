@@ -1,0 +1,51 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        if(p.size()>s.size())
+            return vector<int> (0);
+        map<char,int> m1;
+        map<char,int> m2;
+        vector<int> output(0);
+        for(int i=0;i<p.size();i++)
+            m1[p[i]]++;
+        for(int i=0;i<p.size();i++)
+            m2[s[i]]++;
+        bool tag = 1;
+        for(auto iter = m1.begin();iter!=m1.end()&&tag;iter++)
+        {
+            if(m2[iter->first]!=iter->second)
+                tag = 0;
+        }
+        if(tag)
+            output.emplace_back(0);
+        for(int i=p.size();i<s.size();i++)
+        {
+            if(tag)
+            {
+                //cout<<i<<" "<<s[i]<<" "<<s[i-p.size()]<<endl;
+                if(s[i] == s[i-p.size()])
+                    output.emplace_back(i-p.size()+1);
+                else
+                {
+                    m2[s[i]]++;
+                    m2[s[i-p.size()]]--;
+                    tag = 0;
+                }
+            }
+            else
+            {
+                m2[s[i]]++;
+                m2[s[i-p.size()]]--;
+                tag = 1;
+                for(auto iter = m1.begin();iter!=m1.end()&&tag;iter++)
+                {
+                    if(m2[iter->first]!=iter->second)
+                        tag = 0;
+                }
+                if(tag)
+                    output.emplace_back(i-p.size()+1);
+            }
+        }
+        return output;
+    }
+};
