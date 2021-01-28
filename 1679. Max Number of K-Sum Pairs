@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int maxOperations(vector<int>& nums, int k) {
+        map<int,int> m1;
+        int output = 0;
+        for(int i=0;i<nums.size();i++)
+            m1[nums[i]]++;
+        for(auto iter = m1.begin();iter!=m1.end()&&iter->first<=k/2;iter++)
+        {
+            if(!(k%2)&&iter->first == k/2)
+                return output + iter->second/2;
+            output += min(iter->second,m1[k-iter->first]);
+        }
+        return output;
+    }
+    int min(int a,int b)
+    {
+        if(a>b)
+            return b;
+        return a;
+    }
+};
