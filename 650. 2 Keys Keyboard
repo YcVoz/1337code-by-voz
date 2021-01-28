@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int minSteps(int n) {
+        if(n==1)
+            return 0;
+        int output = 2;
+        int nowA = 2;
+        int nowPaste = 1;
+        while(nowA<n)
+        {
+            if(!(n%nowA))
+            {
+                output += 2;
+                nowPaste = nowA;
+                nowA *= 2;
+            }
+            else
+            {
+                output++;
+                nowA += nowPaste;
+            }
+        }
+        return output;
+    }
+};
