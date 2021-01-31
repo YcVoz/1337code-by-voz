@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int arrayNesting(vector<int>& nums) {
+        vector<bool> visited(nums.size(),0);
+        int max = 0;
+        for(int i=0;i<nums.size();i++)
+        {
+            if(!visited[i])
+            {
+                visited[i] = 1;
+                int now = 1;
+                int index = i;
+                while(nums[index]!=nums[nums[index]]&&(!visited[nums[index]]))
+                {
+                    now++;
+                    visited[nums[index]] = 1;
+                    index = nums[index];
+                }
+                if(now>max)
+                    max = now;
+            }
+        }
+        return max;
+    }
+};
