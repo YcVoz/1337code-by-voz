@@ -1,0 +1,31 @@
+class Solution {
+public:
+    double largestSumOfAverages(vector<int>& A, int K) {
+        vector<vector<double>> dp(A.size(),vector<double>(K,0));
+        vector<double> v1(A.size());
+        v1[0] = A[0];
+        for(int i=1;i<v1.size();i++)
+        {
+            v1[i] = v1[i-1] + A[i];
+        }
+        if(K==1)
+            return v1[v1.size()-1]/A.size();
+        dp[0][0] = A[0];
+        for(int i = 1;i<A.size();i++)
+            dp[i][0] = v1[i]/(i+1);        
+        dp[0][0] = A[0];
+        for(int i=0;i<A.size();i++)
+        {
+            for(int u = 2;u<=K&&u<=i+1;u++)
+            {
+                for(int x = u-2;x<i;x++)
+                {
+                    double sum= dp[x][u-1-1] + (v1[i] - v1[x])/(i - x);
+                    if(sum>dp[i][u-1])
+                        dp[i][u-1] = sum;
+                }
+            }
+        }
+        return dp[A.size()-1][K-1];
+    }
+};
