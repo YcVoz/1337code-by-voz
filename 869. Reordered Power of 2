@@ -1,0 +1,34 @@
+class Solution {
+public:
+    bool reorderedPowerOf2(int N) {
+        vector<int> v1(10,0);
+        int digitCount = 0;
+        while(N)
+        {
+            v1[N%10]++;
+            N /= 10;
+            digitCount++;
+        }
+        long long now = 1;
+        int nowDigit = 0;
+        while(nowDigit<=digitCount)
+        {
+            long long tem = now;
+            nowDigit = 0;
+            vector<int> v1_tem(10,0);
+            while(tem)
+            {
+                v1_tem[tem%10]++;
+                tem /= 10;
+                nowDigit++;
+            }
+            if(digitCount==nowDigit)
+            {
+                if(v1_tem==v1)
+                    return 1;
+            }
+            now *= 2;
+        }
+        return 0;
+    }
+};
