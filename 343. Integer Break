@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int integerBreak(int n) {
+        if(n == 2)
+            return 1;
+        else if(n == 3)
+            return 2;
+        int sum = (n/2)*(n/2+n%2);
+        for(int i = 3;i<n;i++)
+        {
+            int newsum = 1;
+            int numofnot = n%i;
+            int numof = i-numofnot;
+            for(int u=0;u<numof;u++)
+            {
+                newsum *= n/i;
+            }
+            for(int u=0;u<numofnot;u++)
+            {
+                newsum *= n/i + 1;
+            }
+            if(newsum<sum)
+                return sum;
+            sum = newsum;
+        }
+        return -1;
+    }
+};
