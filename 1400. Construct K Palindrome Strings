@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool canConstruct(string s, int k) {
+        if(k>s.size())
+            return 0;
+        if(k==s.size())
+            return 1;
+        vector<int> v1(26,0);
+        for(int i=0;i<s.size();i++)
+            v1[s[i]-'a']++;
+        for(int i=0;i<26;i++)
+        {
+            if(v1[i]%2)
+            {
+                k--;
+                if(k<0)
+                    return 0;
+            }
+        }
+        return 1;
+    }
+};
