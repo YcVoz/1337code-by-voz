@@ -1,0 +1,55 @@
+class Solution {
+public:
+    vector<int> addNegabinary(vector<int>& arr1, vector<int>& arr2) {
+        int lena = arr1.size();
+        int lenb = arr2.size();
+        int bigone = lena;
+        if(lenb>lena)
+            bigone = lenb;
+        vector<int> output(bigone+1,0);
+        for(int i=0;i<bigone;i++)
+        {            
+            int a = 0;
+            int b = 0;
+            if(lena-1-i>=0)
+                a = arr1[lena-1-i];
+            if(lenb-1-i>=0)
+                b = arr2[lenb-1-i];
+            int det = output[bigone-i] + a + b;
+            if(det == 2)
+            {
+                output[bigone-i-1] -= 1;
+                output[bigone-i] = 0;
+            }
+            else if(det == 3)
+            {
+                output[bigone-1-i] -= 1;
+                output[bigone-i] = 1;
+            }
+            else if(det == -1)
+            {
+                output[bigone-1-i] += 1;
+                output[bigone-i] = 1;
+            }
+            else
+            {
+                output[bigone-i] = det;
+            }           
+        }
+        if(output[0] == -1)
+        {
+            output.emplace_back(output[output.size()-1]);
+            for(int i=output.size()-2;i>=2;i--)
+                output[i] = output[i-1];
+            output[0] = 1;
+            output[1] = 1;
+        } 
+        while(output[0]==0&&output.size()>1)
+        {
+            for(int i=0;i<output.size()-1;i++)
+                output[i] = output[i+1];
+            output.resize(output.size()-1);
+        }   
+        return output;
+    }
+};
