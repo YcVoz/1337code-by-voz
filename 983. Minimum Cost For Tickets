@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int mincostTickets(vector<int>& days, vector<int>& costs) {
+        vector<int> dp(days.size()+1,365001);   
+        dp[0] = 0;
+        for(int nowdat = 1;nowdat<days.size()+1;nowdat++)
+        {
+            bool breakout = 1;        
+            for(int i=nowdat;i<days.size()+1&&breakout;i++)
+            {
+                if(days[i-1]-days[nowdat-1]<=29)
+                {
+                    if(dp[i]>costs[2]+dp[nowdat-1])
+                    {
+                        dp[i] = costs[2]+dp[nowdat-1];
+                    }                    
+                }
+                else
+                    breakout = 0;
+            }
+            breakout = 1;        
+            for(int i=nowdat;i<days.size()+1&&breakout;i++)
+            {
+                if(days[i-1]-days[nowdat-1]<=6)
+                {
+                    if(dp[i]>costs[1]+dp[nowdat-1])
+                    {
+                        dp[i] = costs[1]+dp[nowdat-1];
+                    }                    
+                }
+                else
+                    breakout = 0;
+            }
+            if(dp[nowdat]>costs[0]+dp[nowdat-1])
+            {
+                dp[nowdat] = costs[0]+dp[nowdat-1];
+            } 
+        }            
+        return dp[days.size()];
+    }
+};
