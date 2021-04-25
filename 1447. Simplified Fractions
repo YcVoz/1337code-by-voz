@@ -1,0 +1,54 @@
+class Solution {
+public:
+    vector<string> simplifiedFractions(int n) {
+        vector<string> output(0);
+        if(n==1)
+            return output;
+        vector<int> prime = {2,3,5,7,11,13,17,19,23,29,31,37,41,43,47,53,59,61,67,71,73,79,83,89,97};
+        int maxIndex = 0;
+        if(n>=97)
+            maxIndex = 24;
+        else if(n==2)
+            maxIndex = 0;
+        else
+        {
+            bool jump = 1;
+            for(int i=0;i<25&&jump;i++)
+            {
+                if(n<prime[i])
+                {
+                    maxIndex = i-1;
+                    jump = 0;                    
+                }                
+            }
+        }
+        vector<vector<bool>> primefactor(n-1,vector<bool> (n-1,1));
+        for(int i=0;i<n-1;i++)
+        {
+            primefactor[i].resize(i+1);
+        }
+        for(int i=0;i<=maxIndex;i++) 
+        {
+            int now = prime[i]*2;
+            while(now-2<n-1)
+            {
+                int nownow = prime[i];
+                while(nownow-1<primefactor[now-2].size())
+                {
+                    primefactor[now-2][nownow-1] = 0;
+                    nownow += prime[i];
+                }
+                now += prime[i];
+            }
+        } 
+        for(int i=0;i<primefactor.size();i++)
+        {                
+            for(int u=0;u<primefactor[i].size();u++)
+            {
+                if(primefactor[i][u])
+                    output.emplace_back(to_string(u+1) + "/" + to_string(i+2));                   
+            }
+        }        
+        return output;
+    }
+};
