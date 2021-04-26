@@ -1,0 +1,42 @@
+class Solution {
+public:
+    int knightDialer(int n) {
+        if(n==1)
+            return 10;
+        vector<vector<int>> v1(2,vector<int>(9,1));
+        bool boool = 0;
+        int output = 0;
+        for(int i=0;i<n-1;i++)
+        {
+            v1[!boool][0] = v1[boool][6] + v1[boool][4];
+            v1[!boool][0] %= 1000000007;
+            v1[!boool][1] = v1[boool][5] + v1[boool][7];
+            v1[!boool][1] %= 1000000007;
+            v1[!boool][2] = v1[boool][3] + v1[boool][6];
+            v1[!boool][2] %= 1000000007;
+            v1[!boool][3] = v1[boool][2] + v1[boool][7]; 
+            v1[!boool][3] %= 1000000007;
+            v1[!boool][3] += v1[boool][8];
+            v1[!boool][3] %= 1000000007;
+            v1[!boool][4] = v1[boool][0] + v1[boool][5];
+            v1[!boool][4] %= 1000000007;
+            v1[!boool][4] += v1[boool][8];
+            v1[!boool][4] %= 1000000007;
+            v1[!boool][5] = v1[boool][1] + v1[boool][4];
+            v1[!boool][5] %= 1000000007;
+            v1[!boool][6] = v1[boool][0] + v1[boool][2];
+            v1[!boool][6] %= 1000000007;
+            v1[!boool][7] = v1[boool][1] + v1[boool][3];
+            v1[!boool][7] %= 1000000007;
+            v1[!boool][8] = v1[boool][3] + v1[boool][4];
+            v1[!boool][8] %= 1000000007;
+            boool = !boool;
+        }
+        for(int i=0;i<9;i++)
+        {
+            output += v1[boool][i];
+            output %= 1000000007;
+        }
+        return output;
+    }
+};
