@@ -1,0 +1,41 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    int pathSum(TreeNode* root, int targetSum) {
+        if(root==NULL)
+            return 0;
+        int output = 0;
+        if(root->val==targetSum)
+            output++;
+        return output + RootorNotPathSum(root->left,targetSum-root->val,1) + RootorNotPathSum(root->left,targetSum,0)+ RootorNotPathSum(root->right,targetSum-root->val,1) + RootorNotPathSum(root->right,targetSum,0);
+    }
+    int RootorNotPathSum(TreeNode* root, int targetSum,bool includeRoot) {
+        if(root==NULL)
+            return 0;
+        if(includeRoot)
+        {
+            int output = 0;
+            if(root->val==targetSum)
+                output += 1;
+            return RootorNotPathSum(root->right,targetSum-root->val,1) + RootorNotPathSum(root->left,targetSum-root->val,1) + output;
+        }
+        else
+        {
+            int output = 0;
+            if(root->val==targetSum)
+                output += 1;
+            return RootorNotPathSum(root->right,targetSum-root->val,1) + RootorNotPathSum(root->left,targetSum-root->val,1) +RootorNotPathSum(root->right,targetSum,0) + RootorNotPathSum(root->left,targetSum,0) + output;
+        }   
+        return -2147483648;
+    }
+};
