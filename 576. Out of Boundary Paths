@@ -1,0 +1,140 @@
+class Solution {
+public:
+    int findPaths(int m, int n, int N, int i, int j) {
+        if(m==1&&n==1)
+        {
+            if(N!=0)
+                return 4;
+            else 
+                return 0;
+        }
+        vector<vector<vector<int>>> dp(2,vector<vector<int>>(50,vector<int>(50,0)));
+        int output = 0;
+        bool nowlist = 0;
+        dp[nowlist][i][j] = 1;
+        if(N>0)
+        {
+            if(!i)
+                output++;
+            if(!j)
+                output++;
+            if(i+1==m)
+                output++;
+            if(j+1==n)
+                output++;
+        }
+        for(int walk=0;walk<N-1;walk++)
+        {
+            nowlist = !nowlist;
+            for(int a = 0;a<m;a++)
+            {
+                for(int b=0;b<n;b++)
+                    dp[nowlist][a][b] = 0;
+            }
+            for(int a = 0;a<m;a++)
+            {
+                for(int b=0;b<n;b++)
+                {
+                    if(dp[!nowlist][a][b])
+                    {                        
+                        if(a>0)
+                        {
+                            dp[nowlist][a-1][b] += dp[!nowlist][a][b];
+                            dp[nowlist][a-1][b] %= 1000000007;
+                        }                            
+                        if(b>0)
+                        {
+                            dp[nowlist][a][b-1] += dp[!nowlist][a][b];
+                            dp[nowlist][a][b-1] %= 1000000007;
+                        }                            
+                        if(a<m-1)
+                        {
+                            dp[nowlist][a+1][b] += dp[!nowlist][a][b];
+                            dp[nowlist][a+1][b] %= 1000000007;
+                        }                            
+                        if(b<n-1)
+                        {
+                            dp[nowlist][a][b+1] += dp[!nowlist][a][b];
+                            dp[nowlist][a][b+1] %= 1000000007;
+                        }                            
+                    }
+                }
+            }
+            if(m==1)
+            {
+                for(int checkEdge = 1;checkEdge<n-1;checkEdge++)
+                {
+                    output += dp[nowlist][0][checkEdge];
+                    output %= 1000000007;
+                    output += dp[nowlist][0][checkEdge];
+                    output %= 1000000007;
+                }
+                for(int tem=0;tem<3;tem++)
+                {
+                    output += dp[nowlist][0][0];
+                    output %= 1000000007;
+                    output += dp[nowlist][0][n-1];
+                    output %= 1000000007;
+                }   
+            }
+            else if(n==1)
+            {
+                for(int checkEdge = 1;checkEdge<m-1;checkEdge++)
+                {
+                    output += dp[nowlist][checkEdge][0];
+                    output %= 1000000007;
+                    output += dp[nowlist][checkEdge][0];
+                    output %= 1000000007;
+                }
+                for(int tem=0;tem<3;tem++)
+                {
+                    output += dp[nowlist][0][0];
+                    output %= 1000000007;
+                    output += dp[nowlist][m-1][0];
+                    output %= 1000000007;
+                }    
+            }
+            else
+            {
+                //for(int a =0;a<m;a++)
+                //{
+                //    for(int b=0;b<n;b++)
+                //        cout<<dp[nowlist][a][b]<<endl;
+                //    cout<<endl;
+                //}
+                for(int checkEdge = 1;checkEdge<n-1;checkEdge++)
+                {
+                    output += dp[nowlist][0][checkEdge];
+                    output %= 1000000007;
+                    output += dp[nowlist][m-1][checkEdge];
+                    output %= 1000000007;
+                }
+                for(int checkEdge = 1;checkEdge<m-1;checkEdge++)
+                {
+                    output += dp[nowlist][checkEdge][0];
+                    output %= 1000000007;
+                    output += dp[nowlist][checkEdge][n-1];
+                    output %= 1000000007;
+                }            
+                for(int tem=0;tem<2;tem++)
+                {
+                    output += dp[nowlist][0][0];
+                    output %= 1000000007;
+                    output += dp[nowlist][0][n-1];
+                    output %= 1000000007;
+                    output += dp[nowlist][m-1][0];
+                    output %= 1000000007;
+                    output += dp[nowlist][m-1][n-1];
+                    output %= 1000000007;
+                }   
+            }
+            //for(int a =0;a<m;a++)
+            //{
+            //    for(int b=0;b<n;b++)
+            //        cout<<dp[nowlist][a][b]<<" ";
+            //    cout<<endl;
+            //}
+        }        
+        return output;
+    }
+};
