@@ -1,0 +1,82 @@
+class Solution {
+public:
+    vector<bool> checkArithmeticSubarrays(vector<int>& nums, vector<int>& l, vector<int>& r) {
+        int length = nums.size();
+        int m = l.size();
+        vector<bool> output(m,0);
+        vector<vector<vector<int>>>  dp(2,vector<vector<int>>(length,vector<int>(length,100001)));
+        for(int i=0;i<length;i++)
+            dp[0][i][i] = nums[i];
+        for(int i=0;i<length-1;i++)
+        {
+            for(int o=i+1;o<length;o++)
+            {
+                if(nums[o]<dp[1][i][o-1])
+                {
+                    if(nums[o]<dp[0][i][o-1])
+                    {
+                        dp[1][i][o] = dp[0][i][o-1];
+                        dp[0][i][o] = nums[o];
+                    }
+                    else
+                    {
+                        dp[1][i][o] = nums[o];
+                        dp[0][i][o] = dp[0][i][o-1];
+                    }
+                }     
+                else
+                {
+                    dp[1][i][o] = dp[1][i][o-1];
+                    dp[0][i][o] = dp[0][i][o-1];
+                }
+            }
+        }
+        for(int i=0;i<m;i++)
+        {
+            int a = l[i];
+            int b = r[i];
+            if(b-a==1)
+                output[i] = 1;
+            else
+            {              
+                bool allSame = 1;
+                for(int u=a+1;u<=b&&allSame;u++)
+                {
+                    if(nums[u]!=nums[a])
+                        allSame = 0;
+                }
+                if(allSame)
+                    output[i] = 1;
+                else
+                {                    
+                    vector<bool> check(b-a+1,0);
+                    int min = dp[0][a][b];
+                    int min2 = dp[1][a][b];
+                    if(min2!=min)
+                    {
+                        allSame = 1; 
+                        for(int u=a;u<=b&&allSame;u++)
+                        {              
+                            int test = (nums[u]-min)/(min2-min);
+                            int test2 = (nums[u]-min)%(min2-min);
+                            if(test2||test>=check.size())
+                            {
+                                allSame = 0;
+                            }                            
+                            else
+                            {                            
+                                if(check[(nums[u]-min)/(min2-min)])
+                                    allSame = 0;
+                                else
+                                    check[(nums[u]-min)/(min2-min)] = 1;
+                            }
+                        }
+                        if(allSame)
+                            output[i] = 1;   
+                    }
+                }
+            }
+        }
+        return output;
+    }
+};
