@@ -1,0 +1,18 @@
+class Solution {
+public:
+    vector<vector<int>> shiftGrid(vector<vector<int>>& grid, int k) {
+        int now1DIndex = k;
+        int oriIndex = 0;
+        int m = grid.size();
+        int n = grid[0].size();
+        int all = m*n;
+        vector<vector<int>>output(m,vector<int>(n,0));
+        while(oriIndex<all)
+        {            
+            output[now1DIndex%all/n][now1DIndex%all%n] = grid[oriIndex/n][oriIndex%n];
+            now1DIndex++;
+            oriIndex++;
+        }
+        return output;
+    }
+};
