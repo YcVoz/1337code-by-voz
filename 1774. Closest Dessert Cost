@@ -1,0 +1,68 @@
+class Solution {
+public:
+    int closestCost(vector<int>& baseCosts, vector<int>& toppingCosts, int target) {
+        int minLarger = 2147483647;
+        vector<bool> check(target,0);
+        vector<int> nowList(0);
+        vector<int> need2GonowList(0);
+        for(int i=0;i<baseCosts.size();i++)
+        {
+            if(baseCosts[i]==target)
+                return target;
+            if(baseCosts[i]>target)
+            {
+                if(baseCosts[i]<minLarger)
+                    minLarger = baseCosts[i];
+            }
+            else if(!check[baseCosts[i]])
+            {
+                check[baseCosts[i]] = 1;
+                nowList.emplace_back(baseCosts[i]);
+            }            
+        }
+        if(nowList.size()==0)
+            return minLarger;
+        for(int i=0;i<toppingCosts.size();i++)
+        {
+            vector<int> oneOrTwoTopping(2,0);
+            oneOrTwoTopping[0] = toppingCosts[i];
+            oneOrTwoTopping[1] = toppingCosts[i]*2;
+            for(int u=0;u<nowList.size();u++)
+            {       
+                for(int o=0;o<2;o++)
+                {
+                    int nowTestCost = nowList[u]+oneOrTwoTopping[o];
+                    if(nowTestCost==target)
+                        return target;
+                    if(nowTestCost>target)
+                    {
+                        if(nowTestCost<minLarger)
+                            minLarger = nowTestCost;
+                    }
+                    else if(!check[nowTestCost])
+                    {
+                        need2GonowList.emplace_back(nowTestCost);   
+                    } 
+                }                
+            }
+            for(int u=0;u<need2GonowList.size();u++)
+            {
+                if(!check[need2GonowList[u]])
+                {
+                    check[need2GonowList[u]] = 1;
+                    nowList.emplace_back(need2GonowList[u]);
+                }                 
+            }
+            need2GonowList.resize(0);
+        }
+        int maxsmaller = target-1;
+        while(!check[maxsmaller])
+        {
+            maxsmaller--;
+        }
+        if(target-maxsmaller>minLarger-target)
+            return minLarger;
+        else
+            return maxsmaller;
+    }
+};
