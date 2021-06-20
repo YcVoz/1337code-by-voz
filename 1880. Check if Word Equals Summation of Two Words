@@ -1,0 +1,27 @@
+class Solution {
+public:
+    bool isSumEqual(string firstWord, string secondWord, string targetWord) {        
+        int firstWordValue = firstWord[firstWord.size()-1]-'a';
+        int secondWordValue = secondWord[secondWord.size()-1]-'a';
+        int targetWordValue = targetWord[targetWord.size()-1]-'a';
+        int now10Pow = 10;
+        for(int i=firstWord.size()-2;i>=0;i--)
+        {
+            firstWordValue += (firstWord[i]-'a')*now10Pow;
+            now10Pow *= 10;
+        }
+        now10Pow = 10;
+        for(int i=secondWord.size()-2;i>=0;i--)
+        {
+            secondWordValue += (secondWord[i]-'a')*now10Pow;
+            now10Pow *= 10;
+        }
+        now10Pow = 10;
+        for(int i=targetWord.size()-2;i>=0;i--)
+        {
+            targetWordValue += (targetWord[i]-'a')*now10Pow;
+            now10Pow *= 10;
+        }    
+        return (firstWordValue+secondWordValue)==targetWordValue;
+    }
+};
