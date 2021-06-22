@@ -1,0 +1,21 @@
+class Solution {
+public:
+    string toHex(int num) {
+        if(num==0)
+            return "0";
+        string output = "";
+        long int x = num;
+        if(x<0)
+            x = 4294967295+x+1;
+        while(x>0)
+        {
+            int s = x%16;
+            x /= 16;
+            if(s>9)
+                output = char(s - 10 +'a') + output;
+            else
+                output = to_string(s) + output;
+        }
+        return output;
+    }
+};
