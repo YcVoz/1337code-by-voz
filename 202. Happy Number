@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool isHappy(int n) {
+        vector<bool>check(811,0);
+        int x = n;
+        while(1)
+        {
+            int total = 0;
+            while(x>0)
+            {
+                total += (x%10)*(x%10);
+                x/=10;
+            }
+            if(total==1)
+                return 1;
+            if(check[total])
+                return 0;
+            check[total] = 1;
+            x = total;
+        }
+    }
+};
