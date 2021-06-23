@@ -51,24 +51,26 @@ public:
         if(wordStartIndex==word.size()-1)
             return 1;
         check[nowI][nowU] = 1;
-        vector<bool> ans(4,0);
         if(nowI>0&&board[nowI-1][nowU]==word[wordStartIndex+1]&&!check[nowI-1][nowU])
         {
-            ans[0] = dps(board,check,nowI-1,nowU,wordStartIndex+1,word);
+            if(dps(board,check,nowI-1,nowU,wordStartIndex+1,word))
+                return 1;
         }
         if(nowU>0&&board[nowI][nowU-1]==word[wordStartIndex+1]&&!check[nowI][nowU-1])
         {
-            ans[1] = dps(board,check,nowI,nowU-1,wordStartIndex+1,word);
+            if(dps(board,check,nowI,nowU-1,wordStartIndex+1,word))
+                return 1;
         }
         if(nowI<board.size()-1&&board[nowI+1][nowU]==word[wordStartIndex+1]&&!check[nowI+1][nowU])
         {
-            ans[2] = dps(board,check,nowI+1,nowU,wordStartIndex+1,word);
+            if(dps(board,check,nowI+1,nowU,wordStartIndex+1,word))
+                return 1;
         }
         if(nowU<board[0].size()-1&&board[nowI][nowU+1]==word[wordStartIndex+1]&&!check[nowI][nowU+1])
         {
-            ans[3] = dps(board,check,nowI,nowU+1,wordStartIndex+1,word);
+            if(dps(board,check,nowI,nowU+1,wordStartIndex+1,word))
+                return 1;
         }
-            return ans[0]||ans[1]||ans[2]||ans[3];
         return 0;
     }    
 };
