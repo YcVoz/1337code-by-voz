@@ -1,0 +1,35 @@
+class Solution {
+public:
+    double champagneTower(int poured, int query_row, int query_glass) {
+        int a = query_glass;
+        int b = query_row-query_glass;
+        vector<vector<double>> dp(a+1,vector<double>(b+1,0.0));
+        dp[0][0] = poured*1.0;
+        for(int i=1;i<=a;i++)
+        {            
+            dp[i][0] = (dp[i-1][0]-1)/2;
+            if(dp[i][0]<0)
+                dp[i][0] = 0;
+        }
+        for(int i=1;i<=b;i++)
+        {
+            dp[0][i] = (dp[0][i-1]-1)/2;
+            if(dp[0][i]<0)
+                dp[0][i] = 0;
+        }
+        for(int i=1;i<=a;i++)
+        {
+            for(int u=1;u<=b;u++)
+            {                
+                if((dp[i-1][u]-1)/2>0)
+                    dp[i][u] += (dp[i-1][u]-1)/2;
+                if((dp[i][u-1]-1)/2>0)
+                    dp[i][u] += (dp[i][u-1]-1)/2;
+            }
+        }
+        if(dp[a][b]>1)
+            return 1;
+        else
+            return dp[a][b];
+    }
+};
