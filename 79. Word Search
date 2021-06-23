@@ -1,0 +1,74 @@
+class Solution {
+public:
+    bool exist(vector<vector<char>>& board, string word) {
+        int m = board.size();
+        int n = board[0].size();
+        int nowI = -1;
+        int nowU = -1;
+        vector<vector<bool>> check(m,vector<bool>(n,0));         
+        int nowWordIndex = 0;
+        vector<int> smallcase(26,0);
+        vector<int> bigcase(26,0);
+        for(int i=0;i<word.size();i++)
+        {            
+            if(word[i]-'a'<0)
+                bigcase[word[i]-'A']++;
+            else
+                smallcase[word[i]-'a']++;    
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int u=0;u<n;u++)
+            {
+                if(board[i][u]-'a'<0)
+                    bigcase[board[i][u]-'A']--;
+                else
+                    smallcase[board[i][u]-'a']--;                    
+            }
+        }
+        for(int i=0;i<26;i++)
+        {
+            if(bigcase[i]>0)
+                return 0;
+            if(smallcase[i]>0)
+                return 0;
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int u=0;u<n;u++)
+            {
+                if(board[i][u]==word[nowWordIndex])
+                {                       
+                    if(dps(board,check,i,u,0,word))
+                        return 1;
+                }
+            }
+        }
+        return 0;
+    }
+    bool dps(vector<vector<char>> board, vector<vector<bool>> check,int nowI,int nowU,int wordStartIndex,string word)
+    {
+        if(wordStartIndex==word.size()-1)
+            return 1;
+        check[nowI][nowU] = 1;
+        vector<bool> ans(4,0);
+        if(nowI>0&&board[nowI-1][nowU]==word[wordStartIndex+1]&&!check[nowI-1][nowU])
+        {
+            ans[0] = dps(board,check,nowI-1,nowU,wordStartIndex+1,word);
+        }
+        if(nowU>0&&board[nowI][nowU-1]==word[wordStartIndex+1]&&!check[nowI][nowU-1])
+        {
+            ans[1] = dps(board,check,nowI,nowU-1,wordStartIndex+1,word);
+        }
+        if(nowI<board.size()-1&&board[nowI+1][nowU]==word[wordStartIndex+1]&&!check[nowI+1][nowU])
+        {
+            ans[2] = dps(board,check,nowI+1,nowU,wordStartIndex+1,word);
+        }
+        if(nowU<board[0].size()-1&&board[nowI][nowU+1]==word[wordStartIndex+1]&&!check[nowI][nowU+1])
+        {
+            ans[3] = dps(board,check,nowI,nowU+1,wordStartIndex+1,word);
+        }
+            return ans[0]||ans[1]||ans[2]||ans[3];
+        return 0;
+    }    
+};
