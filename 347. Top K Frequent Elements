@@ -1,0 +1,34 @@
+class Solution {
+public:
+    vector<int> topKFrequent(vector<int>& nums, int k) {
+        map<int,set<int>> m1;
+        map<int,int> count;
+        vector<int> output(k);
+        for(int i=0;i<nums.size();i++)
+        {
+            m1[count[nums[i]]].erase(nums[i]);
+            m1[count[nums[i]]+1].insert(nums[i]);
+            count[nums[i]]++;
+        }
+        int countoutput = 0;
+        auto iter = m1.end();
+        iter--;
+        for(iter;iter!=m1.begin();iter--)
+        {
+            for(auto iter2 = iter->second.begin();iter2!=iter->second.end();iter2++)
+            {
+                output[countoutput] = *iter2;
+                countoutput++;
+            }
+            if(countoutput==k)
+                return output;
+        }
+        iter--;
+        for(auto iter2 = iter->second.begin();iter2!=iter->second.end();iter2++)
+        {
+            output[countoutput] = *iter2;
+            countoutput++;
+        }
+        return output;
+    }
+};
