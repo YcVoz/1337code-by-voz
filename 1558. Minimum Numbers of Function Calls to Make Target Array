@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums) {
+        int maxMul = 0;
+        int output = 0;
+        for(int i=0;i<nums.size();i++)
+        {
+            int add = 0;
+            int mul = 0;
+            while(nums[i]>0)
+            {
+                add += 1&nums[i];
+                mul++;
+                nums[i] = nums[i]>>1;                
+            }
+            output += add;
+            if(mul-1>maxMul)
+                maxMul = mul-1;
+        }        
+        return maxMul+output;
+    }
+};
