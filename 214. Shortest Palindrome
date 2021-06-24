@@ -1,0 +1,70 @@
+class Solution {
+public:
+    string shortestPalindrome(string s) {
+        if(s.size()==0)
+            return "";
+        vector<map<int,int>> v1(26);
+        string ss = "";
+        ss += s[0];
+        string output = s; 
+        for(int i=1;i<s.size();i++)
+        {
+            ss += "$";
+            ss += s[i];
+        }
+        for(int i=0;i<=ss.size();i+=2)
+        {            
+            v1[ss[i]-'a'][i] = 1;
+        }
+        for(int i=ss.size()/2;i>=1;i--)
+        {
+            bool all = 1;
+            for(int u=25;all&&u>=0;u--)
+            {
+                bool jump = 1;
+                bool jump1 = 1;
+                for(auto itr = v1[u].begin();jump&&jump1&&itr!=v1[u].end();itr++)
+                {      
+                    int index = itr->first;
+                    int test = i+i-index;
+                    if(test>=0)
+                    {
+                        if(v1[u][index]>0)
+                        {
+                            if(v1[u][test]<=0)
+                            {
+                                jump1 = 0;
+                                v1[u].erase(test); 
+                            }
+                                
+                        }
+                        else
+                        {
+                            v1[u].erase(index);  
+                        }                 
+                    }
+                    else
+                    {
+                        jump = 0;
+                    }
+                }
+                if(!jump1)
+                    all = 0;
+            }
+            if(all)
+            {
+                int sttart = -1;
+                if(i%2)
+                    sttart = (i+1);
+                else
+                    sttart = i/2*2+1;
+                string neww = s.substr (sttart,s.size()-sttart);
+                reverse(neww.begin(), neww.end());
+                return neww+output;
+            }
+        }
+        reverse(s.begin(), s.end());
+        s.erase(s.begin()+s.size()-1);        
+        return s+output;
+    }
+};
