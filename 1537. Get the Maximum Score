@@ -1,0 +1,93 @@
+class Solution {
+public:
+    int maxSum(vector<int>& nums1, vector<int>& nums2) {
+        vector<int> indexA(0);
+        vector<int> indexB(0);
+        int nowIndexA = 0;
+        int nowIndexB = 0;   
+        int output = 0;
+        while(nowIndexA<nums1.size()&&nowIndexB<nums2.size())
+        {            
+            if(nums1[nowIndexA]==nums2[nowIndexB])
+            {
+                indexA.emplace_back(nowIndexA);
+                indexB.emplace_back(nowIndexB);
+                nowIndexA++;
+                nowIndexB++;
+            }
+            else if(nums1[nowIndexA]>nums2[nowIndexB])
+                nowIndexB++;
+            else
+                nowIndexA++;
+        } 
+        nowIndexA = 0;
+        nowIndexB = 0;   
+        int temSumA = 0;
+        int temSumB = 0;
+        for(int i=0;i<indexA.size();i++)
+        {
+            output += nums1[indexA[i]];
+            for(int u = nowIndexA;u<indexA[i];u++)
+            {
+                temSumA += nums1[u];
+            }
+            for(int u = nowIndexB;u<indexB[i];u++)
+            {
+                temSumB += nums2[u];
+            }
+            nowIndexA = indexA[i]+1;
+            nowIndexB = indexB[i]+1;
+            if(temSumA>temSumB)
+            {
+                temSumA%=1000000007;
+                output += temSumA;
+            }
+            else
+            {
+                temSumB%=1000000007;
+                output += temSumB;                
+            }
+            output %= 1000000007;
+            temSumA = 0;
+            temSumB = 0;
+        }
+        int dea = 0;
+        int deb = 0;
+        for(int u = nowIndexA;u<nums1.size();u++)
+        {
+            temSumA += nums1[u];
+            dea += temSumA/1000000007;
+            temSumA%=1000000007;
+        }
+        for(int u = nowIndexB;u<nums2.size();u++)
+        {
+            temSumB += nums2[u];
+            deb += temSumB/1000000007;
+            temSumB%=1000000007;
+        }
+        if(dea>deb)
+        {            
+            output += temSumA;
+            output %=1000000007;
+            return output;
+        }
+        if(dea<deb)
+        {            
+            output += temSumB;
+            output %=1000000007;
+            return output;
+        }
+        if(temSumA>temSumB)
+        {
+            output += temSumA;
+            output %=1000000007;
+        }
+        else
+        {
+            temSumB%=1000000007;
+            output += temSumB;
+            output %=1000000007;
+        }
+        return output;
+    }
+};
