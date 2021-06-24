@@ -1,0 +1,39 @@
+class Solution {
+public:
+    int numDifferentIntegers(string word) {
+        int tem = 0;
+        set<string> s;
+        for(int i=0;i<word.size();i++)
+        {
+            if(word[i]-'0'>=0&&word[i]-'0'<=9)
+            {          
+                int start = i;
+                int end = i;
+                bool jump = 1;
+                for(int u=i+1;jump&&u<word.size();u++)
+                {
+                    i++;
+                    if(word[u]-'0'>=0&&word[u]-'0'<=9)
+                    {
+                        end = u;
+                    }
+                    else
+                        jump = 0;
+                }      
+                jump = 1;
+                int save = 0;
+                string temStr = word.substr(start,end-start+1);
+                for(int o=0;jump&&o<temStr.size();o++)
+                {
+                    if(temStr[o]=='0')
+                        save++;
+                    else
+                        jump = 0;
+                }
+                s.insert(temStr.substr(save,temStr.size()-save));
+                tem = 0;
+            }
+        }
+        return s.size();
+    }
+};
