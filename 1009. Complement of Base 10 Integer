@@ -1,0 +1,11 @@
+class Solution {
+public:
+    int bitwiseComplement(int n) {
+        if(n==0)
+            return 1;
+        int bitPtr = 1;
+        while(n>=bitPtr)
+            bitPtr = bitPtr<<1;
+        return bitPtr-1-n;
+    }
+};
