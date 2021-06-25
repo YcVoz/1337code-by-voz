@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        sort(candidates.begin(),candidates.end());
+        vector<vector<vector<int>>> summ(target+1);
+        vector<vector<vector<int>>> newsumm(target+1);
+        for(int i=0;i<candidates.size();i++)
+        {
+            if(candidates[i]>target)
+                return summ[target];
+            for(int u=1;u+candidates[i]<=target;u++)
+            {
+                if(summ[u].size()!=0)
+                {
+                    for(int o = 1;o*candidates[i]+u<=target;o++)
+                    { 
+                        for(int w=0;w<summ[u].size();w++)
+                        {
+                            vector<int> tem = summ[u][w];
+                            vector<int> tem2(o,candidates[i]);
+                            tem.insert(tem.end(),tem2.begin(),tem2.end());
+                            newsumm[o*candidates[i]+u].emplace_back(tem);
+                        }
+                    }
+                }
+            }
+            for(int o = 1;o*candidates[i]<=target;o++)
+            {
+                vector<int> tem(o,candidates[i]);
+                newsumm[o*candidates[i]].emplace_back(tem);
+            }
+            summ = newsumm;
+        }
+        return summ[target];
+    }
+};
