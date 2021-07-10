@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int checkRecord(int n) {
+        vector<long long int> dp(6,0); // 0A/0AL/0ALL/1A/1AL/1ALL
+        dp[0] = 1;
+        dp[1] = 1;
+        dp[3] = 1;
+        for(int i=1;i<n;i++)
+        {
+            vector<long long int> temdp = dp;
+            dp[0] = temdp[0] + temdp[1] + temdp[2];
+            dp[1] = temdp[0];
+            dp[2] = temdp[1];
+            dp[3] = temdp[0] + temdp[1] + temdp[2] + temdp[3] + temdp[4]+ temdp[5];
+            dp[4] = temdp[3];
+            dp[5] = temdp[4];            
+            for(int i=0;i<6;i++)
+                dp[i]%=1000000007;
+        }
+        int output = 0;
+        for(int i=0;i<6;i++)
+        {
+            output += dp[i];
+            output%=1000000007;
+        }
+            
+        return output;
+    }
+};
