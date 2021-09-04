@@ -1,0 +1,47 @@
+class Solution {
+public:
+    string findDifferentBinaryString(vector<string>& nums) {
+        vector<vector<string>> v(2,vector<string>(0));
+        vector<string> nowRemain;
+        nowRemain = nums;
+        int n = nums.size();
+        int nowCheckIndex = 0;
+        string output = "";
+        while(1)
+        {
+            v[0].resize(0);
+            v[1].resize(0);
+            for(int i=0;i<nowRemain.size();i++)
+            {
+                if(nowRemain[i][nowCheckIndex]=='1')
+                    v[1].emplace_back(nowRemain[i]);
+                else
+                    v[0].emplace_back(nowRemain[i]);
+            }
+            if(v[0].size()==0)
+            {
+                output += to_string(0);
+                while(output.size()!=n)
+                    output += "0";
+                return output;
+            }
+            if(v[1].size()==0)
+            {
+                output += to_string(1);
+                while(output.size()!=n)
+                    output += "0";
+                return output;
+            }
+            int remaining = -1;
+            if(v[1].size()>v[0].size())
+            {
+                remaining = 0;
+            }
+            else
+                remaining = 1;
+            nowRemain = v[remaining];
+            nowCheckIndex++;
+            output += to_string(remaining);
+        }
+    }
+};
