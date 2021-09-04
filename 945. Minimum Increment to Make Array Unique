@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int minIncrementForUnique(vector<int>& nums) {
+        sort(nums.begin(),nums.end());
+        int output = 0;
+        int shouldB = 0;
+        for(int i=1;i<nums.size();i++)
+        {
+            shouldB = nums[i-1] + 1;
+            if(shouldB>nums[i])
+            {
+                output += shouldB-nums[i]; 
+                nums[i] = shouldB;
+            }                  
+        }
+        return output;
+    }
+};
