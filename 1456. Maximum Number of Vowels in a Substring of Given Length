@@ -1,0 +1,18 @@
+class Solution {
+public:
+    int maxVowels(string s, int k) {
+        vector<int> v1(s.size(),0);
+        if(s[0]=='a'||s[0]=='e'||s[0]=='i'||s[0]=='o'||s[0]=='u')
+            v1[0] = 1;
+        for(int i=1;i<s.size();i++)
+        {
+            v1[i] = v1[i-1];
+            if(s[i]=='a'||s[i]=='e'||s[i]=='i'||s[i]=='o'||s[i]=='u')
+                v1[i]++;
+        }
+        int maxx = v1[k-1];
+        for(int i = k;i<s.size();i++)
+            maxx = max(maxx,v1[i]-v1[i-k]);
+        return maxx;
+    }
+};
