@@ -1,0 +1,59 @@
+class Solution {
+public:
+    map<vector<int>,bool> m1;
+    int minSessions(vector<int>& tasks, int sessionTime) {
+        vector<int> count1(sessionTime+1,0);
+        vector<vector<int>>output;
+        vector<int> init_output(sessionTime+1,0);
+        output.emplace_back(init_output);
+        for(int i=0;i<tasks.size();i++)
+            count1[tasks[i]]++;
+        for(int i=sessionTime-1;i>=1;i--)
+        {
+            m1.clear();
+            for(int u=0;u<count1[i];u++)
+            {
+                vector<vector<int>>noow;
+                for(int o = 0;o<output.size();o++)
+                {
+                    vector<vector<int>>now;
+                    now = f1(output[o],i);
+                    noow.insert(noow.end(),now.begin(),now.end());
+                }
+                output = noow;
+            }
+        }
+        int minOutput = output[0][0];   
+        for(int i=1;i<output.size();i++)
+        {
+            minOutput = min(output[i][0],minOutput);
+        }
+        return minOutput+count1[sessionTime];
+    }
+    vector<vector<int>> f1(vector<int> nowBag,int nowTask)
+    {
+        vector<vector<int>> possiblaV1;
+        vector<int> tem1 = nowBag;                  
+        tem1[nowBag.size()-1-nowTask]++;
+        tem1[0]++;
+        if (m1.find(tem1) == m1.end()) {            
+            m1[tem1] = 1;
+            possiblaV1.emplace_back(tem1);
+        }  
+        for(int u=nowBag.size()-2;u>=nowTask;u--)
+        {
+            if(nowBag[u]!=0)
+            {
+                vector<int> tem = nowBag;
+                tem[u]--;
+                if(u!=nowTask)                    
+                    tem[u-nowTask]++;
+                if (m1.find(tem) == m1.end()) {
+                    m1[tem] = 1;
+                    possiblaV1.emplace_back(tem);
+                }                    
+            }
+        }
+        return possiblaV1;
+    }
+};
