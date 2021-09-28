@@ -1,0 +1,12 @@
+vector<int>father;
+int findFather(int x)
+{
+    return x == father[x] ? x : (father[x] = findFather(father[x]));
+}
+void Union(int x, int y)
+{
+    x = father[x];
+    y = father[y];
+    if (x<y) father[y] = x;
+    else father[x] = y;
+} 
