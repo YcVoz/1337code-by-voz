@@ -1,0 +1,59 @@
+class Solution {
+    vector<int>father;
+    int findFather(int x)
+    {
+        return x == father[x] ? x : (father[x] = findFather(father[x]));
+    }
+    void Union(int x, int y)
+    {
+        x = father[x];
+        y = father[y];
+        if (x<y) father[y] = x;
+        else father[x] = y;
+    } 
+public:
+    int latestDayToCross(int row, int col, vector<vector<int>>& cells) {
+        father.resize(row*col);
+        vector<bool>exist(row*col,0);
+        vector<int>left(row*col,-1);
+        vector<int>right(row*col,-1);
+        for(int i=0;i<row*col;i++){
+            left[i] = i%col;
+            right[i] = i%col;
+            father[i] = i;
+        }
+        int maxLeft = col;
+        int maxRight = -1;
+        int absInx = -1;
+        int r = -1;
+        int c = -1;
+        int subcheck = -1;
+        for(int i=0;i<cells.size();i++)
+        {
+            r = cells[i][0]-1;
+            c =  cells[i][1]-1;
+            absInx = r*col + c;
+            maxLeft = left[absInx];
+            maxRight = right[absInx];
+            for(int tr = r-1;tr<=r+1;tr++)
+            {
+                for(int tc = c-1;tc<=c+1;tc++)
+                {          
+                    subcheck = tr*col + tc;
+                    if((tr>=0)&&(tc<col)&&(tc>=0)&&(tr<row)&&(exist[subcheck]))
+                    {
+                        maxLeft = min(maxLeft,left[findFather(subcheck)]);
+                        maxRight = max(maxRight,right[findFather(subcheck)]);                            
+                        Union(absInx,subcheck);
+                    }
+                }
+            }
+            exist[absInx] = 1;
+            left[findFather(absInx)] = maxLeft;
+            right[findFather(absInx)] = maxRight;
+            if(left[findFather(absInx)] == 0 && right[findFather(absInx)]  == col-1)
+                return i;
+        }
+        return -1;
+    }
+};
