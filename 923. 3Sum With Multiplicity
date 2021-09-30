@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int threeSumMulti(vector<int>& arr, int target) {
+        vector<long long> count(target+1,0);
+        cout<<arr.size();
+        long long output = 0;
+        for(int i=0;i<arr.size();i++)
+        {
+            if(arr[i]<=target)
+                count[arr[i]]++;
+        }            
+        if(target%3==0&&count[target/3]>=3&&target/3*3==target)
+            output = count[target/3]*(count[target/3]-1)*(count[target/3]-2)/6;
+        while(output>1000000007)
+            output -= 1000000007;
+        for(int i=0;i*2<=target;i++)
+        {
+            if(count[i]>=2)
+            {
+                int sum2 = count[i]*(count[i]-1)/2;
+                int uu = target - i*2;
+                if(count[uu]>0 && uu!=i)
+                {
+                    output+=sum2*count[uu];
+                    output%=1000000007;
+                }
+
+            }
+            if(count[i]>=1)
+            {
+                for(int u=i+1;target-i-u>u;u++)
+                {
+                    if(count[u]>0&&count[target-i-u]>0)
+                    {
+                        output+=count[i]*count[u]*count[target-i-u];
+                        output%=1000000007;
+                    }
+                }
+            }
+        }
+        return output;
+    }
+};
