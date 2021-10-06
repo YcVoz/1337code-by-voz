@@ -1,0 +1,33 @@
+class Solution {
+public:
+    int kthFactor(int n, int k) {
+        vector<int> answer(0);
+        vector<int> checkAgainPrime(0);
+        vector<int> prime{2,3,5,7,11,13,17,19,23,29,31,37};
+        int maxPosibleFactor = sqrt(n);
+        int nowPrimeIndex = 0;
+        int count = 0;
+        vector<bool> checkOrNot(maxPosibleFactor+1,0);
+        checkOrNot[1] = 1;
+        for(int i=0;i<prime.size();i++)
+            checkOrNot[prime[i]] = 1;
+        for(int i=1;i<checkOrNot.size();i++)
+        {            
+            if(checkOrNot[i] && n%i==0)
+            {
+                count++;
+                if(count==k)
+                    return i;
+                answer.emplace_back(i);
+                if(i==prime[nowPrimeIndex])     
+                    checkAgainPrime.emplace_back(i);
+                for(int u = 0;u<checkAgainPrime.size()&&checkAgainPrime[u]*i<checkOrNot.size();u++)
+                    checkOrNot[checkAgainPrime[u]*i] = 1;
+            }
+            if(i==prime[nowPrimeIndex])      
+                nowPrimeIndex++;
+        }
+        int prime_count = (answer[count-1]*answer[count-1]==n)?(count-1)*2+1:count*2;
+        return (prime_count>=k)?n/answer[prime_count-k]:-1;
+    }
+};
