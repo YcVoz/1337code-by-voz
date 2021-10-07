@@ -1,0 +1,62 @@
+class Solution {
+public:
+    int numEnclaves(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        queue<pair<int,int>> q1;
+        vector<int> v1{0,m-1};
+        int output = 0;
+        pair<int,int> p1;
+        for(int i=0;i<n;i++)
+        {
+            for(int u=0;u<2;u++)
+            {
+                if(grid[v1[u]][i])
+                {
+                    p1.first = v1[u];
+                    p1.second = i;
+                    q1.push(p1);
+                    grid[v1[u]][i] = 0;
+                }
+            }            
+        }    
+        v1[1] = n-1;
+        for(int i=1;i<m-1;i++)
+        {
+            for(int u=0;u<2;u++)
+            {
+                if(grid[i][v1[u]])
+                {
+                    p1.second = v1[u];
+                    p1.first = i;
+                    q1.push(p1);
+                    grid[i][v1[u]] = 0;
+                }
+            }            
+        }
+        while(!q1.empty())
+        {
+            p1 = q1.front();
+            q1.pop();
+            vector<int>xx{p1.first-1,p1.first+1,p1.first,p1.first};
+            vector<int>yy{p1.second,p1.second,p1.second+1,p1.second-1};
+            for(int noo = 0;noo<xx.size();noo++)
+            {
+                int x = xx[noo];
+                int y = yy[noo];
+                if(x>=0&&x<m&&y>=0&&y<n&&grid[x][y])
+                {
+                    pair<int,int> tem(x,y);
+                    q1.push(tem);
+                    grid[x][y] = 0;
+                }
+            }
+        }
+        for(int i=0;i<m;i++)
+        {
+            for(int u=0;u<n;u++)
+                output+=grid[i][u];
+        }
+        return output;
+    }
+};
