@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int numberOfArithmeticSlices(vector<int>& nums) {
+        if(nums.size()<3)
+            return 0;
+        vector<int> diff(nums.size()-1,0);
+        int output = 0;
+        for(int i=0;i<nums.size()-1;i++)
+            diff[i] = nums[i+1]-nums[i];
+        int now = diff[0];
+        int subLength = 1;
+        for(int i=1;i<diff.size();i++)
+        {
+            if(diff[i]==now)
+                subLength++;
+            else
+            {
+                output += (subLength-1)*subLength/2;
+                subLength = 1;
+                now =  diff[i];
+            }                   
+        }
+        output += (subLength-1)*subLength/2;
+        return output;
+    }
+};
