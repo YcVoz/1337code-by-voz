@@ -1,0 +1,68 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* swapNodes(ListNode* head, int k) {
+        int n=1;
+        ListNode* tem = head;
+        while(tem->next)
+        {
+            n++;
+            tem = tem->next;
+        }
+        if(n-k+1==k)
+            return head;
+        int target2_index = max(n-k+1,k);
+        int target1_index = min(n-k+1,k);
+        ListNode* target1_pre = NULL;
+        ListNode* target2_pre = NULL;
+        ListNode* newHead = new ListNode(0, head);      
+        tem = newHead;
+        n=0;
+        while(target1_pre==NULL)
+        {
+            if(n+1==target1_index)
+            {
+                target1_pre = tem;
+            }
+            n++;
+            tem = tem->next;
+        }
+        while(target2_pre==NULL)
+        {
+            if(n+1==target2_index)
+            {
+                target2_pre = tem;
+            }
+            n++;
+            tem = tem->next;
+        }
+        if(target1_pre->next==target2_pre)
+        {
+            tem = target2_pre->next;
+            target1_pre->next->next = tem->next;
+            tem -> next = target1_pre->next;
+            target1_pre->next = tem;
+            head = newHead->next;
+            delete newHead;
+            return head;
+        }
+        tem = target1_pre->next->next;
+        target1_pre->next->next = target2_pre->next->next;
+        target2_pre->next->next = tem;
+        tem = target1_pre->next;
+        target1_pre->next = target2_pre->next;
+        target2_pre->next = tem;
+        head = newHead->next;
+        delete newHead;
+        return head;
+    }
+};
