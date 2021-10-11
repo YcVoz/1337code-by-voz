@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int countNicePairs(vector<int>& nums) {
+        map<int,int> m1;
+        int ans = 0;
+        for(int i=0;i<nums.size();i++)
+        {
+            int tem = nums[i];
+            int numm = 0;
+            while(tem)
+            {
+                numm *= 10;
+                numm += tem%10;
+                tem /= 10;
+            }
+            m1[nums[i] - numm]++;
+        }
+        for(auto iter = m1.begin();iter!=m1.end();iter++)
+        {           
+            if(iter->second>1)
+            {
+                long long x = iter->second;
+                ans += x*(x-1)/2%1000000007;
+                ans%=1000000007;
+            }
+        }
+        return ans;
+    }
+};
