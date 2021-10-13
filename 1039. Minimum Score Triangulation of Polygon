@@ -1,0 +1,22 @@
+class Solution {
+public:
+    int minScoreTriangulation(vector<int>& values) {
+        vector<vector<int>> dp(values.size(),vector<int>(values.size()+1,2147483647));
+        for(int startIndex=0;startIndex+2<values.size();startIndex++)
+            dp[startIndex][3] = values[startIndex]*values[startIndex+1]*values[startIndex+2];
+        for(int length = 4;length<=values.size();length++)
+        {
+            for(int startIndex = 0;startIndex+length-1<values.size();startIndex++)
+            {
+                for(int chooseIndex = startIndex+1;chooseIndex<startIndex+length-1;chooseIndex++)
+                {
+                    int sum = values[startIndex]*values[startIndex+length-1]*values[chooseIndex];
+                    sum += (chooseIndex-startIndex>1)?dp[startIndex][chooseIndex-startIndex+1]:0;
+                    sum += (startIndex+length-chooseIndex>2)?dp[chooseIndex][startIndex+length-chooseIndex]:0;
+                    dp[startIndex][length] = (sum<dp[startIndex][length])?sum:dp[startIndex][length];
+                }
+            }
+        }
+        return dp[0][values.size()];
+    }
+};
