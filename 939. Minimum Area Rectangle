@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minAreaRect(vector<vector<int>>& points) {
+        map<pair<int,int>,bool> m1;
+        int ans = 2147483647;
+        for(int i=0;i<points.size();i++)
+            m1[{points[i][0],points[i][1]}] = 1;
+        for(int i=0;i<points.size()-1;i++)
+        {
+            for(int u=i+1;u<points.size();u++)
+            {
+                if(points[i][0]!=points[u][0]&&points[i][1]!=points[u][1])
+                {
+                    pair<int,int> p1 = {points[i][0],points[u][1]};
+                    pair<int,int> p2 = {points[u][0],points[i][1]};
+                    if(m1[p1]&&m1[p2])
+                        ans = min(ans,abs(points[i][0]-points[u][0])*abs(points[i][1]-points[u][1]));
+                }                
+            }
+        }
+        return ans==2147483647?0:ans;
+    }
+};
