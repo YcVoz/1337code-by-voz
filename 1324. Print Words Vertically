@@ -1,0 +1,42 @@
+class Solution {
+public:
+    vector<string> printVertically(string s) {
+        s += " ";
+        vector<string> v1;
+        vector<string> ans;
+        stack<pair<int,int>> st1;
+        int start = 0;
+        for(int i=1;i<s.size();i++)
+        {
+            if(s[i]==' ')
+            {
+                string tem = "";
+                for(int u = start;u<i;u++)
+                    tem += s[u];
+                pair<int,int> p1 = {v1.size(),tem.size()};
+                while(!st1.empty()&&st1.top().second<=p1.second)
+                    st1.pop();
+                st1.push(p1);
+                v1.emplace_back(tem);
+                start = i+1;
+                i++;
+            }
+        }        
+        start = 0;
+        while(!st1.empty())
+        {
+            int numNeededToPrint = st1.top().second;
+            int eachWordLength = st1.top().first;
+            st1.pop();
+            for(int i = start;i<numNeededToPrint;i++)
+            {
+                string tem = "";
+                for(int u = 0;u<=eachWordLength;u++)
+                    tem += v1[u].size()>i?v1[u][i]:' ';
+                ans.emplace_back(tem);
+                start = numNeededToPrint;
+            }
+        }
+        return ans;
+    }
+};
