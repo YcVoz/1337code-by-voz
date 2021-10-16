@@ -1,0 +1,32 @@
+class Solution {
+public:
+    bool isPossible(vector<int>& nums) {
+        vector<int> v1(2001,0);
+        for(int i=0;i<nums.size();i++)
+            v1[nums[i]+1000]++;
+        int start = 0;
+        while(start+2<v1.size())
+        {
+            if(v1[start]==0)
+                start++;
+            else
+            {
+                if(v1[start+1]<=0||v1[start+2]<=0)
+                    return 0;
+                v1[start]--;
+                v1[start+1]--;
+                v1[start+2]--;
+                for(int i = 3;start+i<v1.size();i++)
+                {
+                    if(v1[start+i]>0&&v1[start+i]>v1[start+i-1])
+                        v1[start+i]--;
+                    else
+                        i = v1.size();
+                }
+            }
+        }
+        if(v1[v1.size()-2]!=0||v1[v1.size()-1]!=0)
+            return 0;
+        return 1;
+    }
+};
