@@ -1,0 +1,48 @@
+class Solution {
+public:
+    bool checkPalindromeFormation(string a, string b) {
+        bool checka = 1;
+        bool checkb = 1;
+        int index = -1;
+        for(int i = 0;i<(a.size()/2);i++)
+        {
+            if(a[i]!=b[a.size()-1-i])
+            {
+                index = i;
+                i += 100000;
+            }
+        }
+        if(index==-1)
+            return 1;
+        for(int i = index;(checka||checkb)&&i<(a.size()/2);i++)
+        {
+            if(a[i]!=a[a.size()-1-i]&&checka)
+                checka = 0;
+            if(b[i]!=b[a.size()-1-i]&&checkb)
+                checkb = 0;
+        }
+        if(checka||checkb)
+            return 1;        
+        checka = 1;
+        checkb = 1;
+        index = -1;
+        for(int i = 0;i<(a.size()/2);i++)
+        {
+            if(b[i]!=a[a.size()-1-i])
+            {
+                index = i;
+                i += 100000;
+            }
+        }
+        if(index==-1)
+            return 1;
+        for(int i = index;(checka||checkb)&&i<(a.size()/2);i++)
+        {
+            if(a[i]!=a[a.size()-1-i]&&checka)
+                checka = 0;
+            if(b[i]!=b[a.size()-1-i]&&checkb)
+                checkb = 0;
+        }    
+        return (checka||checkb);
+    }
+};
