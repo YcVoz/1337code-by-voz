@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<vector<int>> graph1;
+    vector<bool> visited;
+    vector<bool> hasApples;
+    int minTime(int n, vector<vector<int>>& edges, vector<bool>& hasApple) {
+        graph1.resize(n);
+        visited.resize(n);
+        hasApples = hasApple;
+        for(int i=0;i<edges.size();i++)
+        {
+            graph1[edges[i][0]].emplace_back(edges[i][1]);
+            graph1[edges[i][1]].emplace_back(edges[i][0]);
+        }     
+        visited[0] = 1;
+        return dfs(0);
+    }
+    int dfs(int nowIndex)
+    {
+        int cost = 0;
+        for(int i=0;i<graph1[nowIndex].size();i++)
+        {
+            if(!visited[graph1[nowIndex][i]])
+            {
+                visited[graph1[nowIndex][i]] = 1;
+                int subCost = dfs(graph1[nowIndex][i]);
+                cost += (subCost!=0||hasApples[graph1[nowIndex][i]])?subCost+2:0;
+            }
+        }
+        return cost;
+    }
+};
