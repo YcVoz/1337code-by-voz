@@ -1,0 +1,57 @@
+class Solution {
+public:
+    int minMutation(string start, string end, vector<string>& bank) {
+        bank.emplace_back(start);
+        int endIndex = -1;
+        for(int i=0;i<bank.size();i++)
+        {
+            int difff = 0;
+            for(int u=0;u<8&&difff==0;u++)
+                difff += (bank[i][u]!=end[u])?1:0;
+            if(difff==0)
+            {
+                endIndex = i;
+                i = 11;
+            }
+        }
+        if(endIndex==-1)
+            return -1;
+        vector<vector<bool>> g1(bank.size(),vector<bool>(bank.size(),0));
+        vector<int> delNode(0);
+        for(int i=0;i<bank.size()-1;i++)
+        {
+            for(int u=i+1;u<bank.size();u++)
+            {
+                int diff = 0;
+                for(int o = 0;o<8;o++)
+                {
+                    diff += (bank[i][o]!=bank[u][o])?1:0;
+                    o += diff>=2?8:0;
+                }
+                g1[i][u] = diff==1;
+                g1[u][i] = diff==1;
+            }
+        }
+        queue<int>q1;
+        vector<int> path(bank.size(),2147483647);
+        path[bank.size()-1] = 0;
+        q1.push(bank.size()-1);
+        while(!q1.empty())
+        {
+            int nowIndex = q1.front();
+            q1.pop();
+            for(int i=0;i<bank.size();i++)
+            {
+                if(nowIndex!=i&&g1[nowIndex][i])
+                {
+                    if(path[i]>path[nowIndex]+1)
+                    {
+                        q1.push(i);
+                        path[i] = min(path[i],path[nowIndex]+1);
+                    }
+                }
+            }
+        }
+        return path[endIndex]==2147483647?-1:path[endIndex];
+    }
+};
