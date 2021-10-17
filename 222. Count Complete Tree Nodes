@@ -1,0 +1,57 @@
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    vector<int> v1;
+    int countNodes(TreeNode* root) {
+        int rootLevel = getLevel(root);
+        if(rootLevel<=1)
+            return rootLevel;
+        getKeyNode(root);
+        int ans = pow(2,rootLevel-1)-1;
+        int tem = pow(2,rootLevel-2);
+        for(int i=0;i<v1.size();i++)
+        {
+            ans += tem*v1[i];
+            tem /= 2;
+        }
+        return ++ans;
+    }
+    int getLevel(TreeNode* root)
+    {
+        int ans = 0;
+        while(root!=NULL)
+        {
+            ans++;
+            root = root->left;
+        }
+        return ans;
+    }
+    void getKeyNode(TreeNode* root)
+    {
+        if(root->left==NULL)
+            return;
+        int leftLevel = getLevel(root->left);
+        int rightLevel = getLevel(root->right);
+        if(leftLevel!=rightLevel)
+        {
+            v1.emplace_back(0);
+            getKeyNode(root->left);
+        }
+        else
+        {
+            v1.emplace_back(1);
+            getKeyNode(root->right);
+        }
+        return;
+    }
+};
