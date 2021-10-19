@@ -1,0 +1,18 @@
+class Solution {
+public:
+    long long maxMatrixSum(vector<vector<int>>& matrix) {
+        int num_negative = 0;
+        int min_abs = 100001;
+        long long sum = 0;
+        for(int i=0;i<matrix.size();i++)
+        {
+            for(int u=0;u<matrix[0].size();u++)
+            {
+                sum += abs(matrix[i][u]);
+                num_negative += (matrix[i][u]<0)?1:0;
+                min_abs = min(abs(matrix[i][u]),min_abs);
+            }
+        }
+        return num_negative%2?sum+(-2)*min_abs:sum;
+    }
+};
