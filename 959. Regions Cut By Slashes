@@ -1,0 +1,59 @@
+class Solution {
+public:  
+    vector<int>father;
+    int findFather(int x)
+    {
+        return x == father[x] ? x : (father[x] = findFather(father[x]));
+    }
+    void Union(int x, int y)
+    {
+        x = findFather(x);
+        y = findFather(y);
+        if (x<y) father[y] = x;
+        else father[x] = y;
+    } 
+    int regionsBySlashes(vector<string>& grid) {
+        int n = grid.size();
+        int n2 = n*n;
+        father.resize(n2*4);
+        for(int i=0;i<n2*4;i++)
+            father[i] = i;
+        for(int i=0;i<n;i++)
+        {
+            for(int u=0;u<n;u++)
+            {
+                if(grid[i][u]=='/')
+                {
+                    Union(i*n+u,i*n+u+n2);
+                    Union(i*n+u+2*n2,i*n+u+3*n2);
+                }
+                else if(grid[i][u]=='\\')
+                {
+                    Union(i*n+u,i*n+u+2*n2);
+                    Union(i*n+u+n2,i*n+u+3*n2);
+                }
+                else
+                {                    
+                    Union(i*n+u,i*n+u+n2);
+                    Union(i*n+u,i*n+u+2*n2);
+                    Union(i*n+u,i*n+u+3*n2);
+                }
+                if(i>0)
+                    Union(i*n+u,(i-1)*n+u+3*n2);
+                if(u>0)
+                    Union(i*n+u+n2,i*n+u-1+2*n2);
+            }            
+        }
+        vector<int> check(4*n2,1);
+        int ans = 0;
+        for(int i=0;i<4*n2;i++)
+        {
+            if(check[findFather(i)])
+            {
+                ans++;
+                check[findFather(i)] = 0;
+            }
+        }
+        return ans;
+    }
+};
