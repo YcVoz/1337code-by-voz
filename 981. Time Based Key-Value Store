@@ -1,0 +1,43 @@
+class TimeMap {
+public:
+    map<string,vector<pair<int,string>>> m1;
+    TimeMap() {
+        m1.clear();
+    }
+    
+    void set(string key, string value, int timestamp) {
+        m1[key].push_back({timestamp,value});
+    }
+    
+    string get(string key, int timestamp) {
+        if(m1[key].size()<1)
+            return "";
+        if(m1[key][0].first>timestamp)
+            return "";
+        if(m1[key][0].first==timestamp)
+            return m1[key][0].second;
+        if(m1[key].back().first<=timestamp)
+            return m1[key].back().second;
+        int l = 0;
+        int r = m1[key].size()-1;
+        int mid = (l+r)/2;
+        while(r>l+1)
+        {
+            mid = (l+r)/2;
+            if(m1[key][mid].first==timestamp)
+                return m1[key][l].second;
+            if(m1[key][mid].first>timestamp)
+                r = mid;
+            else
+                l = mid;
+        }
+        return m1[key][l].second;
+    }
+};
+
+/**
+ * Your TimeMap object will be instantiated and called as such:
+ * TimeMap* obj = new TimeMap();
+ * obj->set(key,value,timestamp);
+ * string param_2 = obj->get(key,timestamp);
+ */
