@@ -1,0 +1,37 @@
+class Solution {
+public:
+    vector<int> m1;
+    bool canIWin(int maxChoosableInteger, int desiredTotal) {
+        bitset<20> b(pow(2,maxChoosableInteger)-1);
+        if(b.to_ulong()<desiredTotal)
+            return 0;
+        m1 = vector<int>(b.to_ulong()+1,-1);
+        return round(b,desiredTotal);
+    }
+    bool round(bitset<20> b,int number)
+    {
+        if(m1[b.to_ulong()]==1)
+            return 1;
+        for(int i=19;i>=0;i--)
+        {
+            if(b[i])
+            {
+                if(i+1>=number)
+                    return m1[b.to_ulong()] = 1;        
+                else
+                {
+                    b.reset(i);
+                    bool tem = round(b,number-(i+1));
+                    if(!tem)
+                    {
+                        b.set(i); 
+                        m1[b.to_ulong()] = 1;
+                        return 1;                        
+                    }
+                    b.set(i);    
+                }
+            }
+        }      
+        return m1[b.to_ulong()] = 0; 
+    }
+};
