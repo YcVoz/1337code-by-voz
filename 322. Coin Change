@@ -1,0 +1,44 @@
+class Solution {
+public:
+    int coinChange(vector<int>& coins, int amount) {
+        if(amount==0)
+            return 0;
+        vector<int> v1(amount+1,-1);
+        queue<int> q1;
+        int coinCount = 1;
+        for(int i=0;i<coins.size();i++)
+        {
+            if(coins[i]==amount)
+                return coinCount;
+            else if(coins[i]<amount&&v1[coins[i]]==-1)
+            {
+                q1.push(coins[i]);
+                v1[coins[i]] = coinCount;
+            }
+        }
+        coinCount++;
+        queue<int> q2;
+        while(!q1.empty())
+        {
+            queue<int> q2;
+            while(!q1.empty())
+            {
+                int c = q1.front();
+                q1.pop();
+                for(int i=0;i<coins.size();i++)
+                {
+                    if(coins[i]+c==amount)
+                        return coinCount;
+                    else if(coins[i]+c<amount&&v1[coins[i]+c]==-1)
+                    {
+                        q2.push(coins[i]+c);
+                        v1[coins[i]+c] = coinCount;
+                    }
+                }
+            }
+            q1 = q2;
+            coinCount++;
+        }
+        return -1;
+    }
+};
