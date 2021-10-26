@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int countVowelStrings(int n) {
+        vector<vector<int>> v1(5,vector<int>(n+1,0));
+        int ans = 0;
+        for(int i=0;i<5;i++)
+            v1[i][1] = 1;
+        for(int i=2;i<=n;i++)
+            for(int u=0;u<5;u++)
+                for(int o=u;o>=0;o--)
+                    v1[u][i] += v1[o][i-1];               
+        for(int i=0;i<5;i++)
+            ans+=v1[i][n];
+        return ans;
+    }
+};
