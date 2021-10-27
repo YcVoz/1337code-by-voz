@@ -1,0 +1,60 @@
+class Solution {
+public:
+    int maxSumTwoNoOverlap(vector<int>& nums, int firstLen, int secondLen) {
+        int n = nums.size();
+        vector<int> left_1(n,0);
+        vector<int> left_2(n,0);
+        vector<int> right_1(n,0);
+        vector<int> right_2(n,0);
+        int nowsum1 = 0;
+        int nowsum2 = 0;
+        for(int i=0;i<firstLen;i++)
+            nowsum1 += nums[i];
+        for(int i=0;i<secondLen;i++)
+            nowsum2 += nums[i];
+        left_1[firstLen-1] = nowsum1;
+        left_2[secondLen-1] = nowsum2;
+        for(int i=1;i<n;i++)
+        {
+            if(i+firstLen-1<n)
+            {
+                nowsum1 = nowsum1+nums[i+firstLen-1]-nums[i-1];
+                left_1[i+firstLen-1] = max(left_1[i+firstLen-2],nowsum1);
+            }
+            if(i+secondLen-1<n)
+            {
+                nowsum2 = nowsum2+nums[i+secondLen-1]-nums[i-1];
+                left_2[i+secondLen-1] = max(left_2[i+secondLen-2],nowsum2);
+            }
+        }
+        
+        nowsum1 = 0;
+        nowsum2 = 0;
+        for(int i=n-1;i>=n-firstLen;i--)
+            nowsum1 += nums[i];
+        for(int i=n-1;i>=n-secondLen;i--)
+            nowsum2 += nums[i];
+        right_1[n-firstLen] = nowsum1;
+        right_2[n-secondLen] = nowsum2;
+        for(int i=n-2;i>=0;i--)
+        {
+            if(i-firstLen+1>=0)
+            {
+                nowsum1 = nowsum1+nums[i-firstLen+1]-nums[i+1];
+                right_1[i-firstLen+1] = max(right_1[i-firstLen+2],nowsum1);
+            }
+            if(i-secondLen+1>=0)
+            {
+                nowsum2 = nowsum2+nums[i-secondLen+1]-nums[i+1];
+                right_2[i-secondLen+1] = max(right_2[i-secondLen+2],nowsum2);
+            }
+        }
+        int ans = 0;
+        for(int i = 0;i<n-1;i++)
+        {
+            ans = max(ans,left_1[i]+right_2[i+1]);
+            ans = max(ans,left_2[i]+right_1[i+1]);
+        }
+        return ans;
+    }
+};
