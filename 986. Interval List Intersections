@@ -1,0 +1,30 @@
+class Solution {
+public:
+    vector<vector<int>> intervalIntersection(vector<vector<int>>& firstList, vector<vector<int>>& secondList) {
+        int aIndex = 0;
+        int bIndex = 0;
+        vector<vector<int>> ans;
+        while(aIndex<firstList.size()&&bIndex<secondList.size())
+        {
+            if(firstList[aIndex][1]<=secondList[bIndex][1])
+            {
+                if(firstList[aIndex][1]>=secondList[bIndex][0])
+                {      
+                    vector<int> tam = {max(firstList[aIndex][0],secondList[bIndex][0]),firstList[aIndex][1]};
+                    ans.emplace_back(tam);
+                }
+                aIndex++;
+            }
+            else
+            {
+                if(firstList[aIndex][0]<=secondList[bIndex][1])
+                {    
+                    vector<int> tam = {max(firstList[aIndex][0],secondList[bIndex][0]),secondList[bIndex][1]};
+                    ans.emplace_back(tam);
+                }
+                bIndex++;
+            }
+        }
+        return ans;
+    }
+};
