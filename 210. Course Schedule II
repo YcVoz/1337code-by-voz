@@ -1,0 +1,47 @@
+class Solution {
+public:
+    vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
+        vector<vector<int>> backv(numCourses);
+        vector<int> frontv(numCourses,0);
+        vector<int> ans;
+        for(int i=0;i<prerequisites.size();i++)
+        {
+            frontv[prerequisites[i][0]]++;
+            backv[prerequisites[i][1]].emplace_back(prerequisites[i][0]);
+        }
+        queue<int> q1;
+        vector<bool>check(numCourses,1); 
+        int finish = 0;
+        for(int i=0;i<numCourses;i++)
+        {
+            if(frontv[i]==0)
+            {
+                q1.push(i);
+                check[i] = 0;
+            }
+        }
+        while(!q1.empty())
+        {
+            int nowTakeACourse = q1.front();
+            q1.pop();
+            finish++;
+            ans.emplace_back(nowTakeACourse);
+            if(finish==numCourses)
+                return ans;
+            for(int i=0;i<backv[nowTakeACourse].size();i++)
+            {
+                if(check[backv[nowTakeACourse][i]])
+                {
+                    frontv[backv[nowTakeACourse][i]]--;
+                    if(frontv[backv[nowTakeACourse][i]]==0)
+                    {
+                        q1.push(backv[nowTakeACourse][i]);
+                        check[backv[nowTakeACourse][i]] = 0;
+                    }
+                }
+            }
+        }
+        ans.resize(0);
+        return ans;
+    }
+};
