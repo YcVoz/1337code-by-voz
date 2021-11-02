@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool wordBreak(string s, vector<string>& wordDict) {
+        map<string,bool> m2;
+        m2[""] = 1;
+        for(int i=0;i<wordDict.size();i++)
+            m2[wordDict[i]] = 1;
+        for(int i=0;i<s.size();i++)
+        {
+            for(int start=i;start>=0&&i-start+1<=20&&(!m2[s]);start--)
+            {
+                string tem = s.substr(start,i-start+1);
+                string tem2 = s.substr(0,start);
+                if(m2[tem]&&m2[tem2])
+                    m2[s.substr(0,i+1)] = 1;
+            }
+        }
+        return m2[s];
+    }
+};
