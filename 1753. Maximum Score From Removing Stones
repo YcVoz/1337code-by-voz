@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int maximumScore(int a, int b, int c) {
+        int aa = max(a,b);
+        int bb = min(a,b);
+        int cc = c;
+        if(bb<c)
+        {
+            if(c>=aa)
+            {
+                cc = bb;
+                bb = aa;
+                aa = c;
+            }
+            else
+            {
+                cc = bb;
+                bb = c;
+            }
+        }
+        if(bb+cc<=aa)
+            return bb+cc;
+        return (aa+bb+cc)/2;
+    }
+};
