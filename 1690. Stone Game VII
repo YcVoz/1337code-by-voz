@@ -1,0 +1,24 @@
+class Solution {
+public:
+    int stoneGameVII(vector<int>& stones) {
+        int n = stones.size();
+        vector<int> sum(n,0);
+        vector<vector<int>> ans(n,vector<int>(n,0));
+        sum[0] = stones[0];
+        for(int i=1;i<n;i++)
+            sum[i] = sum[i-1]+stones[i];
+        for(int i=0;i+1<n;i++)
+            ans[i][i+1] = max(stones[i],stones[i+1]);
+        for(int l = 3;l<=n;l++)
+        {
+            for(int i=0;i+l-1<n;i++)
+            {
+                int left = sum[i+l-1]-sum[i]-ans[i+1][i+l-1];
+                int right = sum[i+l-2]-ans[i][i+l-2];
+                right -= (i-1>=0)?sum[i-1]:0;
+                ans[i][i+l-1] = max(left,right);
+            }
+        }
+        return ans[0][n-1];
+    }
+};
