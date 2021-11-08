@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int numSub(string s) {
+        int n = s.size();
+        int rightMore = -1;
+        int ans = 0;
+        vector<int> rightMoreArr(n,-1);
+        for(int i=n-1;i>=0;i--)
+        {
+            if(s[i]=='1')
+            {
+                if(rightMore==-1)
+                    rightMore = i;
+                rightMoreArr[i] = rightMore;
+            }
+            else
+                rightMore = -1;            
+        }
+        for(int i = 0;i<n;i++)
+        {
+            if(s[i]=='1')
+            {
+                ans += rightMoreArr[i]-i+1;
+                ans %= 1000000007;
+            }
+        }
+        return ans;
+    }
+};
