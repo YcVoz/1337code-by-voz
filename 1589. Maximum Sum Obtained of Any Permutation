@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int maxSumRangeQuery(vector<int>& nums, vector<vector<int>>& requests) {
+        int n = nums.size();
+        vector<long long>ans(n,0);
+        vector<int>each(n+1,0);
+        long long anss = 0;
+        for(int i=0;i<requests.size();i++){
+            each[requests[i][0]] ++;
+            each[requests[i][1]+1]--;
+        }
+        for(int i=0;i<n;i++)
+        {
+            anss += each[i];
+            ans[i] = anss;
+        }
+        anss = 0;
+        sort(ans.begin(),ans.end());
+        sort(nums.begin(),nums.end());
+        for(int i = n-1;i>=0;i--)
+        {
+            anss += ans[i]*nums[i];
+            anss %= 1000000007;
+        }
+        return anss;
+    }
+};
