@@ -1,0 +1,33 @@
+class Solution {
+public:
+    bool canFinish(int numCourses, vector<vector<int>>& prerequisites) {
+        int n = numCourses;
+        vector<int> preTask(n,0);
+        int n_class = n;
+        vector<vector<int>> postTask(n);
+        for(int i=0;i<prerequisites.size();i++)
+        {
+            preTask[prerequisites[i][0]]++;
+            postTask[prerequisites[i][1]].emplace_back(prerequisites[i][0]);
+        }
+        queue<int> q1;
+        for(int i=0;i<n;i++)
+        {
+            if(preTask[i]==0)
+                q1.push(i);
+        }
+        while(!q1.empty())
+        {
+            int nowtake = q1.front();
+            q1.pop();
+            n_class--;
+            for(int i = 0;i<postTask[nowtake].size();i++)
+            {
+                preTask[postTask[nowtake][i]]--;
+                if(preTask[postTask[nowtake][i]]==0)
+                    q1.push(postTask[nowtake][i]);
+            }
+        }
+        return (n_class==0);
+    }
+};
