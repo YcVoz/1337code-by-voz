@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int characterReplacement(string s, int k) {        
+        int ans = k;
+        if(k==0)
+        {
+            for(int i=0;i<s.size()-1;i++)
+            {
+                int tem = i+1;
+                while(s[tem]==s[i]&&tem<s.size())
+                    tem++;
+                ans = max(ans,tem-i);
+                i = tem-1;
+            }
+            return ans;
+        }
+        for(int i=0;i<26;i++)
+        {
+            int temk = k;
+            int nowIndex = 0;
+            int temStart = -1;
+            queue<int> q1;
+            while(nowIndex<s.size())
+            {
+                if(int(s[nowIndex]-'A')!=i)
+                {
+                    if(temk!=0)
+                    {
+                        temk--; 
+                        ans = max(ans,nowIndex-temStart);  
+                    }
+                    else
+                    {
+                        ans = max(ans,nowIndex-q1.front());  
+                        temStart = q1.front();
+                        q1.pop();
+                    }
+                    q1.push(nowIndex);
+                }
+                else
+                    ans = max(ans,nowIndex-temStart);  
+                nowIndex++;
+            }
+        }
+        return ans;
+    }
+};
