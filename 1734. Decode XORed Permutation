@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<int> decode(vector<int>& encoded) {
+        int n = encoded.size()+1;
+        int total = 0;
+        for(int i=1;i<=n;i++)
+            total ^= i;
+        vector<int> crossEncodedTotal(2,0);
+        for(int i=0;i<n-1;i++)
+            crossEncodedTotal[i%2] ^= encoded[i];
+        vector<int> ans(n);
+        bool tag = 1;
+        int left = 0;
+        int right = n-1;
+        while(left<right){
+            ans[left] = total^crossEncodedTotal[tag];
+            ans[right] = total^crossEncodedTotal[!tag];
+            total = total^ans[left]^ans[right];
+            crossEncodedTotal[tag] ^= encoded[right-1];
+            crossEncodedTotal[!tag] ^= encoded[left];
+            left++;
+            right--;
+            tag = !tag;
+        }
+        ans[left] = total;
+        return ans;
+    }
+};
