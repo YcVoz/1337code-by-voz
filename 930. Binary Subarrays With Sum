@@ -1,0 +1,43 @@
+class Solution {
+public:
+    int numSubarraysWithSum(vector<int>& nums, int goal) {
+        vector<int>indexOf1(0);
+        for(int i=0;i<nums.size();i++){
+            if(nums[i])
+                indexOf1.emplace_back(i);
+        }
+        if(indexOf1.size()<goal)
+            return 0;
+        int ans = 0;
+        if(goal==0){
+            if(indexOf1.size()==0)
+                return nums.size()+nums.size()*(nums.size()-1)/2;
+            int sizee;
+            for(int i=1;i<indexOf1.size();i++){
+                sizee = indexOf1[i]-indexOf1[i-1]-1;
+                if(sizee!=0){
+                    ans += sizee;
+                    ans += sizee*(sizee-1)/2;
+                }
+            }
+            sizee = indexOf1[0];
+            if(sizee!=0){
+                ans += sizee;
+                ans += sizee*(sizee-1)/2;
+            }
+            sizee = nums.size()-indexOf1.back()-1;
+            if(sizee!=0){
+                ans += sizee;
+                ans += sizee*(sizee-1)/2;
+            }
+            return ans;
+        }
+        for(int start = 0;start+goal-1<indexOf1.size();start++){
+            int leftValid = (start==0)?indexOf1[start]+1:indexOf1[start]-indexOf1[start-1];
+            int end = start+goal-1;
+            int rightValid = (end==indexOf1.size()-1)?nums.size()-indexOf1[end]:indexOf1[end+1]-indexOf1[end];
+            ans += leftValid*rightValid;
+        }
+        return ans;
+    }
+};
