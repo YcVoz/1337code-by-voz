@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int removeCoveredIntervals(vector<vector<int>>& intervals) {
+        sort(intervals.begin(),intervals.end(),increase);
+        sort(intervals.begin(),intervals.end(),increase2);
+        int del = 0;
+        for(int i=0;i<intervals.size();i++){
+            int tag = -1;           
+            for(int j = i+1;j<intervals.size()&&tag==-1;j++){
+                if(intervals[j][1]<=intervals[i][1])
+                    del++;
+                else
+                    tag = j;
+            }
+            i = tag-1;
+        }
+        return intervals.size()-del;
+    }
+    static bool increase(vector<int>a,vector<int>b){
+        return a[1]>b[1];
+    }
+    static bool increase2(vector<int>a,vector<int>b){
+        return a[0]<b[0];
+    }
+};
