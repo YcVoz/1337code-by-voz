@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int countTriplets(vector<int>& arr) {
+        vector<int> pre(arr.size(),0);
+        vector<unordered_map<int,int>> preMap(arr.size());
+        pre[0] = arr[0];
+        preMap[0][pre[0]]++;
+        int ans = 0;
+        for(int i=1;i<arr.size();i++){
+            pre[i] = pre[i-1]^arr[i];
+            preMap[i] = preMap[i-1];
+            preMap[i][pre[i]]++;
+        }
+        for(int k = arr.size()-1;k>=1;k--){
+            for(int j = k;j>=1;j--){
+                int jXorK = pre[k]^pre[j-1];
+                ans += j-2>=0?preMap[j-2][pre[j-1]^jXorK]:0;
+                ans += pre[j-1]==jXorK;
+            }
+        }
+        return ans;
+    }
+};
