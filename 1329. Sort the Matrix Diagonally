@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<vector<int>> diagonalSort(vector<vector<int>>& mat) {
+        int m = mat.size();
+        int n = mat[0].size();
+        vector<vector<int>> ans(m,vector<int>(n));
+        for(int i=0;i<m;i++){
+            vector<int> tem(0);
+            int nowI = i;
+            int nowJ = 0;
+            while(nowI<m&&nowJ<n){                
+                tem.emplace_back(mat[nowI][nowJ]);
+                nowJ++;
+                nowI++;
+            }
+            sort(tem.begin(),tem.end());
+            nowI = i;
+            nowJ = 0;
+            int index = 0;
+            while(nowI<m&&nowJ<n){   
+                ans[nowI][nowJ] = tem[index];
+                index++;
+                nowJ++;
+                nowI++;
+            }
+        }
+        for(int j=1;j<n;j++){
+            vector<int> tem(0);
+            int nowI = 0;
+            int nowJ = j;
+            while(nowI<m&&nowJ<n){                
+                tem.emplace_back(mat[nowI][nowJ]);
+                nowJ++;
+                nowI++;
+            }
+            sort(tem.begin(),tem.end());
+            nowI = 0;
+            nowJ = j;
+            int index = 0;
+            while(nowI<m&&nowJ<n){   
+                ans[nowI][nowJ] = tem[index];
+                index++;
+                nowJ++;
+                nowI++;
+            }
+        }
+        return ans;
+    }
+};
