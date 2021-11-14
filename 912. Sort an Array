@@ -1,0 +1,40 @@
+class Solution {
+public:
+    vector<int> sortArray(vector<int>& nums) {
+        mergeSort(nums,0,nums.size()-1);
+        return nums;
+    }
+    void mergeSort(vector<int>& nums,int l,int r){
+        if(l==r)
+            return;
+        int m = (l+r)/2;
+        mergeSort(nums,l,m);
+        mergeSort(nums,m+1,r);
+        int ptrl = l;
+        int ptr2 = m+1;
+        int nowptr = 0;
+        vector<int>tem(r-l+1);
+        while(nowptr!=tem.size()){
+            if(ptrl==m+1){
+                tem[nowptr] = nums[ptr2];
+                ptr2++;
+            }
+            else if(ptr2==r+1){
+                tem[nowptr] = nums[ptrl];
+                ptrl++;
+            }
+            else{
+                if(nums[ptrl]<nums[ptr2]){
+                    tem[nowptr] = nums[ptrl];
+                    ptrl++;
+                }
+                else{
+                    tem[nowptr] = nums[ptr2];
+                    ptr2++;
+                }
+            }    
+            nowptr++;
+        }
+        copy(tem.begin(),tem.end(),nums.begin()+l);
+    }
+};
