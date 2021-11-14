@@ -1,0 +1,6 @@
+istringstream in(str);
+string t;
+vector<string> v;
+while (getline(in, t, ',')) {
+    v.push_back(t);
+}
