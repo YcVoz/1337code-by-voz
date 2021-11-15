@@ -1,0 +1,68 @@
+class Solution {
+public:
+    vector<int> findMinHeightTrees(int n, vector<vector<int>>& edges) {
+        vector<int> ans(1,0);
+        if(n==1)
+            return ans;
+        vector<vector<int>> connect(n,vector<int>(0));
+        vector<vector<int>> walkFrom0(n,vector<int>(0));
+        vector<bool> notCheck(n,1);
+        for(int i=0;i<edges.size();i++){
+            connect[edges[i][0]].emplace_back(edges[i][1]);
+            connect[edges[i][1]].emplace_back(edges[i][0]);
+        }
+        queue<int> q1;
+        notCheck[0] = 0;
+        int maxIndex = -1;
+        q1.push(0);
+        while(!q1.empty()){
+            int now = q1.front();
+            q1.pop();
+            for(int i=0;i<connect[now].size();i++){
+                if(notCheck[connect[now][i]]){
+                    notCheck[connect[now][i]] = 0;
+                    walkFrom0[connect[now][i]] = walkFrom0[now];
+                    walkFrom0[connect[now][i]].emplace_back(connect[now][i]);
+                    q1.push(connect[now][i]);
+                    maxIndex = connect[now][i];
+                }
+            }
+        }
+        notCheck = vector<bool>(n,1);
+        notCheck[maxIndex] = 0;
+        q1.push(maxIndex);
+        walkFrom0 = vector<vector<int>>(n,vector<int>(0));
+        walkFrom0[maxIndex].emplace_back(maxIndex);
+        while(!q1.empty()){
+            int now = q1.front();
+            q1.pop();
+            for(int i=0;i<connect[now].size();i++){
+                if(notCheck[connect[now][i]]){
+                    notCheck[connect[now][i]] = 0;
+                    walkFrom0[connect[now][i]] = walkFrom0[now];
+                    walkFrom0[connect[now][i]].emplace_back(connect[now][i]);
+                    q1.push(connect[now][i]);
+                    maxIndex = connect[now][i];
+                }
+            }
+        }
+        int ptr1 = 0;
+        int ptr2 = 0;
+        if(walkFrom0[maxIndex].size()%2){
+            while(ptr2!=walkFrom0[maxIndex].size()-1){
+                ptr1++;
+                ptr2 += 2;
+            }
+            ans[0] = walkFrom0[maxIndex][ptr1];
+        }
+        else{
+            while(ptr2+2<walkFrom0[maxIndex].size()){
+                ptr1++;
+                ptr2 += 2;
+            }
+            ans[0] = walkFrom0[maxIndex][ptr1];
+            ans.emplace_back(walkFrom0[maxIndex][++ptr1]);
+        }
+        return ans;
+    }
+};
