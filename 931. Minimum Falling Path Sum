@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minFallingPathSum(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int ans = 2147483647;
+        for(int i = 0;i<m-1;i++){
+            vector<int> temRow(n,2147483647);
+            for(int j=0;j<n;j++){
+                if(j>0)
+                    temRow[j-1] = min(temRow[j-1],matrix[i][j]);
+                if(j<n-1)
+                    temRow[j+1] = min(temRow[j+1],matrix[i][j]);
+                temRow[j] = min(temRow[j],matrix[i][j]);
+            }
+            for(int j=0;j<n;j++)
+                matrix[i+1][j] += temRow[j];
+        }
+        for(int j=0;j<n;j++)
+            ans = min(ans,matrix[m-1][j]);
+        return ans;
+    }
+};
