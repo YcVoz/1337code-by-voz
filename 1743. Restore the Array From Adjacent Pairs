@@ -1,0 +1,32 @@
+class Solution {
+public:
+    vector<int> restoreArray(vector<vector<int>>& adjacentPairs) {
+        unordered_map<int,pair<int,int>> m1;
+        for(int i=0;i<adjacentPairs.size();i++){
+            if(m1.find(adjacentPairs[i][0])!=m1.end())
+                m1[adjacentPairs[i][0]].second = adjacentPairs[i][1];
+            else
+                m1[adjacentPairs[i][0]] = make_pair(adjacentPairs[i][1],373373);
+            if(m1.find(adjacentPairs[i][1])!=m1.end())
+                m1[adjacentPairs[i][1]].second = adjacentPairs[i][0];
+            else
+                m1[adjacentPairs[i][1]] = make_pair(adjacentPairs[i][0],373373);
+        }
+        bool tag = 1;
+        int startIndex = 373373373;
+        int lastIndex = -373373373;
+        for(auto iter = m1.begin();iter!=m1.end()&&tag;iter++){
+            if(iter->second.second==373373){
+                startIndex = iter->first;
+                tag = 0;
+            }
+        }
+        vector<int> ans(adjacentPairs.size()+1);
+        for(int i=0;i<ans.size();i++){
+            ans[i] = startIndex;
+            startIndex = m1[startIndex].first==lastIndex?m1[startIndex].second:m1[startIndex].first;
+            lastIndex = ans[i];
+        }
+        return ans;
+    }
+};
