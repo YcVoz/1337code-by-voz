@@ -1,0 +1,20 @@
+class Solution {
+public:
+    bool isPossibleDivide(vector<int>& nums, int k) {
+        map<int,int>m1;
+        for(int i=0;i<nums.size();i++)
+            m1[nums[i]]++;
+        for(auto iter = m1.begin();iter!=m1.end();iter++){
+            if(iter->second!=0){
+                int now = iter->first;
+                int now_n = iter->second;
+                for(int u = 1;u<k;u++){
+                    if(m1[now+u]<now_n)
+                        return 0;
+                    m1[now+u] -= now_n;
+                }
+            }
+        }
+        return 1;
+    }
+};
