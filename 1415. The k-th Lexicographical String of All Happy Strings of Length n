@@ -1,0 +1,29 @@
+class Solution {
+public:
+    string getHappyString(int n, int k) {
+        if(k>3*(pow(2,(n-1))))
+            return "";
+        k--;
+        string ans;
+        int threshold = pow(2,(n-1));
+        ans = char('a'+(k/threshold));
+        while(ans.size()!=n){
+            k -= (k/threshold)*threshold;
+            if(ans.back()=='a'){
+                threshold /= 2;
+                ans += (k<threshold)?"b":"c";
+            }
+            else if(ans.back()=='b'){
+                threshold /= 2;
+                ans += (k<threshold)?"a":"c";                
+            }
+            else if(ans.back()=='c'){
+                threshold /= 2;
+                ans += (k<threshold)?"a":"b";                
+            }
+            else
+                return "ganyu";             
+        }
+        return ans;
+    }
+};
