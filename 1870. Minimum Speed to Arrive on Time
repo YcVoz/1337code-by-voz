@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int minSpeedOnTime(vector<int>& dist, double hour) {
+        int minSpeed = 1;
+        int maxSpeed = 100000000;
+        double nowTime = 0;
+        bool canGo = 1;        
+        while(minSpeed+1!=maxSpeed){
+            int nowSpeed = (minSpeed+maxSpeed)/2;
+            canGo = 1;
+            nowTime = 0;
+            for(int i=0;i<dist.size()-1&&canGo;i++){
+                nowTime += ceil(double(dist[i]) / nowSpeed);
+                canGo = (nowTime>hour)?0:canGo;
+            }
+            nowTime += double(dist.back()) / nowSpeed;
+            canGo = (nowTime>hour)?0:canGo;
+            if(canGo)
+                maxSpeed = nowSpeed;
+            else
+                minSpeed = nowSpeed;
+        }
+        if(maxSpeed==100000000){
+            canGo = 1;
+            nowTime = 0;
+            for(int i=0;i<dist.size()-1&&canGo;i++){
+                nowTime += ceil(double(dist[i]) / maxSpeed);
+                canGo = (nowTime>hour)?0:canGo;
+            }
+            nowTime += double(dist.back()) / maxSpeed;
+            canGo = (nowTime>hour)?0:canGo;
+            return canGo?maxSpeed:-1;
+        }
+        if(minSpeed==1){
+            canGo = 1;
+            nowTime = 0;
+            for(int i=0;i<dist.size()-1&&canGo;i++){
+                nowTime += ceil(double(dist[i]) / minSpeed);
+                canGo = (nowTime>hour)?0:canGo;
+            }
+            nowTime += double(dist.back()) / minSpeed;
+            canGo = (nowTime>hour)?0:canGo;
+            return canGo?minSpeed:maxSpeed;
+        }
+        return maxSpeed;
+    }
+};
