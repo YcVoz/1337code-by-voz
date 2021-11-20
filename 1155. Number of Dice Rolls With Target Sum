@@ -1,0 +1,14 @@
+class Solution {
+public:
+    int numRollsToTarget(int d, int f, int target) {
+        vector<vector<int>>dp(d+1,vector<int>(target+1,0));
+        for(int i=1;i<=f&&i<=target;i++)
+            dp[1][i] = 1;
+        for(int i=2;i<dp.size();i++)
+            for(int u=0;u<dp[i].size();u++)
+                for(int oneDie = 1;oneDie<=f;oneDie++)
+                    if(oneDie<target&&u-oneDie>=0)         
+                            dp[i][u] = (dp[i][u]+dp[i-1][u-oneDie])%1000000007;
+        return dp[d][target];
+    }
+};
