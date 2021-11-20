@@ -1,27 +1,35 @@
 class Solution {
 public:
-    int sumOfBeauties(vector<int>& nums) {
-        vector<int> theMin(nums.size());
-        vector<int> theMax(nums.size());
-        int nowMax = nums[0];
-        int nowMin = nums.back();
-        int ans = 0;
-        theMax[0] = nowMax;
-        theMin[theMin.size()-1] = nowMin;
-        for(int i=1;i<nums.size();i++){
-            nowMax = max(nowMax,nums[i]);
-            theMax[i] = nowMax;
+    bool validateStackSequences(vector<int>& pushed, vector<int>& popped) {
+        int index1 = 0;
+        int index2 = 0;
+        vector<bool> inStack(1000,0);
+        vector<bool> dropAway(1000,0);
+        stack<int> s1;
+        while(index2<popped.size()){
+            if(dropAway[popped[index2]])
+                return 0;
+            if(inStack[popped[index2]]){
+                if(s1.top()!=popped[index2])
+                    return 0;
+                else{
+                    s1.pop();
+                    inStack[popped[index2]] = 0;
+                    dropAway[popped[index2]] = 1;
+                    index2++;
+                }
+            }
+            else{
+                while(pushed[index1]!=popped[index2]){
+                    s1.push(pushed[index1]);
+                    inStack[pushed[index1]] = 1;
+                    index1++;
+                }
+                s1.push(pushed[index1]);
+                inStack[pushed[index1]] = 1;
+                index1++;
+            }
         }
-        for(int i = nums.size()-2;i>=0;i--){
-            nowMin = min(nowMin,nums[i]);
-            theMin[i] = nowMin;
-        }
-        for(int i=1;i<nums.size()-1;i++){
-            if(nums[i]>theMax[i-1]&&nums[i]<theMin[i+1])
-                ans += 2;
-            else if(nums[i]>nums[i-1]&&nums[i]<nums[i+1])
-                ans ++;            
-        }
-        return ans;
+        return 1;
     }
 };
