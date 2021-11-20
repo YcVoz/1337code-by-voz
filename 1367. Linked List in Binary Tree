@@ -1,0 +1,42 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+/**
+ * Definition for a binary tree node.
+ * struct TreeNode {
+ *     int val;
+ *     TreeNode *left;
+ *     TreeNode *right;
+ *     TreeNode() : val(0), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x) : val(x), left(nullptr), right(nullptr) {}
+ *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
+ * };
+ */
+class Solution {
+public:
+    bool isSubPath(ListNode* head, TreeNode* root) {
+        vector<ListNode*> newhead{head};
+        return isSubPath2(newhead, root);
+    }
+    bool isSubPath2(vector<ListNode*> head, TreeNode* root){
+        if(!root)
+            return 0;
+        vector<ListNode*> newhead{head[0]};
+        for(int i=0;i<head.size();i++){
+            if(head[i]->val==root->val){
+                if(head[i]->next==NULL)
+                    return 1;
+                head[i] = head[i]->next;
+                newhead.emplace_back(head[i]);
+            }
+        }        
+        return isSubPath2(newhead, root->left)||isSubPath2(newhead, root->right);
+    }
+};
