@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int sumOfBeauties(vector<int>& nums) {
+        vector<int> theMin(nums.size());
+        vector<int> theMax(nums.size());
+        int nowMax = nums[0];
+        int nowMin = nums.back();
+        int ans = 0;
+        theMax[0] = nowMax;
+        theMin[theMin.size()-1] = nowMin;
+        for(int i=1;i<nums.size();i++){
+            nowMax = max(nowMax,nums[i]);
+            theMax[i] = nowMax;
+        }
+        for(int i = nums.size()-2;i>=0;i--){
+            nowMin = min(nowMin,nums[i]);
+            theMin[i] = nowMin;
+        }
+        for(int i=1;i<nums.size()-1;i++){
+            if(nums[i]>theMax[i-1]&&nums[i]<theMin[i+1])
+                ans += 2;
+            else if(nums[i]>nums[i-1]&&nums[i]<nums[i+1])
+                ans ++;            
+        }
+        return ans;
+    }
+};
