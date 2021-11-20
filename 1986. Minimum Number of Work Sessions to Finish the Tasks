@@ -57,3 +57,33 @@ public:
         return possiblaV1;
     }
 };
+
+
+/////////////////////////////// solution 2 ///////////////////////////
+class Solution {
+public:
+    int minSessions(vector<int>& tasks, int sessionTime) {
+        int n = tasks.size();
+        int max = pow(2,n)-1;
+        vector<int> table(max+1,2147483647);
+        for(int i=1;i<=max;i++){
+            int thisWorkLoad = 0;
+            int index = 0;
+            while(i>>index){
+                thisWorkLoad += (i&(1<<index))?tasks[index]:0;
+                index++;
+            }
+            if(thisWorkLoad>sessionTime){
+                int nowMin = 2147483647;
+                for(int u = 1;u<=i/2;u++){
+                    if((u|(i-u))==i)
+                        nowMin = min(nowMin,table[u]+table[i-u]);
+                }
+                table[i] = nowMin;                
+            }
+            else
+                table[i] = 1;
+        }
+        return table[max];
+    }
+};
