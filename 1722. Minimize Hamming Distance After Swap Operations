@@ -1,0 +1,36 @@
+class Solution {
+public:
+    vector<int>father;
+    int findFather(int x)
+    {
+        return x == father[x] ? x : (father[x] = findFather(father[x]));
+    }
+    void Union(int x, int y)
+    {
+        x = findFather(x);
+        y = findFather(y);
+        if (x<y) father[y] = x;
+        else father[x] = y;
+    } 
+    int minimumHammingDistance(vector<int>& source, vector<int>& target, vector<vector<int>>& allowedSwaps) {
+        int n = source.size();
+        int ans = 0;
+        father.resize(n);
+        for(int i=0;i<n;i++)
+            father[i] = i;
+        for(int i=0;i<allowedSwaps.size();i++)
+            Union(allowedSwaps[i][0],allowedSwaps[i][1]);
+        vector<unordered_map<int,int>> group(n);
+        for(int i=0;i<n;i++){
+            group[findFather(i)][source[i]]++;
+            group[findFather(i)][target[i]]--;
+        }
+        for(int i=0;i<n;i++){
+            int tem = 0;
+            for(auto iter = group[i].begin();iter!=group[i].end();iter++)
+                tem += abs(iter->second);
+            ans += tem/2;
+        }
+        return ans;
+    }
+};
