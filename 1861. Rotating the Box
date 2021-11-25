@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<vector<char>> rotateTheBox(vector<vector<char>>& box) {
+        int m = box.size();
+        int n = box[0].size();
+        vector<vector<char>> ans(n,vector<char>(m,'.'));
+        for(int i=0;i<m;i++){
+            int nowStone = 0;
+            for(int u=0;u<n;u++){
+                if(box[i][u]=='#')
+                    nowStone++;
+                else if(box[i][u]=='*'){
+                    ans[u][m-1-i] = '*';
+                    for(int o = 1;o<=nowStone;o++)
+                        ans[u-o][m-1-i] = '#';
+                    nowStone = 0;
+                }
+            }
+            for(int o = 1;o<=nowStone;o++)
+                ans[n-o][m-1-i] = '#';
+        }
+        return ans;
+    }
+};
