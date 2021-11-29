@@ -1,0 +1,72 @@
+class Solution {
+public:
+    int openLock(vector<string>& deadends, string target) {
+        map<int,bool> m1;
+        map<int,int> m2;
+        for(int i=0;i<deadends.size();i++)
+            m1[stoi(deadends[i])] = 1;
+        if(m1.find(0)!=m1.end())
+            return -1;
+        if(target == "0000")
+            return 0;
+        m2[0] = 0;
+        queue<int> q1;
+        q1.push(0);
+        while(!q1.empty()){
+            int tem = q1.front();
+            int nowtest;
+            q1.pop();
+            for(int i=0;i<4;i++){
+                if(int(tem/pow(10,i))%10 >= 1 && 8 >= int(tem/pow(10,i))%10){
+                    nowtest = tem+pow(10,i);
+                    if(m1.find(nowtest)==m1.end()&&m2.find(nowtest)==m2.end()){
+                        if(stoi(target)==nowtest)
+                            return m2[tem]+1;
+                        m2[nowtest] = m2[tem]+1;
+                        q1.push(nowtest);
+                    }
+                    nowtest = tem-pow(10,i);
+                    if(m1.find(nowtest)==m1.end()&&m2.find(nowtest)==m2.end()){
+                        if(stoi(target)==nowtest)
+                            return m2[tem]+1;
+                        m2[nowtest] = m2[tem]+1;
+                        q1.push(nowtest);
+                    }
+                }
+                else if(int(tem/pow(10,i))%10==9){
+                    nowtest = tem-pow(10,i)*9;
+                    if(m1.find(nowtest)==m1.end()&&m2.find(nowtest)==m2.end()){
+                        if(stoi(target)==nowtest)
+                            return m2[tem]+1;
+                        m2[nowtest] = m2[tem]+1;
+                        q1.push(nowtest);
+                    }
+                    nowtest = tem-pow(10,i);
+                    if(m1.find(nowtest)==m1.end()&&m2.find(nowtest)==m2.end()){
+                        if(stoi(target)==nowtest)
+                            return m2[tem]+1;
+                        m2[nowtest] = m2[tem]+1;
+                        q1.push(nowtest);
+                    }
+                }
+                else{
+                    nowtest = tem+pow(10,i);
+                    if(m1.find(nowtest)==m1.end()&&m2.find(nowtest)==m2.end()){
+                        if(stoi(target)==nowtest)
+                            return m2[tem]+1;
+                        m2[nowtest] = m2[tem]+1;
+                        q1.push(nowtest);
+                    }
+                    nowtest = tem+pow(10,i)*9;
+                    if(m1.find(nowtest)==m1.end()&&m2.find(nowtest)==m2.end()){
+                        if(stoi(target)==nowtest)
+                            return m2[tem]+1;
+                        m2[nowtest] = m2[tem]+1;
+                        q1.push(nowtest);
+                    }
+                }
+            }
+        }
+        return -1;
+    }
+};
