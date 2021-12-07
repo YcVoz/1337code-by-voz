@@ -1,0 +1,26 @@
+class Solution {
+public:
+    int numSplits(string s) {
+        vector<int> leftv(26,0);
+        vector<int> rightv(26,0);
+        int leftCount = 1;
+        int rightCount = 0;
+        int ans = 0;
+        leftv[int(s[0]-'a')] = 1;
+        for(int i=1;i<s.size();i++){
+            int tem = int(s[i]-'a');
+            rightCount+=(!rightv[tem]);
+            rightv[tem]++;
+        }
+        ans += (leftCount==rightCount);
+        for(int i=1;i<s.size()-1;i++){
+            int tem = int(s[i]-'a');
+            leftCount+=(!leftv[tem]);
+            leftv[tem]++;
+            rightv[tem]--;
+            rightCount-=(!rightv[tem]);
+            ans += (leftCount==rightCount);
+        }
+        return ans;
+    }
+};
