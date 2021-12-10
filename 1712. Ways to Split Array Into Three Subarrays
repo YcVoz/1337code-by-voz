@@ -1,0 +1,48 @@
+class Solution {
+public:
+    int waysToSplit(vector<int>& nums) {        
+        int n = nums.size();
+        int ptr1 = 0;
+        int ptr2 = 1;
+        int ptr3 = 2;
+        int sumLeft = 0;
+        int sumMid1 = 0;
+        int sumMid2 = 0;
+        int sumRight = 0;
+        long long ans = 0;
+        sumLeft = nums[ptr1];
+        sumMid1 = nums[ptr2];
+        for(int i=ptr3;i<n;i++)
+            sumRight += nums[i];
+        while(ptr1<n-2){
+            while(sumLeft>sumMid1||ptr2<=ptr1){
+                if(ptr2!=n-2){
+                    ptr2++;
+                    sumMid1 += nums[ptr2];
+                    sumMid2 -= nums[ptr2];
+                }
+                else
+                    return ans;
+            }
+            while(ptr3<=ptr2){
+                sumRight -= nums[ptr3];
+                sumMid2 = 0;
+                ptr3++;
+            }
+            if(sumRight+sumMid2>=sumMid1)
+            {
+                while(ptr3!=n-1&&sumRight-nums[ptr3]>=sumMid1+sumMid2+nums[ptr3]){
+                    sumRight -= nums[ptr3];
+                    sumMid2 += nums[ptr3];
+                    ptr3++;
+                }  
+                ans += (ptr3-ptr2);
+                ans %= 1000000007;
+            }
+            ptr1++;
+            sumLeft += nums[ptr1];
+            sumMid1 -= nums[ptr1];
+        }
+        return ans;
+    }
+};
