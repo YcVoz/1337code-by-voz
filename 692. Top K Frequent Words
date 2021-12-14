@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<string> topKFrequent(vector<string>& words, int k) {        
+        vector<string> ans(k);      
+        vector<pair<int,string>> v1;
+        map<string,int> m1;
+        for(int i=0;i<words.size();i++)
+            m1[words[i]]++;
+        for(auto iter = m1.begin();iter!=m1.end();iter++)
+            v1.emplace_back(make_pair(iter->second,iter->first));
+        sort(v1.begin(),v1.end(),bools);
+        for(int i=0;i<k;i++)
+            ans[i] = v1[i].second;
+        return ans;
+    }
+    static bool bools(pair<int,string> a, pair<int,string>b){
+        if(a.first>b.first)
+            return 1;
+        else if(a.first<b.first)
+            return 0;
+        return b.second>a.second;
+    }
+};
