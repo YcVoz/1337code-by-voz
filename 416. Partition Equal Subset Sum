@@ -1,0 +1,31 @@
+class Solution {
+public:
+    bool canPartition(vector<int>& nums) {
+        set<int> s1;
+        set<int> stem;
+        int n = nums.size();
+        int sum = 0;            
+        for(int i=0;i<n;i++)
+            sum += nums[i];
+        if(sum%2)
+            return 0;
+        sum /= 2;
+        for(int i=0;i<nums.size();i++){
+            stem.clear();
+            if(nums[i]==sum)
+                return 1;
+            stem.insert(nums[i]);
+            for(auto iter = s1.begin();iter!=s1.end();iter++){
+                if(*iter+nums[i]==sum)
+                    return 1;
+                if(*iter+nums[i]==sum)
+                    return 1;
+                if(*iter+nums[i]<sum)
+                    stem.insert(*iter+nums[i]);
+                stem.insert(*iter);
+            }
+            s1 = stem;
+        }
+        return 0;
+    }
+};
