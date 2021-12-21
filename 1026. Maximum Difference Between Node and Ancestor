@@ -11,42 +11,19 @@
  */
 class Solution {
 public:
+    int maxDiff = 0;
     int maxAncestorDiff(TreeNode* root) {
-        return getMaxMinDiff(root)[2];
+        passMaxMinWhileTraveling(root,root->val,root->val);
+        return maxDiff;
     }
-    vector<int> getMaxMinDiff(TreeNode* root){
-        //max,min,maxDiff
-        vector<int> vOut(3);
-        vOut[0] = root->val;
-        vOut[1] = root->val;
-        vOut[2] = 0;
-        if(root->left!=NULL)
-        {
-            vector<int> vtem = getMaxMinDiff(root->left);
-            vOut[2] = vtem[2];
-            if(vtem[0]>vOut[0])
-                vOut[0] = vtem[0];
-            if(vtem[1]<vOut[1])
-                vOut[1] = vtem[1];
-            if(abs(vtem[0]-root->val)>vOut[2])
-                vOut[2] = abs(vtem[0]-root->val);
-            if(abs(vtem[1]-root->val)>vOut[2])
-                vOut[2] = abs(vtem[1]-root->val);
-        }          
-        if(root->right!=NULL)
-        {
-            vector<int> vtem = getMaxMinDiff(root->right);
-            if(vtem[2]>vOut[2])
-                vOut[2] = vtem[2];
-            if(vtem[0]>vOut[0])
-                vOut[0] = vtem[0];
-            if(vtem[1]<vOut[1])
-                vOut[1] = vtem[1];
-            if(abs(vtem[0]-root->val)>vOut[2])
-                vOut[2] = abs(vtem[0]-root->val);
-            if(abs(vtem[1]-root->val)>vOut[2])
-                vOut[2] = abs(vtem[1]-root->val);
-        }          
-        return vOut;
+    void passMaxMinWhileTraveling(TreeNode* root, int maxx, int minn){
+        if(root){
+            maxDiff = max(maxDiff,abs(root->val-maxx));
+            maxDiff = max(maxDiff,abs(root->val-minn));
+            maxx = max(maxx,root->val);
+            minn = min(minn,root->val);
+            passMaxMinWhileTraveling(root->left, maxx, minn);
+            passMaxMinWhileTraveling(root->right, maxx, minn);
+        }
     }
 };
