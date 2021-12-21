@@ -1,0 +1,31 @@
+class Solution {
+public:
+    int smallestDivisor(vector<int>& nums, int threshold) {
+        int big = 1000000;
+        int small = 1;
+        int mid;
+        if(sumFuc(nums,1)<=threshold)
+            return 1;
+        while(big != small+1){
+            mid = (big+small)/2;
+            if(sumFuc(nums,mid)>threshold)
+                small = mid;
+            else
+                big = mid;
+        }
+        return big;
+    }
+    int divFuc(int a,int d){
+        if(a<=d)
+            return 1;
+        if(a%d==0)
+            return a/d;
+        return a/d+1;
+    }
+    long long sumFuc(vector<int>& nums,int d){
+        long long sum = 0;
+        for(int i=0;i<nums.size();i++)
+            sum += divFuc(nums[i],d);
+        return sum;
+    }
+};
