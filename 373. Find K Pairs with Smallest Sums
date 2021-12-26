@@ -1,0 +1,28 @@
+#define pii tuple<int, int, int>
+class Solution {
+public:
+    vector<vector<int>> kSmallestPairs(vector<int>& nums1, vector<int>& nums2, int k) {
+        long long n1 = nums1.size();
+        long long n2 = nums2.size();
+        vector<vector<int>> ans;
+        map<pair<int,int>,bool> m1;
+        priority_queue <pii, vector<pii>, greater<pii>> pq;
+        pq.push(make_tuple(nums1[0]+nums2[0],0,0));
+        while(ans.size()!=k && ans.size()<n1*n2){
+            vector<int> tem(2);
+            int inx1 = get<1>(pq.top());
+            int inx2 = get<2>(pq.top());
+            tem[0] = nums1[inx1];
+            tem[1] = nums2[inx2];
+            ans.emplace_back(tem);
+            pq.pop();
+            if(inx1+1<n1 && !m1[make_pair(inx1+1,inx2)])
+                pq.push(make_tuple(nums1[inx1+1]+nums2[inx2],inx1+1,inx2));
+            if(inx2+1<n2 && !m1[make_pair(inx1,inx2+1)]) 
+                pq.push(make_tuple(nums1[inx1]+nums2[inx2+1],inx1,inx2+1));
+            m1[make_pair(inx1+1,inx2)] = 1;
+            m1[make_pair(inx1,inx2+1)] = 1;
+        }
+        return ans;
+    }
+};
