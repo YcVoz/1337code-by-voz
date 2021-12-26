@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int furthestBuilding(vector<int>& heights, int bricks, int ladders) {
+        int n = heights.size();
+        priority_queue <int> pd;
+        for(int i=1;i<n;i++){
+            if(heights[i]>heights[i-1]){
+                int diff = heights[i]-heights[i-1];
+                pd.push(diff);
+                if(bricks < diff){
+                    if(ladders==0)
+                        return i-1;
+                    bricks += pd.top()-diff;
+                    pd.pop();
+                    ladders--;
+                }
+                else
+                    bricks -= diff;
+            }
+        }
+        return n-1;
+    }
+};
