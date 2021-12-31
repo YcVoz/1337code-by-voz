@@ -4,19 +4,14 @@ public:
         int n = s.size();
         int ans = n;
         vector<int> a_num(n);
-        vector<int> b_num(n);
         if(s[0]=='a')
-            a_num[0] = 1;
-        else
-            b_num[0] = 1;            
-        for(int i=1;i<n;i++){
-            a_num[i] = a_num[i-1]+(s[i]=='a');
-            b_num[i] = b_num[i-1]+(s[i]=='b');
-        }
-        ans = min(ans,a_num[n-1]);
-        ans = min(ans,b_num[n-1]);
+            a_num[0] = 1;          
         for(int i=1;i<n;i++)
-            ans = min(ans,b_num[i-1]+a_num[n-1]-a_num[i-1]);
+            a_num[i] = a_num[i-1]+(s[i]=='a');
+        ans = min(ans,a_num[n-1]);
+        ans = min(ans,n-a_num[n-1]);
+        for(int i=1;i<n;i++)
+            ans = min(ans,i-a_num[i-1]+a_num[n-1]-a_num[i-1]);
         return ans;
     }
 };
