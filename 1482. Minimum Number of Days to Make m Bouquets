@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int minDays(vector<int>& bloomDay, int m, int k) {
+        int n = bloomDay.size();
+        if(n<m*k)
+            return -1;
+        int maxDays = *max_element(bloomDay.begin(), bloomDay.end());
+        int minDays = 0;
+        int nowDays;
+        vector<int> local_max(n,0);
+        vector<int> dp(n,0);
+        vector<int> init_dp(n,0);
+        deque<int> q1;
+        for(int i=0;i<n;i++){
+            while(!q1.empty() && q1.back()<bloomDay[i])
+                q1.pop_back();
+            q1.push_back(bloomDay[i]);
+            local_max[i] = q1.front();
+            if(i+1>=k && bloomDay[i-k+1]==q1.front())
+                q1.pop_front();
+        }
+        for(int i=0;i<k-1;i++)
+            local_max[i] = 0;
+        while(minDays+1!=maxDays){
+            dp = init_dp;
+            nowDays = (maxDays+minDays)/2;
+            dp[k-1] = local_max[k-1]<=nowDays;
+            for(int i=k;i<n;i++)
+                dp[i] = max(dp[i-1],dp[i-k] + (local_max[i]<=nowDays));
+            if(dp[n-1]>=m)
+                maxDays = nowDays;
+            else
+                minDays = nowDays;
+        }        
+        return maxDays;
+    }
+};
