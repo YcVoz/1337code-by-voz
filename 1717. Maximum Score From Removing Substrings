@@ -1,0 +1,34 @@
+class Solution {
+public:
+    int maximumGain(string s, int x, int y) {
+        int ret = 0;
+        char firstChar = (x>y)?'a':'b';
+        char secondChar = (x>y)?'b':'a';
+        stack<int> s1;
+        for(int i=0;i<s.size();i++){
+            if(s[i] == firstChar) s1.push(i);
+            else if(s[i] == secondChar){
+                if(!s1.empty()){
+                    s[s1.top()] = '$';
+                    s[i] = '$';
+                    s1.pop();
+                    ret += max(x,y);
+                }
+            }
+            else stack<int>().swap(s1);
+        }
+        stack<int>().swap(s1);
+        for(int i=0;i<s.size();i++){
+            if(s[i] == secondChar)s1.push(i);
+            else if(s[i] == firstChar){
+                if(!s1.empty()){
+                    s1.pop();
+                    ret += min(x,y);
+                }
+            }
+            else if(s[i] == '$');
+            else stack<int>().swap(s1);
+        }
+        return ret;
+    }
+};
