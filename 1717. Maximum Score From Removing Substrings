@@ -2,32 +2,30 @@ class Solution {
 public:
     int maximumGain(string s, int x, int y) {
         int ret = 0;
+        int num_fitst = 0;
+        int num_second = 0;
+        int pairCount = 0;;
         char firstChar = (x>y)?'a':'b';
         char secondChar = (x>y)?'b':'a';
-        stack<int> s1;
+        s += '$';
         for(int i=0;i<s.size();i++){
-            if(s[i] == firstChar) s1.push(i);
+            if(s[i] == firstChar)
+                num_fitst++;
             else if(s[i] == secondChar){
-                if(!s1.empty()){
-                    s[s1.top()] = '$';
-                    s[i] = '$';
-                    s1.pop();
-                    ret += max(x,y);
+                num_second++;
+                if(num_fitst){
+                    num_second--;
+                    num_fitst--;
+                    pairCount++;
                 }
             }
-            else stack<int>().swap(s1);
-        }
-        stack<int>().swap(s1);
-        for(int i=0;i<s.size();i++){
-            if(s[i] == secondChar)s1.push(i);
-            else if(s[i] == firstChar){
-                if(!s1.empty()){
-                    s1.pop();
-                    ret += min(x,y);
-                }
+            else{
+                ret += pairCount * max(x,y);
+                ret += min(num_fitst,num_second) * min(x,y);
+                num_fitst = 0;
+                num_second = 0;
+                pairCount = 0;
             }
-            else if(s[i] == '$');
-            else stack<int>().swap(s1);
         }
         return ret;
     }
