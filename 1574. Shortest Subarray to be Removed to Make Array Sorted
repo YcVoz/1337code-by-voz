@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int findLengthOfShortestSubarray(vector<int>& arr) {
+        int n = arr.size();
+        int nowIndexFromFront = 0;
+        int nowIndexFromBack = n-1;
+        int nowIndex = 0;
+        int maxRemain;
+        while(nowIndexFromFront!=n-1 && arr[nowIndexFromFront+1]>=arr[nowIndexFromFront])
+            nowIndexFromFront++;
+        while(nowIndexFromBack!=0 && arr[nowIndexFromBack-1]<=arr[nowIndexFromBack])
+            nowIndexFromBack--;
+        if(nowIndexFromFront==n-1 || nowIndexFromBack==0)
+            return 0;        
+        maxRemain = nowIndexFromFront+1;
+        for(int i=nowIndexFromBack;i<n;i++){
+            if(nowIndex<0)
+                nowIndex = 0;
+            while(arr[nowIndex]<=arr[i]&&nowIndex<=nowIndexFromFront)
+                nowIndex++;
+            nowIndex--;
+            maxRemain = max(maxRemain,nowIndex+1+n-i);
+            if(nowIndex==nowIndexFromFront)
+                return n-maxRemain;
+        }
+        return n-maxRemain;
+    }
+};
