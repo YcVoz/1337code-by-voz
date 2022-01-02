@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int minOperations(vector<int>& nums1, vector<int>& nums2) {
+        int sum1 = 0;
+        int sum2 = 0;
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        int diff = 0;
+        int ans = 0;
+        vector<int> v1(7,0);
+        vector<int> v2(7,0);
+        for(int i=0;i<n1;i++){
+            v1[nums1[i]]++;
+            sum1 += nums1[i];
+        }
+        for(int i=0;i<n2;i++){
+            v2[nums2[i]]++;
+            sum2 += nums2[i];
+        }
+        if(sum1<sum2){
+            v1.swap(v2);
+            sum1 = sum1^sum2;
+            sum2 = sum1^sum2;
+            sum1 = sum1^sum2;
+            n1 = n2^n1;
+            n2 = n2^n1;
+            n1 = n2^n1;
+        }        
+        diff = sum1-sum2;
+        for(int i = 1;i<6;i++){
+            int numCanUse = (v1[7-i]+v2[i]);
+            if(diff>numCanUse*(6-i)){
+                diff -= (v1[7-i]+v2[i])*(6-i);
+                ans += numCanUse;
+            }
+            else
+                return ans + diff/(6-i) + (diff%(6-i)>0);
+        }
+        return -1;
+    }
+};
