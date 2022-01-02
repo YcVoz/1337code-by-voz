@@ -1,0 +1,25 @@
+class Solution {
+public:
+    bool canReach(string s, int minJump, int maxJump) {
+        vector<int> numOf_0(s.size());
+        numOf_0[0] = 1;
+        for(int i=1;i<s.size();i++){
+            if(s[i]=='0'){
+                if(i-minJump>=0){
+                    if(i-maxJump-1<0){
+                        if(numOf_0[i-minJump]==0)
+                            s[i] = '1';
+                    }
+                    else{
+                        if(numOf_0[i-minJump]-numOf_0[i-maxJump-1]==0)
+                            s[i] = '1';
+                    }
+                }    
+                else
+                    s[i] = '1';
+            }
+            numOf_0[i] = (s[i]=='0')?numOf_0[i-1]+1:numOf_0[i-1];
+        }
+        return s[s.size()-1]=='0';
+    }
+};
