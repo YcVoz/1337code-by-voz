@@ -1,0 +1,22 @@
+class Solution {
+public:
+    bool hasAllCodes(string s, int k) {
+        int n = s.size();
+        int nowHave = 1;
+        vector<bool> v1(pow(2,k),0);
+        string s2 = s.substr(0,k); 
+        bitset<20> b1(s2);
+        v1[b1.to_ulong()] = 1;
+        for(int i=1;i<n-k+1;i++){
+            b1 = b1<<1;
+            if(s[i+k-1]=='1')
+                b1.set(0);  
+            int nowNumber = b1.to_ulong();
+            nowHave += (v1[nowNumber & int(pow(2,k)-1)] == 0);
+            v1[nowNumber & int(pow(2,k)-1)] = 1;
+            if(nowHave==v1.size())
+                return 1;
+        }
+        return 0;
+    }
+};
