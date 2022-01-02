@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int minimumDeleteSum(string s1, string s2) {
+        int n1 = s1.size();
+        int n2 = s2.size();
+        int totalASCII = 0;
+        vector<vector<int>> lcs_ACSII(n1, vector<int>(n2,0));
+        for(int i=0;i<n1;i++){
+            totalASCII += int(s1[i]);
+            for(int u=0;u<n2;u++){
+                if(s1[i]==s2[u]){
+                    lcs_ACSII[i][u] = (i-1>=0 && u-1>=0)?lcs_ACSII[i-1][u-1]:0;
+                    lcs_ACSII[i][u] += int(s1[i]);
+                }
+                else
+                    lcs_ACSII[i][u] = max((i-1>=0?lcs_ACSII[i-1][u]:0),(u-1>=0?lcs_ACSII[i][u-1]:0));
+            }
+        }
+        for(int i=0;i<n2;i++)
+            totalASCII += int(s2[i]);
+        return totalASCII-2*lcs_ACSII[n1-1][n2-1];
+    }
+};
