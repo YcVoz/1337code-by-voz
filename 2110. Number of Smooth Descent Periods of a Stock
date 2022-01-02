@@ -1,0 +1,20 @@
+class Solution {
+public:
+    long long getDescentPeriods(vector<int>& prices) {
+        int n = prices.size();
+        long long ans = 0;
+        for(int i=0;i<n;i++){
+            long long nowRightMost = i;
+            for(int u=i+1;u<n;u++){
+                if(prices[u] == prices[u-1]-1)
+                    nowRightMost = u;
+                else
+                    u = n;
+            }
+            nowRightMost -= i-1;
+            ans += (nowRightMost + 1)*(nowRightMost)/2;
+            i += (nowRightMost-1);
+        }
+        return ans;
+    }
+};
