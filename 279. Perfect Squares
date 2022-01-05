@@ -1,0 +1,12 @@
+class Solution {
+public:
+    int numSquares(int n) {
+        vector<int> v1(n+1,10000);    
+        v1[0] = 0;
+        for(int i=1;i<=n;i++){
+            for(int u = 1;u*u<=i;u++)
+                v1[i] = u*u==i?1:min(v1[i],v1[u*u]+v1[i-u*u]);
+        }
+        return v1[n];
+    }
+};
