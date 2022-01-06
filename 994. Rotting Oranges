@@ -1,0 +1,47 @@
+class Solution {
+public:
+    int orangesRotting(vector<vector<int>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        int total = 0;
+        int days = 0;
+        int q1Size;
+        vector<int> diration = {1,0,-1,0,1};
+        queue<pair<int,int>> q1;
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                total += (grid[i][j]!=0);
+                if(grid[i][j]==2){
+                    q1.push({i,j});
+                    total--;
+                }
+            }
+        }
+        if(total==0)
+            return 0;        
+        q1Size = q1.size();
+        while(!q1.empty()){
+            int i = q1.front().first;
+            int j = q1.front().second;
+            q1.pop();
+            q1Size--;
+            for(int x = 0;x<4;x++)
+            {
+                int ii = i+diration[x];
+                int jj = j+diration[x+1];
+                if(ii>=0 && ii<m && jj>=0 && jj<n && grid[ii][jj]==1){
+                    grid[ii][jj] = 2;
+                    q1.push({ii,jj});
+                    total--;
+                }
+            }           
+            if(q1Size==0){
+                days++;
+                q1Size = q1.size();
+                if(total==0)
+                    return days;            
+            }
+        }
+        return -1;
+    }
+};
