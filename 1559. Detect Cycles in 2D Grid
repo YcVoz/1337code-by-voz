@@ -1,0 +1,56 @@
+class Solution {
+public:
+    bool containsCycle(vector<vector<char>>& grid) {
+        int m = grid.size();
+        int n = grid[0].size();
+        for(int i = 0;i<m;i++){
+            for(int j=0;j<n;j++){
+                int nowValue = int(grid[i][j]-'a');
+                if(nowValue<=25 && nowValue>=0){
+                    queue<tuple<int,int,int>> q1;
+                    q1.push({i,j,0});
+                    grid[i][j] = char('a'+nowValue-26);
+                    while(!q1.empty()){
+                        int x = get<0>(q1.front());
+                        int y = get<1>(q1.front());
+                        int invalidDirection = get<2>(q1.front());
+                        q1.pop();
+                        if(x>0 && invalidDirection!=1){
+                            if(int(grid[x-1][y]-'a')==nowValue-26)
+                                return 1;
+                            if(int(grid[x-1][y]-'a')==nowValue){
+                                q1.push({x-1,y,3});
+                                grid[x-1][y] = char('a'+nowValue-26);
+                            }
+                        }
+                        if(y>0 && invalidDirection!=4){
+                            if(int(grid[x][y-1]-'a')==nowValue-26)
+                                return 1;
+                            if(int(grid[x][y-1]-'a')==nowValue){
+                                q1.push({x,y-1,2});
+                                grid[x][y-1] = char('a'+nowValue-26);
+                            }
+                        }
+                        if(x<m-1 && invalidDirection!=3){
+                            if(int(grid[x+1][y]-'a')==nowValue-26)
+                                return 1;
+                            if(int(grid[x+1][y]-'a')==nowValue){
+                                q1.push({x+1,y,1});
+                                grid[x+1][y] = char('a'+nowValue-26);
+                            }
+                        }
+                        if(y<n-1 && invalidDirection!=2){
+                            if(int(grid[x][y+1]-'a')==nowValue-26)
+                                return 1;
+                            if(int(grid[x][y+1]-'a')==nowValue){
+                                q1.push({x,y+1,4});
+                                grid[x][y+1] = char('a'+nowValue-26);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return 0;
+    }
+};
