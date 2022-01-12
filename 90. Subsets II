@@ -1,0 +1,25 @@
+class Solution {
+public:
+    vector<vector<int>> subsetsWithDup(vector<int>& nums) {
+        int n = nums.size();
+        sort(nums.begin(),nums.end());
+        map<vector<int>,bool> ans;
+        vector<vector<int>> ansv;
+        vector<int> empty(0);
+        ans[empty] = 1;
+        for(int i=0;i<n;i++){            
+            map<vector<int>,bool> ans2;
+            for(auto iter = ans.begin();iter != ans.end();iter++){
+                vector<int> tem = iter->first;
+                tem.emplace_back(nums[i]);
+                ans2[tem] = 1;
+            }
+            swap(ans, ans2);
+            ans.insert(ans2.begin(), ans2.end());
+        }
+        for(auto iter = ans.begin();iter != ans.end();iter++){
+            ansv.emplace_back(iter->first);
+        }
+        return ansv;
+    }
+};
