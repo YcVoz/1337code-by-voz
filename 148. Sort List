@@ -1,0 +1,93 @@
+/**
+ * Definition for singly-linked list.
+ * struct ListNode {
+ *     int val;
+ *     ListNode *next;
+ *     ListNode() : val(0), next(nullptr) {}
+ *     ListNode(int x) : val(x), next(nullptr) {}
+ *     ListNode(int x, ListNode *next) : val(x), next(next) {}
+ * };
+ */
+class Solution {
+public:
+    ListNode* sortList(ListNode* head) {
+        if(!head)
+            return head;
+        int n = 1;
+        int totalNode = 0;
+        int remainNode = 0;
+        int n1 = 0;
+        int n2 = 0;
+        bool tag = 1;
+        ListNode* headhead = new ListNode(373, head);
+        ListNode* temheadhead = headhead;
+        ListNode* tem = head;
+        ListNode* tem1 = head;
+        ListNode* tem2 = head;
+        while(tem){
+            totalNode++;
+            tem = tem->next;
+        }
+        while(tag){
+            if(n*2>=totalNode)
+                tag = 0;
+            remainNode = totalNode;
+            temheadhead = headhead;
+            tem = headhead->next;
+            for(int i=0;i<totalNode/(2*n)+1;i++){
+                n1 = 0;
+                n2 = 0;
+                if(remainNode>n){
+                    tem1 = tem;
+                    while(n1!=n){
+                        n1++;
+                        tem = tem->next;
+                        remainNode--;
+                    }
+                    tem2 = tem;
+                    while(n2!=n && tem){
+                        n2++;
+                        tem = tem->next;
+                        remainNode--;
+                    }
+                    temheadhead->next = sortSortedList(tem1,tem2,tem,n1,n2);
+                    for(int i=0;i<n1+n2;i++)
+                        temheadhead = temheadhead->next;
+                }
+            }
+            n *= 2;
+        }
+        return headhead->next;
+    }
+    ListNode* sortSortedList(ListNode* head1, ListNode* head2, ListNode* head3, int n1,int n2) {
+        ListNode* retret = new ListNode();
+        ListNode* ret = retret;
+        int go1Or2 = 0;
+        while(n1!=0 || n2!=0){            
+            if(n1==0)
+                go1Or2 = 2;
+            else if(n2==0)
+                go1Or2 = 1;
+            else{
+                if(head1->val>head2->val)
+                    go1Or2 = 2;
+                else
+                    go1Or2 = 1;
+            }
+            if(go1Or2 == 1){
+                ret->next = head1;
+                ret = ret->next;
+                head1 = head1->next;
+                n1--;
+            }
+            else if(go1Or2 == 2){
+                ret->next = head2;
+                ret = ret->next;
+                head2 = head2->next;
+                n2--;
+            }
+        }
+        ret->next = head3;
+        return retret->next;
+    }
+};
