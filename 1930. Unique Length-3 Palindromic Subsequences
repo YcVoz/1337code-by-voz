@@ -1,0 +1,25 @@
+class Solution {
+public:
+    int countPalindromicSubsequence(string s) {
+        int n = s.size();
+        int ret = 0;
+        vector<int> vBegin(26,-1);
+        vector<int> vEnd(26,-1);
+        vector<vector<int>> v1(n,vector<int> (26,0));
+        v1[0][s[0]-'a'] = 1;
+        vBegin[s[0]-'a'] = 0;
+        vEnd[s[0]-'a'] = 0;        
+        for(int i=1;i<n;i++){
+            if(vBegin[s[i]-'a']==-1)
+                vBegin[s[i]-'a'] = i;
+            vEnd[s[i]-'a'] = i;
+            for(int u=0;u<26;u++)
+                v1[i][u] = v1[i-1][u] + (s[i]-'a'==u);
+        }
+        for(int u=0;u<26;u++)
+            if(vBegin[u]!=vEnd[u])
+                for(int o = 0;o<26;o++)
+                    ret+=v1[vEnd[u]-1][o]!=v1[vBegin[u]][o];
+        return ret;
+    }
+};
