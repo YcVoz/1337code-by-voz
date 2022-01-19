@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int longestStrChain(vector<string>& words) {
+        int n = words.size();
+        int ret = 1;
+        map<string,int> m1;
+        vector<vector<string>> v1(17);
+        for(int i = 0;i<n;i++){
+            m1[words[i]] = 1;
+            v1[words[i].size()].emplace_back(words[i]);
+        }
+        for(int i=2;i<17;i++){
+            for(int o = 0;o<v1[i].size();o++){
+                string tem = v1[i][o];
+                int ts = tem.size();                
+                m1[tem] = (m1.find(tem.substr(1))!=m1.end())?max(m1[tem.substr(1)]+1,m1[tem]):m1[tem];
+                m1[tem] = (m1.find(tem.substr(0,ts-1))!=m1.end())?max(m1[tem.substr(1)]+1,m1[tem]):m1[tem];
+                for(int p=1;p<ts;p++){
+                    string tem2 = tem.substr(0,p)+tem.substr(p+1);
+                    m1[tem] = (m1.find(tem2)!=m1.end())?max(m1[tem2]+1,m1[tem]):m1[tem];
+                }
+                ret = max(ret,m1[tem]);
+            }
+        }
+        return ret;
+    }
+};
