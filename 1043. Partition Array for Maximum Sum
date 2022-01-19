@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int maxSumAfterPartitioning(vector<int>& arr, int k) {
+        int n = arr.size();
+        vector<int> dp(n+1,0);
+        dp[1] = arr[0];
+        for(int i=2;i<=n;i++){
+            int maxNumLastPart = arr[i-1];
+            for(int lastPartLen = 1;lastPartLen<=min(k,i);lastPartLen++){
+                maxNumLastPart = max(maxNumLastPart,arr[i-lastPartLen]);
+                dp[i] = max(dp[i],dp[i-lastPartLen]+lastPartLen*maxNumLastPart);
+            }
+        }
+        return dp[n];
+    }
+};
