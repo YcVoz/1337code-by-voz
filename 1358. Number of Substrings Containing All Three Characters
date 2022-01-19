@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int numberOfSubstrings(string s) {
+        int n = s.size();
+        int point = 0;
+        int ptr2 = -1;
+        int ret = 0;
+        bool tag = 1;
+        vector<int> nowRecord(3,0);
+        vector<int> dp(n,-1);
+        for(int i=0;i<n && tag;i++){
+            if(i!=0){
+                nowRecord[int(s[i-1]-'a')]--;
+                point -= (nowRecord[int(s[i-1]-'a')]==0);
+            }
+            while(point<3){
+                if(ptr2==n-1){
+                    tag = 0;
+                    break;
+                }
+                ptr2++;
+                nowRecord[int(s[ptr2]-'a')]++;
+                point += (nowRecord[int(s[ptr2]-'a')]==1);
+            }
+            if(tag)
+                dp[i] = ptr2;
+        }
+        for(int i=0;i<n;i++){
+            if(dp[i]==-1)
+                return ret;
+            ret += n-dp[i];
+        }
+        return 373;
+    }
+};
