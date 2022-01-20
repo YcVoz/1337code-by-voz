@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int minFlips(string s) {
+        int n = s.size();
+        int nowPointa = 0;
+        int nowPointb = 0;
+        int reta = 0;
+        int retb = 0;
+        bool nowEle = 0;
+        vector<int> pointa(2*n,0);
+        vector<int> pointb(2*n,0);
+        s = s+s;        
+        for(int i=0;i<2*n;i++){
+            if(s[i]!=char('0'+nowEle))
+                pointa[i] = 1;
+            else
+                pointb[i] = 1;
+            nowEle = !nowEle;
+        }
+        for(int i=0;i<n;i++){
+            nowPointa += pointa[i];
+            nowPointb += pointb[i];
+        }
+        reta = nowPointa;
+        retb = nowPointb;
+        for(int i=n;i<2*n;i++){
+            nowPointa += pointa[i];
+            nowPointa -= pointa[i-n];
+            reta = min(reta,nowPointa);
+            nowPointb += pointb[i];
+            nowPointb -= pointb[i-n];
+            retb = min(retb,nowPointb);
+        }
+        return min(retb,reta);
+    }
+};
+
