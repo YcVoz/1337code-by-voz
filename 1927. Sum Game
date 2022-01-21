@@ -1,0 +1,40 @@
+class Solution {
+public:
+    bool sumGame(string num) {
+        int n = num.size();
+        int leftSum = 0;
+        int rightSum = 0;
+        int leftBlank = 0;
+        int rightBlank = 0;
+        int diff = 0;
+        int blankdiff = 0;
+        for(int i=0;i<n/2;i++){
+            if(int(num[i]-'0')<10)
+                leftSum += int(num[i]-'0');
+            else
+                leftBlank++;
+            if(int(num[i+n/2]-'0')<10)
+                rightSum += int(num[i+n/2]-'0');
+            else
+                rightBlank++;
+        }
+        if((leftBlank+rightBlank)%2)
+            return 1;
+        diff = leftSum-rightSum;
+        blankdiff = rightBlank-leftBlank;
+        if(diff<0){
+            diff *= -1;
+            blankdiff *= -1;
+        }
+        if(blankdiff<0)
+            return 1;
+        if(blankdiff==0)
+            return diff!=0;
+        blankdiff /= 2;
+        cout<<diff<<endl;
+        cout<<blankdiff<<endl;
+        if(diff==(blankdiff)*9)
+            return 0;
+        return 1;
+    }
+};
