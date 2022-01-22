@@ -1,0 +1,49 @@
+class Solution {
+public:
+    vector<int> diffWaysToCompute(string expression) {
+        int n = expression.size();
+        int nowNum = 0;
+        vector<int> num1;
+        vector<int> exp1;
+        for(int i=0;i<n;i++){
+            if(int(expression[i]-'0')<0){
+                num1.emplace_back(nowNum);
+                nowNum = 0;
+                if(expression[i]=='+')
+                    exp1.emplace_back(0);                
+                else if(expression[i]=='-')
+                    exp1.emplace_back(1);                
+                else if(expression[i]=='*')
+                    exp1.emplace_back(2);         
+            }
+            else
+                nowNum = nowNum*10 + int(expression[i]-'0');
+        }
+        num1.emplace_back(nowNum);
+        n = num1.size();
+        vector<vector<vector<int>>> dp(n,vector<vector<int>>(n));
+        for(int i=0;i<n;i++)
+            dp[i][i].emplace_back(num1[i]);
+        for(int len = 2;len<=n;len++){
+            for(int start = 0;start+len-1<n;start++){
+                for(int numOfLeft = 1;numOfLeft<len;numOfLeft++){
+                    int ll = start;
+                    int lr = start+numOfLeft-1;
+                    int rl = start+numOfLeft;
+                    int rr = start+len-1;
+                    for(int a = 0;a<dp[ll][lr].size();a++){
+                        for(int b=0;b<dp[rl][rr].size();b++){
+                            if(exp1[lr]==0)
+                                dp[ll][rr].emplace_back(dp[ll][lr][a]+dp[rl][rr][b]);
+                            else if(exp1[lr]==1)
+                                dp[ll][rr].emplace_back(dp[ll][lr][a]-dp[rl][rr][b]);
+                            else if(exp1[lr]==2)
+                                dp[ll][rr].emplace_back(dp[ll][lr][a]*dp[rl][rr][b]);
+                        }
+                    }
+                }
+            }
+        }
+        return dp[0][n-1];
+    }
+};
