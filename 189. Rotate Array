@@ -1,0 +1,29 @@
+class Solution {
+public:
+    void rotate(vector<int>& nums, int k) {
+        int n = nums.size();
+        k %= n;
+        if(n==1 || k==0)
+            return;
+        int check = lcd(n,k);
+        for(int i=0;i<check;i++){
+            int a = i;
+            int b = nums[(a+n-k)%n];
+            int c;
+            do{
+                c = nums[a];
+                nums[a] = b;
+                a = (a+k)%n;
+                b = c;
+            }while(a != i);
+        }
+    }
+    int lcd(int a, int b){
+        if(a<b)
+            return lcd(b,a);
+        if(a % b != 0)
+            return lcd(b, a%b);
+        else
+            return b;
+    }
+};
