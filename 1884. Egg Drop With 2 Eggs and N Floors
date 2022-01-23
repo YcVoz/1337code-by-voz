@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int twoEggDrop(int n) {
+        int ret = n;
+        int sum = n;
+        int now = 1;
+        int tem;
+        while(1){
+            sum += now;
+            tem = sum / (now+1);
+            if(sum % (now+1)!=0)
+                tem++;
+            if(tem>ret)
+                return ret;
+            ret = min(ret, tem);
+            now ++;
+        }
+        return ret;
+    }
+};
+
