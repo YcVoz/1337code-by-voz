@@ -1,0 +1,27 @@
+class Solution {
+public:
+    int minReorder(int n, vector<vector<int>>& connections) {
+        int ret = 0;
+        vector<vector<pair<int,bool>>> v1(n);
+        vector<bool> check(n,1);
+        queue<int> q1;
+        for(int i=0;i<connections.size();i++){
+            v1[connections[i][0]].push_back(make_pair(connections[i][1],1));
+            v1[connections[i][1]].push_back(make_pair(connections[i][0],0));
+        }
+        check[0] = 0;
+        q1.push(0);
+        while(!q1.empty()){
+            int nowPop = q1.front();
+            q1.pop();
+            for(int i=0;i<v1[nowPop].size();i++){
+                if(check[v1[nowPop][i].first]){
+                    check[v1[nowPop][i].first] = 0;
+                    q1.push(v1[nowPop][i].first);
+                    ret += v1[nowPop][i].second;
+                }
+            }
+        }
+        return ret;
+    }
+};
