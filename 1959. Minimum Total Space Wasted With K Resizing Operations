@@ -1,0 +1,30 @@
+class Solution {
+public:
+    int minSpaceWastedKResizing(vector<int>& nums, int k) {
+        int n = nums.size();
+        vector<vector<int>> dp(n, vector<int>(k+1, 2147483647));
+        vector<int> sum(n, 0);
+        sum[0] = nums[0];
+        for(int i=1;i<n;i++)
+            sum[i] = sum[i-1] + nums[i];
+        for(int i=0;i<n;i++){
+            for(int j=0;j<=k;j++){
+                if(i<=j)dp[i][j] = 0;
+                else{
+                    int maxValue = nums[i];
+                    for(int start = i;start>=0;start--){
+                        maxValue = max(maxValue, nums[start]);
+                        int right = (start-1>=0)?sum[i]-sum[start-1]:sum[i];
+                        if(j==0)
+                            dp[i][j] = maxValue*(i-start+1)-(right);
+                        else{
+                            int left = (start-1>=0&&j-1>=0)?dp[start-1][j-1]:j-1>=0?0:100000000;
+                            dp[i][j] = min(dp[i][j], left + maxValue*(i-start+1)-(right));
+                        }
+                    }
+                }
+            }
+        }
+        return dp[n-1][k];
+    }
+};
