@@ -1,0 +1,38 @@
+class Solution {
+public:
+    bool canPartitionKSubsets(vector<int>& nums, int k) {
+        int n = nums.size();
+        int sum = 0;
+        int eachGroupSum = 0;
+        int maxx = 0;
+        bitset<16> b1(pow(2,n)-1);
+        vector<int> v1(pow(2,n),0);
+        vector<int> match;
+        for(int i=0;i<n;i++){
+            sum += nums[i];
+            maxx = max(maxx, nums[i]);
+        }            
+        eachGroupSum = sum / k;
+        if(sum%k!=0 || maxx>eachGroupSum)
+            return 0;
+        for(int i=1;i<pow(2,n);i++){
+            int numOfThisSet = bit2Sum(bitset<16>(i),nums,n);
+            if(numOfThisSet>eachGroupSum && numOfThisSet%eachGroupSum==0){
+                for(int u=0;u<match.size() && !v1[i];u++)
+                    if(((i-match[u])|match[u])==i && (v1[i-match[u]]!=0))
+                        v1[i] = v1[i-match[u]]+v1[match[u]];
+            }
+            else if(numOfThisSet==eachGroupSum){
+                v1[i] = 1;
+                match.emplace_back(i);
+            }
+        }
+        return v1[pow(2,n)-1];
+    }
+    int bit2Sum(bitset<16> b, vector<int>& nums, int n){
+        int ret = 0;
+        for (int i=0; i<n; i++)
+            ret += b.test(i)*nums[i];
+        return ret;
+    }
+};
