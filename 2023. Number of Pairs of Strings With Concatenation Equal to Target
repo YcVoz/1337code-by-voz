@@ -1,0 +1,29 @@
+class Solution {
+public:
+    int numOfPairs(vector<string>& nums, string target) {
+        int n = target.size();
+        int ans = 0;
+        string tem_post = "";
+        string tem_pre = "";
+        vector<string> post(n+1);
+        vector<string> pre(n+1);
+        vector<int> post_n(n+1,0);
+        for(int i=0;i<n;i++){
+            tem_post = target[n-1-i] + tem_post;
+            post[i+1] = tem_post;
+            tem_pre = tem_pre + target[i];
+            pre[i+1] = tem_pre;
+        }
+        for(int i=0;i<nums.size();i++){
+            int nowL = nums[i].size();
+            if(nowL<n && post[nowL]==nums[i])
+                post_n[nowL]++;
+        }
+        for(int i=0;i<nums.size();i++){
+            int nowL = nums[i].size();
+            if(nowL<n && pre[nowL]==nums[i])
+                ans += (nums[i]+nums[i]==target)?post_n[n-nowL]-1:post_n[n-nowL];
+        }
+        return ans;
+    }
+};
