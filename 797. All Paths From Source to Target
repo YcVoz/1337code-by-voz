@@ -1,0 +1,28 @@
+class Solution {
+public:
+    vector<vector<int>> allPathsSourceTarget(vector<vector<int>>& graph) {
+        int n = graph.size();
+        vector<vector<int>> head(n);
+        vector<vector<int>> ret(0);
+        queue<vector<int>> q1;
+        for(int i=0;i<n;i++)
+            for(int u=0;u<graph[i].size();u++)
+                head[graph[i][u]].push_back(i);
+        q1.push(vector<int>(1,n-1));
+        while(!q1.empty()){
+            vector<int> now = q1.front();
+            q1.pop();
+            for(int i=0;i<head[now.back()].size();i++){
+                vector<int> tem = now;
+                tem.push_back(head[now.back()][i]);
+                if(head[now.back()][i]==0){
+                    reverse(tem.begin(), tem.end());
+                    ret.push_back(tem);
+                }                    
+                else
+                    q1.push(tem);
+            }
+        }
+        return ret;
+    }
+};
