@@ -1,0 +1,18 @@
+class Solution {
+public:
+    string reverseParentheses(string s) {
+        string ret = "";
+        vector<int> indexOfLeft(0);
+        for(int i=0;i<s.size();i++){
+            if(s[i]==')'){
+                reverse(ret.begin()+indexOfLeft.back(), ret.begin()+ret.size());
+                indexOfLeft.pop_back();
+            }
+            else if(s[i]=='(')
+                indexOfLeft.push_back(ret.size());
+            else
+                ret += s[i];
+        }
+        return ret;
+    }
+};
