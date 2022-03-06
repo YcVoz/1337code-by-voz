@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int countSubIslands(vector<vector<int>>& grid1, vector<vector<int>>& grid2) {
+        int m = grid1.size();
+        int n = grid1[0].size();   
+        int ret = 0;
+        vector<int> director = {0,1,0,-1,0};
+        for(int i=0;i<m;i++){
+            for(int j=0;j<n;j++){
+                if(grid2[i][j]){
+                    bool flag = 1;
+                    queue<pair<int,int>> q1;
+                    q1.push({i,j});
+                    grid2[i][j] = 0;
+                    if(!grid1[i][j])
+                        flag = 0;
+                    while(!q1.empty()){
+                        pair<int,int> nowPosition = q1.front();
+                        q1.pop();
+                        for(int u=0;u<4;u++){
+                            int x = nowPosition.first+director[u];
+                            int y = nowPosition.second+director[u+1];
+                            if(x>=0 && y>=0 && x<m && y<n && grid2[x][y]){
+                                grid2[x][y] = 0;
+                                q1.push({x,y});
+                                if(!grid1[x][y])
+                                    flag = 0;
+                            }
+                        }
+                    }
+                    ret += flag;
+                }
+            }
+        }
+        return ret;
+    }
+};
