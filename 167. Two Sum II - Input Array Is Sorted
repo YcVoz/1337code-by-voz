@@ -1,0 +1,20 @@
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& numbers, int target) {
+        int index1 = 0;
+        int index2 = numbers.size()-1;
+        vector<int> ret(2,-1);
+        while(1){
+            if(numbers[index1]+numbers[index2]>target)
+                index2--;
+            else if(numbers[index1]+numbers[index2]<target)
+                index1++;
+            else{
+                ret[0] = index1+1;
+                ret[1] = index2+1;
+                return ret;
+            }
+        }
+        return ret;
+    }
+};
