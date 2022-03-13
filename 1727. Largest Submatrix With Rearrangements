@@ -1,0 +1,21 @@
+class Solution {
+public:
+    int largestSubmatrix(vector<vector<int>>& matrix) {
+        int m = matrix.size();
+        int n = matrix[0].size();
+        int ret = 0;
+        vector<vector<int>> v1(m,vector<int>(n));
+        for(int u = 0;u<n;u++){      
+            for(int i = m-2;i>=0;i--){
+                if(matrix[i][u])
+                    matrix[i][u] += matrix[i+1][u];
+            }
+        }       
+        for(int i=0;i<m;i++){
+            sort(matrix[i].begin(),matrix[i].end(),greater<int>());
+            for(int u=0;u<n && matrix[i][u];u++)
+                ret = max(ret, matrix[i][u]*(u+1));
+        }
+        return ret;
+    }
+};
