@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> rearrangeArray(vector<int>& nums) {
+        int n = nums.size();
+        int indexVp = 0;
+        int indexVn = 0;
+        vector<int> vp(n/2);
+        vector<int> vn(n/2);
+        vector<int> ret(n);
+        for(int i=0;i<n;i++){
+            if(nums[i]>0)
+                vp[indexVp++] = nums[i];
+            else
+                vn[indexVn++] = nums[i];
+        }
+        for(int i=0;i<n/2;i++){
+            ret[i*2] = vp[i];
+            ret[i*2 + 1] = vn[i];
+        }
+        return ret;
+    }
+};
