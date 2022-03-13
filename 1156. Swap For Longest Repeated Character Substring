@@ -1,0 +1,37 @@
+class Solution {
+public:
+    int maxRepOpt1(string text) {
+        int n = text.size();
+        int count = 1;
+        int ret = 0;
+        char nowCheck = text[0];
+        vector<int> v(26,0);
+        vector<vector<pair<int,int>>> v1(26,vector<pair<int,int>>());
+        v[text[0]-'a']++;
+        for(int i=1;i<n;i++){
+            v[text[i]-'a']++;
+            if(text[i]!=nowCheck){
+                v1[nowCheck-'a'].push_back({i-count,i-1});
+                count = 1;
+                nowCheck = text[i];
+            }
+            else
+                count++;
+        }
+        v1[nowCheck-'a'].push_back({n-count,n-1});
+        for(int i=0;i<26;i++){
+            if(v1[i].size()){
+                int now = v1[i][0].second-v1[i][0].first+1;
+                for(int u=1;u<v1[i].size();u++){
+                    if(v1[i][u].first==v1[i][u-1].second+2)
+                        now = max(now,v1[i][u].second-v1[i][u-1].first);
+                    else
+                        now = max(now,v1[i][u].second-v1[i][u].first+1);
+                }
+                now = min(now+1,v[i]);
+                ret = max(ret,now);
+            }
+        }
+        return ret;
+    }
+};
