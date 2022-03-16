@@ -1,0 +1,35 @@
+class Solution {
+public:
+    int balancedString(string s) {
+        int n = s.size();
+        int ret = n;
+        int index1 = 0;
+        int index2 = 0;
+        map<char,int> m1;
+        for(int i=0;i<n;i++)
+            m1[s[i]]++;
+        n /= 4;
+        for(auto iter = m1.begin();iter!=m1.end();iter++)
+            iter->second = max(iter->second-n,0);
+        if(!m1['Q'] and !m1['W'] and !m1['E'] and !m1['R'])
+            return 0;
+        m1[s[index1]]--;
+        n *= 4;
+        while(1){
+            if(m1['Q']>0 || m1['W']>0 || m1['E']>0 || m1['R']>0){
+                if(index2<n-1){
+                    index2++;
+                    m1[s[index2]]--;
+                }
+                else
+                    return ret;
+            }
+            else{
+                ret = min(ret,index2-index1+1);
+                m1[s[index1]]++;
+                index1++;
+            }
+        }
+        return ret;
+    }
+};
