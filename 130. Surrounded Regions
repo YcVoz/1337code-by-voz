@@ -1,0 +1,68 @@
+class Solution {
+public:
+    void solve(vector<vector<char>>& board) {
+        int m = board.size();
+        int n = board[0].size();
+        if(m<=2 || n<=2)
+            return;
+        vector<int> direction = {0,1,0,-1,0};
+        vector<int> xx = {0,m-1};
+        vector<int> yy = {0,n-1};
+        queue<pair<int,int>> q1;
+        for(int i=0;i<m;i++){
+            int x = i;
+            for(int o=0;o<2;o++){
+                int y = yy[o];
+                if(board[x][y] == 'O'){
+                    board[x][y] = 'V';
+                    q1.push({x,y});
+                    while(!q1.empty()){
+                        int x1 = q1.front().first;
+                        int y1 = q1.front().second;
+                        q1.pop();
+                        for(int u = 0;u<4;u++){
+                            int x2 = x1+direction[u];
+                            int y2 = y1+direction[u+1];
+                            if(x2>=0&&x2<m&&y2>=0&&y2<n && board[x2][y2]=='O'){
+                                q1.push({x2,y2});
+                                board[x2][y2] = 'V';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(int i=0;i<n;i++){
+            int y = i;
+            for(int o=0;o<2;o++){
+                int x = xx[o];
+                if(board[x][y] == 'O'){
+                    board[x][y] = 'V';
+                    q1.push({x,y});
+                    while(!q1.empty()){
+                        int x1 = q1.front().first;
+                        int y1 = q1.front().second;
+                        q1.pop();
+                        for(int u = 0;u<4;u++){
+                            int x2 = x1+direction[u];
+                            int y2 = y1+direction[u+1];
+                            if(x2>=0&&x2<m&&y2>=0&&y2<n && board[x2][y2]=='O'){
+                                q1.push({x2,y2});
+                                board[x2][y2] = 'V';
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(int i=0;i<m;i++){
+            for(int u=0;u<n;u++){
+                if(board[i][u]=='V')
+                    board[i][u]='O';
+                else if(board[i][u]=='O')
+                    board[i][u]='X';
+            }
+        }
+        return;
+    }
+};
