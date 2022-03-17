@@ -1,0 +1,24 @@
+class Solution {
+public:
+    vector<int> goodDaysToRobBank(vector<int>& security, int time) {
+        int n = security.size();
+        int frontBack = 0;
+        vector<int> ret(0);
+        vector<int> backFront(n,0);
+        if(time==0){
+            for(int i=0;i<n;i++)
+                ret.push_back(i);
+            return ret;
+        }          
+        if(time*2+1>n)
+            return ret;
+        for(int i = n-2;i>=0;i--)
+            backFront[i] = (security[i]<=security[i+1])?backFront[i+1]+1:0;
+        for(int i=1;i<n-time;i++){
+            frontBack = (security[i]<=security[i-1])?frontBack+1:0;
+            if(i>=time && frontBack>=time && backFront[i]>=time)
+                ret.push_back(i);
+        }
+        return ret;
+    }
+};
