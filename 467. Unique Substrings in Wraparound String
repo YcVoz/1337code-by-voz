@@ -1,0 +1,28 @@
+class Solution {
+public:
+    int findSubstringInWraproundString(string p) {
+        int n = p.size();
+        int ret = 0;
+        int maxLen = 0;
+        int maxLenChar = -1;
+        vector<int> v1(26,0);
+        for(int i=0;i<n;i++){
+            int tem = 1;
+            int end = i+1;
+            while(end<n && (p[end-1]+1 == p[end] || (p[end-1]=='z' && p[end]=='a')))
+                end++;
+            end -= i;
+            if(end>maxLen){
+                maxLen = end;
+                maxLenChar = p[i]-'a';
+            }
+            v1[p[i]-'a'] = max(v1[p[i]-'a'],end);
+            i += end-1;
+        }
+        for(int i = 0;i<26;i++){            
+            ret += v1[(maxLenChar+i)%26];
+            v1[(maxLenChar+i+1)%26] = max(v1[(maxLenChar+i)%26]-1,v1[(maxLenChar+i+1)%26]);
+        }
+        return ret;
+    }
+};
