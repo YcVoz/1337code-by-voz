@@ -1,0 +1,16 @@
+class Solution {
+public:
+    int rangeBitwiseAnd(int left, int right) {
+        long now = left;
+        long nowVal = left;
+        long bitt = 1;
+        while(nowVal != 0){
+            bitt = nowVal&-nowVal;
+            if(nowVal+bitt>right)
+                return nowVal;
+            now += bitt;
+            nowVal &= now;
+        }
+        return 0;
+    }
+};
