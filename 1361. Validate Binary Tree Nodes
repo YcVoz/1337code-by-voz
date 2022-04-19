@@ -1,0 +1,39 @@
+class Solution {
+public:
+    bool validateBinaryTreeNodes(int n, vector<int>& leftChild, vector<int>& rightChild) {
+        int root = -1;
+        vector<int> headd(n,0);
+        queue<int> q1;
+        for(int i=0;i<n;i++){
+            if(leftChild[i]!=-1){
+                headd[leftChild[i]]++;
+            }
+            if(rightChild[i]!=-1){
+                headd[rightChild[i]]++;
+            }
+        }
+        for(int i=0;i<n;i++){
+            if(headd[i]==0){
+                if(root!=-1)
+                    return 0;
+                root = i;
+            }
+            else if(headd[i]!=1)
+                return 0;
+        }
+        if(root==-1)
+            return 0;
+        q1.push(root);
+        root = 0;
+        while(!q1.empty()){
+            int tem = q1.front();
+            root++;
+            q1.pop();
+            if(leftChild[tem]!=-1)
+                q1.push(leftChild[tem]);
+            if(rightChild[tem]!=-1)
+                q1.push(rightChild[tem]);
+        }
+        return root==n;
+    }
+};
