@@ -1,0 +1,23 @@
+class Solution {
+public:
+    vector<long long> maximumEvenSplit(long long finalSum) {
+        vector<long long> ret(0);
+        long long up = 100000;
+        long long down = 1;
+        long long n;
+        if(finalSum&1)
+            return ret;
+        while(down+1!=up){
+            n = (up+down)/2;
+            if(n*(n+1)>finalSum)
+                up = n;
+            else
+                down = n;
+        }
+        ret.resize(down);
+        for(long long i=0;i<down-1;i++)
+            ret[i] = (i+1)*2;
+        ret[down-1] = finalSum-down*(down-1);
+        return ret;
+    }
+};
