@@ -1,0 +1,41 @@
+class Solution {
+public:
+    int singleNumber(vector<int>& nums) {
+        int count = 0;
+        int minmaxCount = 0;
+        vector<int> peachBit(32,0);
+        vector<int> neachBit(32,0);
+        for(int i=0;i<nums.size();i++){
+            if(nums[i] == -2147483648)
+                minmaxCount++;
+            else if(nums[i]>0){
+                while(nums[i]>0){
+                    peachBit[count] += nums[i]&1;
+                    nums[i] >>= 1;
+                    count++;
+                }
+            }
+            else if(nums[i]<0){
+                nums[i] *= -1;
+                while(nums[i]>0){
+                    neachBit[count] += nums[i]&1;
+                    nums[i] >>= 1;
+                    count++;
+                }
+            }
+            
+            count = 0;
+        }
+        if(minmaxCount==1)
+            return -2147483648;
+        for(int i=0;i<32;i++){
+            count += peachBit[i]%3<<i;
+        }   
+        if(count)
+            return count;
+        for(int i=0;i<32;i++){
+            count += neachBit[i]%3<<i;
+        }
+        return -count;
+    }
+};
