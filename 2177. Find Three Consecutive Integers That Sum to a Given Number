@@ -1,0 +1,14 @@
+class Solution {
+public:
+    vector<long long> sumOfThree(long long num) {
+        vector<long long> ret;
+        long long mid = num/3;
+        if(mid*3!=num)
+            return ret;
+        ret.resize(3);
+        ret[0] = mid-1;
+        ret[1] = mid;
+        ret[2] = mid+1;
+        return ret;
+    }
+};
