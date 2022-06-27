@@ -1,0 +1,64 @@
+class Solution {
+public:
+    vector<string> ret;
+    vector<string> restoreIpAddresses(string s) {
+        ret.resize(0);
+        helper("", s, 3);
+        return ret;
+    }
+    void helper(string ans, string s, int dot){
+        int n = s.size();
+        int oneInt = 0;
+        if(n<=dot || n==0)
+            return;
+        if(dot == 0){
+            if(n>3)
+                return;
+            if(n==1){
+                ans += s;
+                ret.push_back(ans);
+                return;
+            }
+            if(s[0]=='0') 
+                return;
+            for(int i=0;i<n;i++)
+                oneInt = oneInt*10 + int(s[i]-'0');
+            if(oneInt>255)
+                return;
+            ans += s;
+            ret.push_back(ans);
+            return;
+        }
+        if(s[0]=='0'){
+            helper(ans+s.substr(0,1)+'.', s.substr(1,n), dot-1);
+            return;
+        }
+        else if(s[0]=='1'){
+            helper(ans+s.substr(0,1)+'.', s.substr(1,n), dot-1);
+            if(n-1>dot)
+                helper(ans+s.substr(0,2)+'.', s.substr(2,n), dot-1);
+            if(n-2>dot)
+                helper(ans+s.substr(0,3)+'.', s.substr(3,n), dot-1);
+            return;
+        }
+        else if(s[0]=='2'){
+            helper(ans+s.substr(0,1)+'.', s.substr(1,n), dot-1);
+            if(n-1>dot)
+                helper(ans+s.substr(0,2)+'.', s.substr(2,n), dot-1);
+            if(n-2>dot){
+                for(int i=0;i<3;i++)
+                    oneInt = oneInt*10 + int(s[i]-'0');
+                if(oneInt>255)
+                    return;
+                helper(ans+s.substr(0,3)+'.', s.substr(3,n), dot-1);
+            }                
+            return;
+        }
+        else{
+            helper(ans+s.substr(0,1)+'.', s.substr(1,n), dot-1);
+            if(n-1>dot)
+                helper(ans+s.substr(0,2)+'.', s.substr(2,n), dot-1);
+        }
+        return;
+    }
+};
