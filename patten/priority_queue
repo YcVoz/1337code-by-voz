@@ -1,0 +1,6 @@
+auto cmpr = [](const pair<long long int, int> &x, const pair<long long int, int> &y) {
+    if(x.first==y.first)
+        return x.second>y.second;
+    return x.first>y.first;
+};
+priority_queue<pair<long long int,int>, vector<pair<long long int,int>>, decltype(cmpr)> pq;
