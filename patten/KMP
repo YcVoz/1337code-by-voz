@@ -1,0 +1,35 @@
+    vector<int> KMPsearch(const std::string& target, const std::string& p)
+    {
+        if(target.size() < p.size()) return vector<int>(0);
+        vector<int> ret(0);
+        std::vector<int> v(p.size(), -1);
+        int i = 1;
+        int j = 0;
+        //build failure function stage
+        while(i < p.size())
+        {
+            if(p[i] == p[j]) //matched, update failure function
+            {
+                v[i] = j;
+                i++;
+                j++;
+            }
+            else if(j == 0)i++; //j = 0，不用往前看prefix string，直接放棄比對
+            else j = v[j-1] + 1; //更新比對基準
+        }
+        i = 0;
+        j = 0;
+        //compare target string stage
+        while(i < target.size())
+        {
+            if(target[i] == p[j])
+            {
+                i++;
+                j++;
+            }
+            else if(j == 0) i++;
+            else j = v[j-1] + 1;
+            if(j == p.size())ret.push_back(i - j);
+        }
+        return ret;
+    }
